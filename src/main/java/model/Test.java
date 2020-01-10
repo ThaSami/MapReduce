@@ -15,34 +15,18 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
-import java.util.Scanner;
 
 import static util.FilesUtil.checkOS;
-import static util.FilesUtil.split;
 
 public class Test extends Application {
 
     private TextField numOfMappers = new TextField();
     private TextField numOfReducers = new TextField();
-    private TextArea mapperFunction = new TextArea();
-    private TextArea ReducerFunction = new TextArea("public static Map<T,T> reduce(Map<T,T> map){" +
-            "" +
-            "" +
-            "" +
-            "" +
-            "" +
-            "" +
-            "}");
-    private TextField TextFilePath = new TextField("public static Map<T,T> mapping(String file){" +
-            "" +
-            "" +
-            "" +
-            "" +
-            "" +
-            "" +
-            "}");
+    private TextArea mapperFunction = new TextArea("public static Map<String,Object> mapping(String file){ \n\n\n\n\n}");
+    private TextArea reducerFunction = new TextArea("public static Map<String,Object> reduce(Map<String,Object> map){\n\n\n\n\n\n}");
+    private TextField textFilePath = new TextField();
 
-    private TextArea outPuts = new TextArea();
+    private static TextArea outPuts = new TextArea();
 
 
     // Button for sending a student to the server
@@ -56,9 +40,9 @@ public class Test extends Application {
         pane.add(new Label("Number Of Reducers"), 0, 1);
         pane.add(numOfReducers, 1, 1);
         pane.add(new Label("Text File Path"), 0, 2);
-        pane.add(TextFilePath, 1, 2);
+        pane.add(textFilePath, 1, 2);
         pane.add(new Label("Reducer Function"), 0, 5);
-        pane.add(ReducerFunction, 1, 5);
+        pane.add(reducerFunction, 1, 5);
         pane.add(new Label("Mapper Function"), 0, 3);
         pane.add(mapperFunction, 1, 3);
 
@@ -71,9 +55,9 @@ public class Test extends Application {
         pane.setAlignment(Pos.TOP_CENTER);
         numOfMappers.setPrefColumnCount(15);
         numOfReducers.setPrefColumnCount(30);
-        TextFilePath.setPrefColumnCount(10);
+        textFilePath.setPrefColumnCount(10);
         mapperFunction.setPrefColumnCount(2);
-        ReducerFunction.setPrefColumnCount(3);
+        reducerFunction.setPrefColumnCount(3);
 
         // Create a scene and place it in the stage
         Scene scene = new Scene(pane, 700, 700);
@@ -84,9 +68,16 @@ public class Test extends Application {
         btRegister.setOnAction(e -> {
             try {
                 if (!checkOS("Linux")) {
-                    System.out.println("This programme has to be run UnderLinux");
+                    outPuts.appendText("This programme has to be run UnderLinux");
                     System.exit(1);
                 }
+
+                String mappersNumber = numOfMappers.getText();
+                String reducersNumber = numOfReducers.getText();
+                String mappingMethod = mapperFunction.getText();
+                String reduceMethod = reducerFunction.getText();
+                String txtFilePath = textFilePath.getText();
+
 
             } catch (Exception ex) {
                 System.err.println(ex);
@@ -117,9 +108,7 @@ public class Test extends Application {
       new Thread(() -> {
           try (ServerSocket server = new ServerSocket(7777)) {
 
-              System.out.println("Server started at " + new Date());
-              System.out.println();
-
+              outPuts.appendText("Server started at " + new Date());
               while (true) {
                   Socket client = server.accept();
                   ContainersWorker thread = new ContainersWorker(client);
