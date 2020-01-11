@@ -1,5 +1,6 @@
 package model;
 
+import MapReduce.WorkFlow;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -26,7 +27,7 @@ public class Test extends Application {
     private TextArea reducerFunction = new TextArea("public static Map<String,Object> reduce(Map<String,Object> map){\n\n\n\n\n\n}");
     private TextField textFilePath = new TextField();
 
-    private static TextArea outPuts = new TextArea();
+    public static TextArea outPuts = new TextArea();
 
 
     // Button for sending a student to the server
@@ -71,14 +72,15 @@ public class Test extends Application {
                     outPuts.appendText("This programme has to be run UnderLinux");
                     System.exit(1);
                 }
-
-                String mappersNumber = numOfMappers.getText();
-                String reducersNumber = numOfReducers.getText();
+                btRegister.setDisable(true);
+                int mappersNumber = Integer.parseInt(numOfMappers.getText());
+                int reducersNumber = Integer.parseInt(numOfReducers.getText());
                 String mappingMethod = mapperFunction.getText();
                 String reduceMethod = reducerFunction.getText();
                 String txtFilePath = textFilePath.getText();
 
-
+                WorkFlow workFlow = new WorkFlow(mappersNumber, reducersNumber, txtFilePath, mappingMethod, reduceMethod);
+                workFlow.StartWorkFlow();
             } catch (Exception ex) {
                 System.err.println(ex);
             }

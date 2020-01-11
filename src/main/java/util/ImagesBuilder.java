@@ -28,7 +28,7 @@ public class ImagesBuilder {
                         + "import java.util.TreeMap;\n"
                         + "import java.util.regex.Matcher;\n"
                         + "import java.util.regex.Pattern;"
-                        + "public class Mapping { "
+                        + "public class MapperUtil { "
                         + mapperMethod
                         + " }";
 
@@ -71,7 +71,7 @@ public class ImagesBuilder {
                         + "import java.util.TreeMap;\n"
                         + "import java.util.regex.Matcher;\n"
                         + "import java.util.regex.Pattern;"
-                        + "public class Reducing { "
+                        + "public class ReducerUtil { "
                         + reducerMethod
                         + " }";
 
@@ -99,7 +99,7 @@ public class ImagesBuilder {
     public static void prepareReducerDockerFile() {
         try {
             List<String> lines = Arrays.asList("FROM openjdk:8", "COPY ./target/classes/ReducerNode.class /tmp", "COPY ./temp/mapper/ReducerUtil.class /tmp", "WORKDIR /tmp");
-            Path file = Paths.get("mapperDockerFile");
+            Path file = Paths.get("reducerDockerFile");
             Files.write(file, lines, StandardCharsets.UTF_8);
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -26,6 +26,6 @@ public class MapperNode {
     System.out.println("Closing socket and terminating program.");
     socket.close();
 
-
+    //TODO: import the class dynamically.
   }
 }
