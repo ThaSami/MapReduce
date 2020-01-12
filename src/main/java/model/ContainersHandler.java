@@ -12,6 +12,7 @@ public class ContainersHandler {
     @Setter
     @Getter
     public static int numOfContainers = 20;
+    public static int runningContainers = 0;
     private List<String> mappersAddresses;
     private List<String> reducersAddresses;
 
@@ -41,5 +42,14 @@ public class ContainersHandler {
 
     public String getReducersAddresses(int id) {
         return reducersAddresses.get(id);
+    }
+
+    @Synchronized
+    public void incerementRunningContainers() {
+        runningContainers++;
+    }
+
+    public void sendFileToMappers() {
+
     }
 }

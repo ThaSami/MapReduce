@@ -1,9 +1,10 @@
 package MapReduce;
 
 import lombok.AllArgsConstructor;
+import model.ContainersHandler;
 import model.Test;
-import util.FilesUtil;
-import util.ImagesBuilder;
+import utility.FilesUtil;
+import utility.DockerImagesCreator;
 
 @AllArgsConstructor
 public class WorkFlow {
@@ -14,15 +15,16 @@ public class WorkFlow {
     private String reducingMethod;
 
     public void StartWorkFlow() {
+        ContainersHandler.setNumOfContainers(numOfMappers + numOfReducer);
         FilesUtil.split(txtFilePath, numOfMappers);
         Test.outPuts.appendText("Splitted Files\n");
-        ImagesBuilder.prepareMapperCode(mappingMethod);
+        DockerImagesCreator.prepareMapperCode(mappingMethod);
         Test.outPuts.appendText("Mapper Code Prepared Successfully\n");
-        ImagesBuilder.prepareReducerCode(reducingMethod);
+        DockerImagesCreator.prepareReducerCode(reducingMethod);
         Test.outPuts.appendText("Reducer Code Prepared Successfully\n");
-        ImagesBuilder.prepareMapperDockerFile();
+        DockerImagesCreator.prepareMapperDockerFile();
         Test.outPuts.appendText("Mapper DockerFile Created Successfully\n");
-        ImagesBuilder.prepareReducerDockerFile();
+        DockerImagesCreator.prepareReducerDockerFile();
         Test.outPuts.appendText("Reducer DockerFile created Successfully\n");
 
 

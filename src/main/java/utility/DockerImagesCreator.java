@@ -1,4 +1,4 @@
-package util;
+package utility;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -9,14 +9,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class ImagesBuilder {
+public class DockerImagesCreator {
 
 
-    private ImagesBuilder() {
+    private DockerImagesCreator() {
     }
 
     public static void prepareMapperCode(String mapperMethod) {

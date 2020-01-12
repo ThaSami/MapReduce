@@ -17,7 +17,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
 
-import static util.FilesUtil.checkOS;
+import static utility.FilesUtil.checkOS;
 
 public class Test extends Application {
 
@@ -95,22 +95,10 @@ public class Test extends Application {
   public static void main(final String... args) {
 
 
-/*
-    System.out.println("Enter txt File Path: ");
-      Scanner sc = new Scanner(System.in);
-      String fileName = sc.next();
-    System.out.println("Enter Number of mappers: ");
-      int numOfMappers = sc.nextInt();
-      split(fileName,numOfMappers);
-     System.out.println("Enter Number of reducers: ");
-      int numOfReducers = sc.nextInt();
-
-*/
-
       new Thread(() -> {
           try (ServerSocket server = new ServerSocket(7777)) {
 
-              outPuts.appendText("Server started at " + new Date());
+              outPuts.appendText("Server started at " + new Date() + '\n');
               while (true) {
                   Socket client = server.accept();
                   ContainersWorker thread = new ContainersWorker(client);

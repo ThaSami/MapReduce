@@ -1,14 +1,0 @@
-
-Fsquid:S1148""#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8Ùüÿ–ø-
-dsquid:S2142!"FEither re-interrupt this method or rethrow the "InterruptedException".(òž¶È8à‡ä—ø-
-[
-squid:S106/"9Replace this use of System.out or System.err by a logger.(£ˆú®ýÿÿÿÿ8ößè—ø-
-[
-squid:S106"9Replace this use of System.out or System.err by a logger.(ñ—¸½úÿÿÿÿ8Ùüÿ–ø-
-V
-squid:S106"9Replace this use of System.out or System.err by a logger.(õâÆ¸8Ùüÿ–ø-
-nsquid:CommentedOutCodeLine6"<This block of commented-out lines of code should be removed.(‚µ‡Üÿÿÿÿÿ8óÎö—ø-
-[
-squid:S1062"9Replace this use of System.out or System.err by a logger.(…‰ûäþÿÿÿÿ8Ñ‚ê—ø-
-V
-squid:S106+"9Replace this use of System.out or System.err by a logger.(Çì±ß8©—”¶ø-

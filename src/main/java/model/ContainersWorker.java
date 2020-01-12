@@ -25,12 +25,16 @@ public class ContainersWorker {
                 switch (query) {
                     case "RegisterMapper":
                         containersHandler.addMapperAddress(socket.getInetAddress().toString());
-                        System.out.printf("Regsitered mapper %s", socket.getInetAddress());
+                        Test.outPuts.appendText("Regsitered mapper " + socket.getInetAddress() + '\n');
+                        containersHandler.incerementRunningContainers();
                         break;
                     case "RegisterReducer":
                         containersHandler.addReducerAddress(socket.getInetAddress().toString());
-                        System.out.printf("Regsitered reducer %s", socket.getInetAddress());
+                        Test.outPuts.appendText("Regsitered reducer " + socket.getInetAddress() + '\n');
+                        containersHandler.incerementRunningContainers();
                         break;
+                    case "GetData":
+
                     default:
                         int id = Integer.parseInt(query);
                         String address = containersHandler.getReducersAddresses(id);
