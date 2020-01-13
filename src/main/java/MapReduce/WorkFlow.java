@@ -1,7 +1,7 @@
 package MapReduce;
 
 import lombok.AllArgsConstructor;
-import model.ContainersHandler;
+import model.ContainersDataHandler;
 import model.Test;
 import utility.FilesUtil;
 import utility.DockerImagesCreator;
@@ -15,7 +15,7 @@ public class WorkFlow {
     private String reducingMethod;
 
     public void StartWorkFlow() {
-        ContainersHandler.setNumOfContainers(numOfMappers + numOfReducer);
+        ContainersDataHandler.setNumOfContainers(numOfMappers + numOfReducer);
         FilesUtil.split(txtFilePath, numOfMappers);
         Test.outPuts.appendText("Splitted Files\n");
         DockerImagesCreator.prepareMapperCode(mappingMethod);
@@ -26,7 +26,8 @@ public class WorkFlow {
         Test.outPuts.appendText("Mapper DockerFile Created Successfully\n");
         DockerImagesCreator.prepareReducerDockerFile();
         Test.outPuts.appendText("Reducer DockerFile created Successfully\n");
-
+        DockerImagesCreator.prepareDockerCompose(numOfMappers, numOfReducer);
+        Test.outPuts.appendText("docker-compose created Successfully\n");
 
     }
 

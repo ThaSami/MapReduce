@@ -4,11 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Synchronized;
 
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainersHandler {
+public class ContainersDataHandler {
     @Setter
     @Getter
     public static int numOfContainers = 20;
@@ -16,9 +15,9 @@ public class ContainersHandler {
     private List<String> mappersAddresses;
     private List<String> reducersAddresses;
 
-    private static ContainersHandler containersHandler = null;
+    private static ContainersDataHandler containersDataHandler = null;
 
-    private ContainersHandler() {
+    private ContainersDataHandler() {
         this.mappersAddresses = new ArrayList<>();
         this.reducersAddresses = new ArrayList<>();
     }
@@ -33,11 +32,11 @@ public class ContainersHandler {
         reducersAddresses.add(address);
     }
 
-    public static ContainersHandler getInstance() {
-        if (containersHandler == null)
-            containersHandler = new ContainersHandler();
+    public static ContainersDataHandler getInstance() {
+        if (containersDataHandler == null)
+            containersDataHandler = new ContainersDataHandler();
 
-        return containersHandler;
+        return containersDataHandler;
     }
 
     public String getReducersAddresses(int id) {

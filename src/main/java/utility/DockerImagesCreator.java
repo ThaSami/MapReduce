@@ -4,11 +4,13 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 public class DockerImagesCreator {
@@ -29,26 +31,20 @@ public class DockerImagesCreator {
                         + "public class MapperUtil { "
                         + mapperMethod
                         + " }";
-
         try {
-            compileMapper(source);
-        } catch (IOException ex) {
+            File root = new File("./temp");
+            File sourceFile = new File(root, "mapper/MapperUtil.java");
+            sourceFile.getParentFile().mkdirs();
+            Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8));
+
+
+            CompileJavaCode(sourceFile);
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
     }
 
-    private static void compileMapper(String source) throws IOException {
-        // Save source in .java file.
-        File root = new File("./temp");
-        File sourceFile = new File(root, "mapper/MapperUtil.java");
-        sourceFile.getParentFile().mkdirs();
-        Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8));
-
-        // Compile source file.
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        compiler.run(null, null, null, sourceFile.getPath());
-    }
 
     public static void prepareMapperDockerFile() {
         try {
@@ -72,26 +68,17 @@ public class DockerImagesCreator {
                         + "public class ReducerUtil { "
                         + reducerMethod
                         + " }";
-
         try {
-            compileReducer(source);
+            File root = new File("./temp");
+            File sourceFile = new File(root, "reducer/ReducerUtil.java");
+            Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8));
 
-        } catch (IOException ex) {
+
+            CompileJavaCode(sourceFile);
+
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-
-    private static void compileReducer(String source) throws IOException {
-        // Save source in .java file.
-        File root = new File("./temp");
-        File sourceFile = new File(root, "reducer/ReducerUtil.java");
-        sourceFile.getParentFile().mkdirs();
-        Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8));
-
-        // Compile source file.
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        compiler.run(null, null, null, sourceFile.getPath());
     }
 
     public static void prepareReducerDockerFile() {
@@ -101,6 +88,48 @@ public class DockerImagesCreator {
             Files.write(file, lines, StandardCharsets.UTF_8);
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public static void prepareDockerCompose(int numOfMappers, int numOfReducers) {
+        String mapperReplicas = "       replicas: " + numOfMappers;
+        String reducerReplicas = "       replicas: " + numOfReducers;
+        try {
+            List<String> lines = Arrays.asList(
+                    "version: '3.7'",
+                    "services:",
+                    "  mappers:",
+                    "     image: mapper",
+                    "     ports:",
+                    "        - '7777'",
+                    "     entrypoint:",
+                    "        - java",
+                    "        - MapperNode",
+                    "     deploy:",
+                    mapperReplicas,
+                    "  reducers:",
+                    "     image: reducer",
+                    "     ports:",
+                    "        - '7777'",
+                    "     entrypoint:",
+                    "        - java",
+                    "        - ReducerNode",
+                    "     deploy:",
+                    reducerReplicas);
+
+            Path file = Paths.get("docker-dompose.yml");
+            Files.write(file, lines, StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void CompileJavaCode(File sourceFile) {
+        sourceFile.getParentFile().mkdirs();
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        int resultCode = compiler.run(null, null, null, sourceFile.getPath());
+        if (resultCode != 0) {
+            throw new IllegalFormatCodePointException(1);
         }
     }
 

@@ -7,11 +7,11 @@ import java.net.Socket;
 
 public class ContainersWorker {
     private Socket socket;
-    private ContainersHandler containersHandler;
+    private ContainersDataHandler containersDataHandler;
 
     ContainersWorker(Socket socket) {
         this.socket = socket;
-        this.containersHandler = ContainersHandler.getInstance();
+        this.containersDataHandler = ContainersDataHandler.getInstance();
     }
 
 
@@ -24,20 +24,20 @@ public class ContainersWorker {
             while ((query = in.readUTF()) != null) {
                 switch (query) {
                     case "RegisterMapper":
-                        containersHandler.addMapperAddress(socket.getInetAddress().toString());
+                        containersDataHandler.addMapperAddress(socket.getInetAddress().toString());
                         Test.outPuts.appendText("Regsitered mapper " + socket.getInetAddress() + '\n');
-                        containersHandler.incerementRunningContainers();
+                        containersDataHandler.incerementRunningContainers();
                         break;
                     case "RegisterReducer":
-                        containersHandler.addReducerAddress(socket.getInetAddress().toString());
+                        containersDataHandler.addReducerAddress(socket.getInetAddress().toString());
                         Test.outPuts.appendText("Regsitered reducer " + socket.getInetAddress() + '\n');
-                        containersHandler.incerementRunningContainers();
+                        containersDataHandler.incerementRunningContainers();
                         break;
                     case "GetData":
 
                     default:
                         int id = Integer.parseInt(query);
-                        String address = containersHandler.getReducersAddresses(id);
+                        String address = containersDataHandler.getReducersAddresses(id);
                         outputToClient.writeUTF(address);
                 }
             }
