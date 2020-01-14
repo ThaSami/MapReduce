@@ -68,25 +68,25 @@ public class MapperNode {
     }).start();
 
     new Thread(() -> {
-      ReceiveFile();
-    }).start();
-
-    new Thread(() -> {
       ReceiveReducersAdresses();
     }).start();
 
-    //TODO: import the class dynamically.
+    new Thread(() -> {
+      ReceiveFile();
+      try {
+        File root = new File("./");
+        URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
+        Class<?> cls = Class.forName("MapperUtil", true, classLoader); // Should print "hello".
+        Method method = cls.getDeclaredMethod("mapping", String.class);
+        Map<?, ?> result = (Map<?, ?>) method.invoke(cls, "./myData");
+        //TODO: spread result into adjcency list of TreeMaps / SortedMaps.
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
 
-    File root = new File("./");
+    }).start();
 
-    try {
-      URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
-      Class<?> cls = Class.forName("MapperUtil", true, classLoader); // Should print "hello".
-      Method method = cls.getDeclaredMethod("mapping", String.class);
-      Map<?, ?> result = (Map<?, ?>) method.invoke(cls, "./myData");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+
 
   }
 }
