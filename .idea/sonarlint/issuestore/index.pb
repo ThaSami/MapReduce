@@ -7,8 +7,6 @@ k
 ;.idea/libraries/Maven__org_projectlombok_lombok_1_18_10.xml,4/c/4cdf0543b1b9acb76489f4f51f752009cd983bbc
 Y
 )src/main/java/model/ContainersWorker.java,5/8/5801a2cc5a735fc3001bbd3df20ccc1d28010d32
-Z
-*src/main/java/model/ContainersHandler.java,e/d/ed2f211ed2d1cda7447dc77620ed95c63a99cf86
 :
 
 DockerFile,4/0/40f7331d8e28c3c74df3da70560f362ea1796985
@@ -28,3 +26,5 @@ W
 'src/main/java/utility/FilesHandler.java,4/9/49ae773053518d6e7b2142ff40895a481102abf5
 T
 $src/main/java/utility/FilesUtil.java,5/2/52800c520e0436f7da75724f14333bc70ed064c3
+^
+.src/main/java/model/ContainersDataHandler.java,c/3/c36b6577e0bc934dd2085b953cc13c508a5b21e2

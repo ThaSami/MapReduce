@@ -23,8 +23,8 @@ public class Test extends Application {
 
     private TextField numOfMappers = new TextField();
     private TextField numOfReducers = new TextField();
-    private TextArea mapperFunction = new TextArea("public static Map<String,Object> mapping(String file){ \n\n\n\n\n}");
-    private TextArea reducerFunction = new TextArea("public static Map<String,Object> reduce(Map<String,Object> map){\n\n\n\n\n\n}");
+    private TextArea mapperFunction = new TextArea("public static Map<?,?> mapping(String file){ \n\n\n\n\n}");
+    private TextArea reducerFunction = new TextArea("public static Map<?,?> reduce(Map<String,Object> map){\n\n\n\n\n\n}");
     private TextField textFilePath = new TextField();
 
     public static TextArea outPuts = new TextArea();

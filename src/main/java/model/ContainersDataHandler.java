@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Synchronized;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,11 +48,18 @@ public class ContainersDataHandler {
     }
 
     @Synchronized
-    public void incerementRunningContainers() {
+    public void incrementRunningContainers() {
         runningContainers++;
     }
 
-    public void sendFileToMappers() {
-
+    public void sendFileToMappers(String address) {
+        try (Socket sk = new Socket(address, 49999)) {
+            ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream());
+            objectOutput.writeObject(this.reducersAddresses);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

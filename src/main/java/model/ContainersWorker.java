@@ -26,12 +26,12 @@ public class ContainersWorker {
                     case "RegisterMapper":
                         containersDataHandler.addMapperAddress(socket.getInetAddress().toString());
                         Test.outPuts.appendText("Regsitered mapper " + socket.getInetAddress() + '\n');
-                        containersDataHandler.incerementRunningContainers();
+                        containersDataHandler.incrementRunningContainers();
                         break;
                     case "RegisterReducer":
                         containersDataHandler.addReducerAddress(socket.getInetAddress().toString());
                         Test.outPuts.appendText("Regsitered reducer " + socket.getInetAddress() + '\n');
-                        containersDataHandler.incerementRunningContainers();
+                        containersDataHandler.incrementRunningContainers();
                         break;
                     case "GetData":
 

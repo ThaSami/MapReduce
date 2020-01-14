@@ -59,17 +59,15 @@ public class FilesUtil {
     return !file.exists();
   }
 
-  public static void fileUploader(String host, String file) {
+  public static void fileUploader(String host, String path) {
 
-    String Host = host;
-    File f = new File(file);
+    File f = new File(path);
 
-    try (Socket socket = new Socket(Host, 4444);
+    try (Socket socket = new Socket(host, 6666);
          InputStream in = new FileInputStream(f);
          OutputStream out = socket.getOutputStream();) {
-      // Get the size of the file
       long length = f.length();
-      byte[] bytes = new byte[16 * 1024];
+      byte[] bytes = new byte[8192];
       int count;
       while ((count = in.read(bytes)) > 0) {
         out.write(bytes, 0, count);

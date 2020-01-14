@@ -1,38 +1,92 @@
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Method;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class MapperNode {
 
+  static List<String> reducersAddresses;
 
-  static void RegisterContainer(DataOutputStream dataOutputStream) throws IOException {
-    System.out.println("Registering to server");
-    dataOutputStream.writeUTF("RegisterMapper");
-    dataOutputStream.flush();
+
+  static void RegisterContainer(String host) {
+
+    try (
+            Socket socket = new Socket(host, 7777);
+            OutputStream outputStream = socket.getOutputStream();
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);) {
+      System.out.println("Registering to server");
+      dataOutputStream.writeUTF("RegisterMapper");
+      dataOutputStream.flush();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
   }
 
-  static void dataReciever() {
+  static void ReceiveFile() {
+    try (ServerSocket serverSocket = new ServerSocket(6666);
+         Socket socket = serverSocket.accept();
+         InputStream in = socket.getInputStream();
+         OutputStream out = new FileOutputStream("myData")) {
 
+      byte[] bytes = new byte[8192];
+
+      int count;
+      while ((count = in.read(bytes)) > 0) {
+        out.write(bytes, 0, count);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  static void ReceiveReducersAdresses() {
+    System.out.println("Receivng Reducers Addresses");
+    try (
+            ServerSocket myServerSocket = new ServerSocket(49999);
+            Socket skt = myServerSocket.accept();
+            ObjectInputStream objectInput = new ObjectInputStream(skt.getInputStream());) {
+      Object object = objectInput.readObject();
+      reducersAddresses = (ArrayList<String>) object;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    System.out.println("Reducers addresses recieved");
   }
 
 
   public static void main(String[] args) throws IOException {
 
-    Socket socket = new Socket(args[0], 7777);
-    // get the output stream from the socket.
-    OutputStream outputStream = socket.getOutputStream();
-    // create a data output stream from the output stream so we can send data through it
-    DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+    new Thread(() -> {
+      RegisterContainer(args[0]);
 
-    dataOutputStream.close();
+    }).start();
 
-    //Recieve Num of Reducers and there Addresses
+    new Thread(() -> {
+      ReceiveFile();
+    }).start();
 
+    new Thread(() -> {
+      ReceiveReducersAdresses();
+    }).start();
 
-    socket.close();
     //TODO: import the class dynamically.
+
+    File root = new File("./");
+
+    try {
+      URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
+      Class<?> cls = Class.forName("MapperUtil", true, classLoader); // Should print "hello".
+      Method method = cls.getDeclaredMethod("mapping", String.class);
+      Map<?, ?> result = (Map<?, ?>) method.invoke(cls, "./myData");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
   }
 }
