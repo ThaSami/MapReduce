@@ -23,6 +23,7 @@ public class Test extends Application {
 
     private TextField numOfMappers = new TextField();
     private TextField numOfReducers = new TextField();
+    private TextArea customImport = new TextArea("//Insert your Imports other than \n //import java.io.*;\n");
     private TextArea mapperFunction = new TextArea("public static Map<?,?> mapping(String file){ \n\n\n\n\n}");
     private TextArea reducerFunction = new TextArea("public static Map<?,?> reduce(Map<String,Object> map){\n\n\n\n\n\n}");
     private TextField textFilePath = new TextField();
@@ -42,10 +43,13 @@ public class Test extends Application {
         pane.add(numOfReducers, 1, 1);
         pane.add(new Label("Text File Path"), 0, 2);
         pane.add(textFilePath, 1, 2);
+        pane.add(new Label("Custom Imports"), 0, 3);
+        pane.add(customImport, 1, 3);
+        pane.add(new Label("Mapper Function"), 0, 4);
+        pane.add(mapperFunction, 1, 4);
         pane.add(new Label("Reducer Function"), 0, 5);
         pane.add(reducerFunction, 1, 5);
-        pane.add(new Label("Mapper Function"), 0, 3);
-        pane.add(mapperFunction, 1, 3);
+
 
         pane.add(btRegister, 1, 6);
         GridPane.setHalignment(btRegister, HPos.RIGHT);
@@ -59,9 +63,9 @@ public class Test extends Application {
         textFilePath.setPrefColumnCount(10);
         mapperFunction.setPrefColumnCount(2);
         reducerFunction.setPrefColumnCount(3);
-
+        customImport.setPrefColumnCount(3);
         // Create a scene and place it in the stage
-        Scene scene = new Scene(pane, 700, 700);
+        Scene scene = new Scene(pane, 800, 800);
         primaryStage.setTitle("Map Reduce"); // Set the stage title
         primaryStage.setScene(scene); // Place the scene in the stage
         primaryStage.show(); // Display the stage
@@ -78,8 +82,8 @@ public class Test extends Application {
                 String mappingMethod = mapperFunction.getText();
                 String reduceMethod = reducerFunction.getText();
                 String txtFilePath = textFilePath.getText();
-
-                WorkFlow workFlow = new WorkFlow(mappersNumber, reducersNumber, txtFilePath, mappingMethod, reduceMethod);
+                String customImports = customImport.getText();
+                WorkFlow workFlow = new WorkFlow(mappersNumber, reducersNumber, txtFilePath, mappingMethod, reduceMethod, customImports);
                 workFlow.StartWorkFlow();
             } catch (Exception ex) {
                 System.err.println(ex);

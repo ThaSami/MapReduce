@@ -7,11 +7,23 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class MapperNode {
 
   static List<String> reducersAddresses;
+  static List<TreeMap<Object, Object>> shuffleResult;
 
+  static void shuffler(Map<?, ?> result) {
+    shuffleResult = new ArrayList<>(6);
+    for (int i = 0; i < 5; i++) {
+      shuffleResult.add(i, new TreeMap());
+    }
+    int numberOfReducers = reducersAddresses.size();
+    for (Object k : result.keySet()) {
+      shuffleResult.get(Math.abs(k.hashCode()) % numberOfReducers).put(k, result.get(k));
+    }
+  }
 
   static void RegisterContainer(String host) {
 
@@ -60,7 +72,7 @@ public class MapperNode {
   }
 
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
 
     new Thread(() -> {
       RegisterContainer(args[0]);
@@ -79,13 +91,13 @@ public class MapperNode {
         Class<?> cls = Class.forName("MapperUtil", true, classLoader); // Should print "hello".
         Method method = cls.getDeclaredMethod("mapping", String.class);
         Map<?, ?> result = (Map<?, ?>) method.invoke(cls, "./myData");
-        //TODO: spread result into adjcency list of TreeMaps / SortedMaps.
+        shuffler(result);
+        //TODO TreeMaps to Reducers
       } catch (Exception e) {
         e.printStackTrace();
       }
 
     }).start();
-
 
 
   }

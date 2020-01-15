@@ -1,18 +1,21 @@
 package utility;
 
 
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.IllegalFormatCodePointException;
 
 public class FilesUtil {
 
   private FilesUtil() {
   }
 
-  public static void split(String filename, int numOfFiles) {
+  public static void splitter(String filename, int numOfFiles) {
 
     ProcessBuilder processBuilder = new ProcessBuilder();
     File file = new File(filename);
@@ -77,4 +80,14 @@ public class FilesUtil {
     }
 
   }
+
+  public static void CompileJavaCode(File sourceFile) {
+    sourceFile.getParentFile().mkdirs();
+    JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+    int resultCode = compiler.run(null, null, null, sourceFile.getPath());
+    if (resultCode != 0) {
+      throw new IllegalFormatCodePointException(1);
+    }
+  }
+
 }

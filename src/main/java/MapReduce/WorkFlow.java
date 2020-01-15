@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import model.ContainersDataHandler;
 import model.Test;
 import utility.FilesUtil;
-import utility.DockerImagesCreator;
+import utility.MapperImageUtil;
 
 @AllArgsConstructor
 public class WorkFlow {
@@ -13,20 +13,21 @@ public class WorkFlow {
     private String txtFilePath;
     private String mappingMethod;
     private String reducingMethod;
+    private String customImport;
 
     public void StartWorkFlow() {
         ContainersDataHandler.setNumOfContainers(numOfMappers + numOfReducer);
-        FilesUtil.split(txtFilePath, numOfMappers);
+        FilesUtil.splitter(txtFilePath, numOfMappers);
         Test.outPuts.appendText("Splitted Files\n");
-        DockerImagesCreator.prepareMapperCode(mappingMethod);
+        MapperImageUtil.prepareMapperCode(mappingMethod, customImport);
         Test.outPuts.appendText("Mapper Code Prepared Successfully\n");
-        DockerImagesCreator.prepareReducerCode(reducingMethod);
+        MapperImageUtil.prepareReducerCode(reducingMethod, customImport);
         Test.outPuts.appendText("Reducer Code Prepared Successfully\n");
-        DockerImagesCreator.prepareMapperDockerFile();
+        MapperImageUtil.prepareMapperDockerFile();
         Test.outPuts.appendText("Mapper DockerFile Created Successfully\n");
-        DockerImagesCreator.prepareReducerDockerFile();
+        MapperImageUtil.prepareReducerDockerFile();
         Test.outPuts.appendText("Reducer DockerFile created Successfully\n");
-        DockerImagesCreator.prepareDockerCompose(numOfMappers, numOfReducer);
+        MapperImageUtil.prepareDockerCompose(numOfMappers, numOfReducer);
         Test.outPuts.appendText("docker-compose created Successfully\n");
 
     }
