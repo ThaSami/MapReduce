@@ -2,19 +2,19 @@ version: '3.7'
 services:
   mappers:
     image: mapper
-    ports:
+    expose:
       - '7777'
     entrypoint:
       - java
       - MapperNode
     deploy:
-      replicas: 4
+      replicas: 3
   reducers:
     image: reducer
-    ports:
+    expose:
       - '7777'
     entrypoint:
       - java
       - ReducerNode
     deploy:
-      replicas: 4
+      replicas: 3

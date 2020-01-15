@@ -1,9 +1,8 @@
+import utility.Constants;
+
 import java.io.*;
 import java.lang.reflect.Method;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +25,28 @@ public class MapperNode {
     }
   }
 
-  static void RegisterContainer(String host) {
+  static void sendShuffleResultToReducer() {
+    System.out.println("Sending Shuffle Result To reducers");
+    int numberOfReducers = reducersAddresses.size();
+    for (int i = 0; i < numberOfReducers; i++) {
 
-    try (Socket socket = new Socket(host, 7777);
+      try (Socket sk = new Socket(reducersAddresses.get(i), Constants.TREE_MAP_RECEIVER_PORT);
+           ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream())) {
+        objectOutput.writeObject(shuffleResult.get(i));
+      } catch (UnknownHostException e) {
+        e.printStackTrace();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  static void ReportToMainServer(String host, String query) {
+    try (Socket socket = new Socket(host, Constants.MAIN_SERVER_PORT);
          OutputStream outputStream = socket.getOutputStream();
          DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
-      System.out.println("Registering to server");
-      dataOutputStream.writeUTF("RegisterMapper");
+      System.out.println("Sending : " + query + " to main server");
+      dataOutputStream.writeUTF(query);
       dataOutputStream.flush();
     } catch (Exception e) {
       e.printStackTrace();
@@ -40,7 +54,7 @@ public class MapperNode {
   }
 
   static void ReceiveFile() {
-    try (ServerSocket serverSocket = new ServerSocket(6666);
+    try (ServerSocket serverSocket = new ServerSocket(Constants.MAPPERS_FILE_RECEIVER_PORT);
          Socket socket = serverSocket.accept();
          InputStream in = socket.getInputStream();
          OutputStream out = new FileOutputStream("myData")) {
@@ -58,7 +72,8 @@ public class MapperNode {
 
   static void ReceiveReducersAdresses() {
     System.out.println("Receivng Reducers Addresses");
-    try (ServerSocket myServerSocket = new ServerSocket(49999);
+    try (ServerSocket myServerSocket =
+                 new ServerSocket(Constants.MAPPERS_REDUCER_ADDRESS_RECEIVER_PORT);
          Socket skt = myServerSocket.accept();
          ObjectInputStream objectInput = new ObjectInputStream(skt.getInputStream())) {
       Object object = objectInput.readObject();
@@ -69,18 +84,17 @@ public class MapperNode {
     System.out.println("Reducers addresses recieved");
   }
 
+
   public static void main(String[] args) {
 
     new Thread(
             () -> {
-              RegisterContainer(args[0]);
+              ReportToMainServer(args[0], "RegisterMapper");
             })
             .start();
 
     new Thread(
-            () -> {
-              ReceiveReducersAdresses();
-            })
+            MapperNode::ReceiveReducersAdresses)
             .start();
 
     new Thread(
@@ -90,16 +104,17 @@ public class MapperNode {
                 File root = new File("./");
                 URLClassLoader classLoader =
                         URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
-                Class<?> cls =
-                        Class.forName("MapperUtil", false, classLoader);
+                Class<?> cls = Class.forName("MapperUtil", false, classLoader);
                 Method method = cls.getDeclaredMethod("mapping", String.class);
                 Map<?, ?> result = (Map<?, ?>) method.invoke(cls, "./myData");
                 shuffler(result);
-                // TODO Send TreeMaps to Reducers
+                sendShuffleResultToReducer();
+                ReportToMainServer(args[0], "Finished");
               } catch (Exception e) {
                 e.printStackTrace();
               }
             })
             .start();
+
   }
 }

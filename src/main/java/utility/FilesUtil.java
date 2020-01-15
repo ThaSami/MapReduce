@@ -1,6 +1,5 @@
 package utility;
 
-
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.*;
@@ -8,7 +7,10 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.IllegalFormatCodePointException;
+import java.util.List;
 
 public class FilesUtil {
 
@@ -19,9 +21,9 @@ public class FilesUtil {
 
     ProcessBuilder processBuilder = new ProcessBuilder();
     File file = new File(filename);
-    int size = (int) (file.length() / 1024) / numOfFiles + 1;
-    String splitCommand = "split -d -C " + size + "k" + " " + filename + " map";
-    processBuilder.command("bash", "-c", splitCommand);
+    int size = (int) (file.length() / 1024) / numOfFiles + 1; //convert to kb then split the size evenly , //TODO covert from gb to kb
+    String splitCommand = "cd ./temp/Data/ &&" + " split -d -C " + size + "k" + " Data.txt" + " map";
+    processBuilder.command("sh", "-c", splitCommand);
 
     try {
 
@@ -35,21 +37,22 @@ public class FilesUtil {
       }
 
       int exitCode = process.waitFor();
-      System.out.println("\nExited with error code : " + exitCode);
+      System.out.println("\nSplitter Exited with error code : " + exitCode);
 
     } catch (IOException | InterruptedException e) {
       e.printStackTrace();
     }
   }
 
-  public static boolean checkOS(String name) {
-    String osName = System.getProperty("os.name").toLowerCase();
 
-    return osName.startsWith(name.toLowerCase());
-  }
+  public static void copy(String from, String to) throws IOException {
+    File src = new File(from);
+    File root = new File("./temp");
+    File dst = new File(root, to);
+    dst.getParentFile().mkdirs();
 
-  private static Path getPathObject(String pathString) {
-    return Paths.get(pathString);
+    Files.copy(src.toPath(), dst.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
   }
 
   public static Boolean checkIfExist(String path) {
@@ -62,13 +65,25 @@ public class FilesUtil {
     return !file.exists();
   }
 
+  public static List<String> getFilesInDirectory(String directoryPath) {
+    List<String> results = new ArrayList<>();
+
+    File[] files = new File(directoryPath).listFiles();
+    for (File file : files) {
+      if (file.isFile()) {
+        results.add(file.getName());
+      }
+    }
+    return results;
+  }
+
   public static void fileUploader(String host, String path) {
 
     File f = new File(path);
 
-    try (Socket socket = new Socket(host, 6666);
+    try (Socket socket = new Socket(host, Constants.MAPPERS_FILE_RECEIVER_PORT);
          InputStream in = new FileInputStream(f);
-         OutputStream out = socket.getOutputStream();) {
+         OutputStream out = socket.getOutputStream()) {
       long length = f.length();
       byte[] bytes = new byte[8192];
       int count;
@@ -78,7 +93,6 @@ public class FilesUtil {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
   }
 
   public static void CompileJavaCode(File sourceFile) {
@@ -89,5 +103,4 @@ public class FilesUtil {
       throw new IllegalFormatCodePointException(1);
     }
   }
-
 }
