@@ -25,16 +25,15 @@ public class Test extends Application {
     private TextField numOfReducers = new TextField();
     private TextArea customImport = new TextArea("//Insert your Imports other than \n //import java.io.*;\n");
     private TextArea mapperFunction = new TextArea("public static Map<?,?> mapping(String file){ \n\n\n\n\n}");
-    private TextArea reducerFunction = new TextArea("public static Map<?,?> reduce(Map<String,Object> map){\n\n\n\n\n\n}");
+    private TextArea reducerFunction = new TextArea("public static Map<?,?> reduce(Map<?,List<?>> map){\n\n\n\n\n\n}");
     private TextField textFilePath = new TextField();
 
     public static TextArea outPuts = new TextArea();
 
 
-    // Button for sending a student to the server
     private Button btRegister = new Button("RUN IT BABY");
 
-    @Override // Override the start method in the Application class
+    @Override
     public void start(Stage primaryStage) {
         GridPane pane = new GridPane();
         pane.add(new Label("Number Of Mappers"), 0, 0);
@@ -64,11 +63,11 @@ public class Test extends Application {
         mapperFunction.setPrefColumnCount(2);
         reducerFunction.setPrefColumnCount(3);
         customImport.setPrefColumnCount(3);
-        // Create a scene and place it in the stage
+
         Scene scene = new Scene(pane, 800, 800);
-        primaryStage.setTitle("Map Reduce"); // Set the stage title
-        primaryStage.setScene(scene); // Place the scene in the stage
-        primaryStage.show(); // Display the stage
+        primaryStage.setTitle("Map Reduce");
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
         btRegister.setOnAction(e -> {
             try {
@@ -83,8 +82,10 @@ public class Test extends Application {
                 String reduceMethod = reducerFunction.getText();
                 String txtFilePath = textFilePath.getText();
                 String customImports = customImport.getText();
+
                 WorkFlow workFlow = new WorkFlow(mappersNumber, reducersNumber, txtFilePath, mappingMethod, reduceMethod, customImports);
                 workFlow.StartWorkFlow();
+
             } catch (Exception ex) {
                 System.err.println(ex);
             }

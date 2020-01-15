@@ -14,7 +14,6 @@ public class ReducerImageUtil {
     private ReducerImageUtil() {
     }
 
-    ;
 
     public static void prepareReducerCode(String reducerMethod, String customImports) {
         String source = customImports
@@ -25,6 +24,7 @@ public class ReducerImageUtil {
         try {
             File root = new File("./temp");
             File sourceFile = new File(root, "reducer/ReducerUtil.java");
+            sourceFile.getParentFile().mkdirs();
             Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8));
 
 
@@ -37,7 +37,7 @@ public class ReducerImageUtil {
 
     public static void prepareReducerDockerFile() {
         try {
-            List<String> lines = Arrays.asList("FROM openjdk:8", "COPY ./target/classes/ReducerNode.class /tmp", "COPY ./temp/mapper/ReducerUtil.class /tmp", "WORKDIR /tmp");
+            List<String> lines = Arrays.asList("FROM openjdk:8", "COPY ./target/classes/ReducerNode.class /tmp", "COPY ./temp/reducer/ReducerUtil.class /tmp", "WORKDIR /tmp");
             Path file = Paths.get("reducerDockerFile");
             Files.write(file, lines, StandardCharsets.UTF_8);
         } catch (IOException ex) {

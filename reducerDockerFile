@@ -1,0 +1,4 @@
+FROM openjdk:8
+COPY ./target/classes/ReducerNode.class /tmp
+COPY ./temp/mapper/ReducerUtil.class /tmp
+WORKDIR /tmp

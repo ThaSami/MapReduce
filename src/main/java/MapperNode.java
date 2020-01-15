@@ -15,11 +15,12 @@ public class MapperNode {
   static List<TreeMap<Object, Object>> shuffleResult;
 
   static void shuffler(Map<?, ?> result) {
-    shuffleResult = new ArrayList<>(6);
-    for (int i = 0; i < 5; i++) {
+    int numberOfReducers = reducersAddresses.size();
+
+    shuffleResult = new ArrayList<>(numberOfReducers);
+    for (int i = 0; i < numberOfReducers; i++) {
       shuffleResult.add(i, new TreeMap());
     }
-    int numberOfReducers = reducersAddresses.size();
     for (Object k : result.keySet()) {
       shuffleResult.get(Math.abs(k.hashCode()) % numberOfReducers).put(k, result.get(k));
     }
@@ -27,17 +28,15 @@ public class MapperNode {
 
   static void RegisterContainer(String host) {
 
-    try (
-            Socket socket = new Socket(host, 7777);
-            OutputStream outputStream = socket.getOutputStream();
-            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);) {
+    try (Socket socket = new Socket(host, 7777);
+         OutputStream outputStream = socket.getOutputStream();
+         DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
       System.out.println("Registering to server");
       dataOutputStream.writeUTF("RegisterMapper");
       dataOutputStream.flush();
     } catch (Exception e) {
       e.printStackTrace();
     }
-
   }
 
   static void ReceiveFile() {
@@ -59,10 +58,9 @@ public class MapperNode {
 
   static void ReceiveReducersAdresses() {
     System.out.println("Receivng Reducers Addresses");
-    try (
-            ServerSocket myServerSocket = new ServerSocket(49999);
-            Socket skt = myServerSocket.accept();
-            ObjectInputStream objectInput = new ObjectInputStream(skt.getInputStream());) {
+    try (ServerSocket myServerSocket = new ServerSocket(49999);
+         Socket skt = myServerSocket.accept();
+         ObjectInputStream objectInput = new ObjectInputStream(skt.getInputStream())) {
       Object object = objectInput.readObject();
       reducersAddresses = (ArrayList<String>) object;
     } catch (Exception e) {
@@ -71,34 +69,37 @@ public class MapperNode {
     System.out.println("Reducers addresses recieved");
   }
 
-
   public static void main(String[] args) {
 
-    new Thread(() -> {
-      RegisterContainer(args[0]);
+    new Thread(
+            () -> {
+              RegisterContainer(args[0]);
+            })
+            .start();
 
-    }).start();
+    new Thread(
+            () -> {
+              ReceiveReducersAdresses();
+            })
+            .start();
 
-    new Thread(() -> {
-      ReceiveReducersAdresses();
-    }).start();
-
-    new Thread(() -> {
-      ReceiveFile();
-      try {
-        File root = new File("./");
-        URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
-        Class<?> cls = Class.forName("MapperUtil", true, classLoader); // Should print "hello".
-        Method method = cls.getDeclaredMethod("mapping", String.class);
-        Map<?, ?> result = (Map<?, ?>) method.invoke(cls, "./myData");
-        shuffler(result);
-        //TODO TreeMaps to Reducers
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-
-    }).start();
-
-
+    new Thread(
+            () -> {
+              ReceiveFile();
+              try {
+                File root = new File("./");
+                URLClassLoader classLoader =
+                        URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
+                Class<?> cls =
+                        Class.forName("MapperUtil", false, classLoader);
+                Method method = cls.getDeclaredMethod("mapping", String.class);
+                Map<?, ?> result = (Map<?, ?>) method.invoke(cls, "./myData");
+                shuffler(result);
+                // TODO Send TreeMaps to Reducers
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
+            })
+            .start();
   }
 }
