@@ -29,8 +29,8 @@ public class ContainersWorker {
             ContainersDataHandler.incrementRunningContainers();
             break;
           case "Finished":
-            containersDataHandler.incrementFinishedMappers();
-            Test.outPuts.appendText("Mapper Finished" + socket.getInetAddress() + '\n');
+            ContainersDataHandler.incrementFinishedMappers();
+              Test.outPuts.appendText("Mapper Finished" + socket.getInetAddress() + '\n');
             //ContainersDataHandler.incrementRunningContainers();
             break;
 

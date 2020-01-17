@@ -20,8 +20,6 @@ M
 src/main/java/model/Test.java,1/e/1ebd85f63d400d8d83ef098b0c38a8b365118063
 U
 %src/main/java/MapReduce/WorkFlow.java,8/2/828fe4f4db178ad6937fa049737cb0f20360876c
-W
-'src/main/java/utility/FilesHandler.java,4/9/49ae773053518d6e7b2142ff40895a481102abf5
 T
 $src/main/java/utility/FilesUtil.java,5/2/52800c520e0436f7da75724f14333bc70ed064c3
 ^
@@ -36,14 +34,6 @@ M
 temp/reducer/ReducerUtil.java,c/4/c46fbb7698024a26659199ce67e4e2f0cd57bf32
 B
 docker-dompose.yml,5/0/504c667ee7835b8969f407d796ba9a7a039a21ef
-5
-map00,f/5/f5dc1c2e3f57b3a4944154266e17d66d20f6de0b
-5
-map01,e/7/e79a1d0c1f124edb78ba9f8c627e749cf38392d5
-5
-map02,2/e/2edc38bb234a3f26856cfea4e74a61cbec29422f
-5
-map03,d/2/d2c24a0c4b0cf7370349a304dbf93629c9437979
 @
 mapperDockerFile,e/4/e4c299dc3780736f988a5b84d82be8fb57f6b455
 A
@@ -52,3 +42,11 @@ N
 src/main/java/ReducerNode.java,a/2/a208c9e3224d63e468579f98d94b445b74132007
 T
 $src/main/java/utility/Constants.java,5/b/5bccbd29f8ec293916064910b92f868bbabc3aee
+B
+temp/Data/Data.txt,1/9/19ce346375d0f46ac9572ca8172e69e75cb9e484
+?
+temp/Data/map00,d/d/dd2f0d94abda735fc2e115437dbbe42f03b94fe9
+?
+temp/Data/map01,9/a/9a94aa6c4dfde395987ec3c6c367c75109147cfa
+?
+temp/Data/map02,a/d/ad93f02117839cccc3591a0c7056a2c79c44d19c
