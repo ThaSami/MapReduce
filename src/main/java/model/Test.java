@@ -24,14 +24,14 @@ public class Test extends Application {
   public static TextArea outPuts = new TextArea();
   private TextField numOfMappers = new TextField();
   private TextField numOfReducers = new TextField();
-  private TextArea customImport =
-          new TextArea("//Insert your Imports other than \n //import java.io.*;\n");
-  private TextArea mapperFunction =
-          new TextArea("public static Map<?,?> mapping(String file){ \n\n\n\n\n}");
-  private TextArea reducerFunction =
-          new TextArea("public static Map<?,?> reduce(Map<?,List<?>> map){\n\n\n\n\n\n}");
-  private TextField textFilePath = new TextField();
-  private Button btRegister = new Button("RUN IT BABY");
+    private TextArea customImport =
+            new TextArea("//Insert your Imports other than \n //import java.io.*;\n");
+    private TextArea mapperFunction =
+            new TextArea("public static Map<?,?> mapping(String file){ \n\n\n\n\n}");
+    private TextArea reducerFunction =
+            new TextArea("public static Map<?,?> reduce(Map<Object,List<Object>> map){\n\n\n\n\n\n}");
+    private TextField textFilePath = new TextField();
+    private Button btRegister = new Button("Execute");
 
   public static void main(final String... args) {
 
@@ -39,14 +39,14 @@ public class Test extends Application {
             () -> {
               try (ServerSocket server = new ServerSocket(MAIN_SERVER_PORT)) {
 
-                outPuts.appendText("Server started at " + new Date() + '\n');
-                while (true) {
-                  Socket client = server.accept();
-                  ContainersWorker thread = new ContainersWorker(client);
-                  thread.handle();
-                }
+                  outPuts.appendText("Server started at " + new Date() + '\n');
+                  while (true) {
+                      Socket client = server.accept();
+                      ContainersWorker thread = new ContainersWorker(client);
+                      thread.handle();
+                  }
               } catch (IOException ex) {
-                ex.printStackTrace();
+                  ex.printStackTrace();
               }
             })
             .start();
@@ -91,29 +91,29 @@ public class Test extends Application {
 
     btRegister.setOnAction(
             e -> {
-              try {
+                try {
 
-                  btRegister.setDisable(true);
-                  int mappersNumber = Integer.parseInt(numOfMappers.getText());
-                  int reducersNumber = Integer.parseInt(numOfReducers.getText());
-                  String mappingMethod = mapperFunction.getText();
-                  String reduceMethod = reducerFunction.getText();
-                  String txtFilePath = textFilePath.getText();
-                  String customImports = customImport.getText();
+                    btRegister.setDisable(true);
+                    int mappersNumber = Integer.parseInt(numOfMappers.getText());
+                    int reducersNumber = Integer.parseInt(numOfReducers.getText());
+                    String mappingMethod = mapperFunction.getText();
+                    String reduceMethod = reducerFunction.getText();
+                    String txtFilePath = textFilePath.getText();
+                    String customImports = customImport.getText();
 
-                  MainWorkFlow mainWorkFlow =
-                          new MainWorkFlow(
-                                  mappersNumber,
-                                  reducersNumber,
-                                  txtFilePath,
-                                  mappingMethod,
-                                  reduceMethod,
-                                  customImports);
-                  mainWorkFlow.StartWorkFlow();
+                    MainWorkFlow mainWorkFlow =
+                            new MainWorkFlow(
+                                    mappersNumber,
+                                    reducersNumber,
+                                    txtFilePath,
+                                    mappingMethod,
+                                    reduceMethod,
+                                    customImports);
+                    mainWorkFlow.start();
 
-              } catch (Exception ex) {
-                System.err.println(ex);
-              }
+                } catch (Exception ex) {
+                    System.err.println(ex);
+                }
             });
   }
 }

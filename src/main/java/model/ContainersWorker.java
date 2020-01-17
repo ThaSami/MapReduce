@@ -1,7 +1,6 @@
 package model;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.net.Socket;
 
 public class ContainersWorker {
@@ -21,21 +20,19 @@ public class ContainersWorker {
           case "RegisterMapper":
             containersDataHandler.addMapperAddress(socket.getInetAddress().toString());
             Test.outPuts.appendText("Regsitered mapper " + socket.getInetAddress() + '\n');
-            ContainersDataHandler.incrementRunningContainers();
+            containersDataHandler.incrementRunningContainers();
             break;
           case "RegisterReducer":
             containersDataHandler.addReducerAddress(socket.getInetAddress().toString());
             Test.outPuts.appendText("Regsitered reducer " + socket.getInetAddress() + '\n');
-            ContainersDataHandler.incrementRunningContainers();
+            containersDataHandler.incrementRunningContainers();
             break;
           case "Finished":
-            ContainersDataHandler.incrementFinishedMappers();
-              Test.outPuts.appendText("Mapper Finished" + socket.getInetAddress() + '\n');
-            //ContainersDataHandler.incrementRunningContainers();
+            Test.outPuts.appendText("Mapper Finished" + socket.getInetAddress() + '\n');
+            containersDataHandler.incrementFinishedMappers();
             break;
 
           default:
-
         }
       }
     } catch (Exception e) {

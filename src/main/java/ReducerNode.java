@@ -2,10 +2,7 @@ import utility.Constants;
 
 import java.io.*;
 import java.lang.reflect.Method;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.net.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
 
@@ -61,20 +58,42 @@ public class ReducerNode {
         }
     }
 
-    static void ReceiveStartFlag() {
-        try (ServerSocket server = new ServerSocket(Constants.REDUCER_START_LISTENER_PORT)) {
-
+    static void receiveStartFlag() {
+        try (ServerSocket server = new ServerSocket(Constants.REDUCER_START_RECEIVER_PORT)) {
+            Socket sk = server.accept();
+            DataInputStream in = new DataInputStream(sk.getInputStream());
+            String query;
+            while ((query = in.readUTF()) != null) {
+                if (query.startsWith("start")) startReducing = true;
+                System.out.println("Start flag received");
+            }
+            in.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    static void sendResultToCollector(String address, Map<?, ?> result) {
+        System.out.println("Sending final Result To collector");
+        try (Socket sk = new Socket(address, Constants.COLLECTOR_PORT);
+             ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream())) {
+            objectOutput.writeObject(result);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("sent Shuffle Result To reducers");
     }
 
     public static void main(String[] args) {
         new Thread(
                 () -> {
                     RegisterContainer(args[0]);
+                    receiveStartFlag();
                 })
                 .start();
+
         ReceiveTreeMap();
         try {
             File root = new File("./");
@@ -82,7 +101,7 @@ public class ReducerNode {
             Class<?> cls = Class.forName("ReducerUtil", false, classLoader);
             Method method = cls.getDeclaredMethod("reducer", Map.class);
             Map<?, ?> result = (Map<?, ?>) method.invoke(cls, reducerData);
-            // TODO recieve START from MainServer
+            sendResultToCollector(args[0], result);
         } catch (Exception e) {
             e.printStackTrace();
         }

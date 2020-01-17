@@ -50,3 +50,7 @@ B
 temp/Data/map01,9/a/9a94aa6c4dfde395987ec3c6c367c75109147cfa
 ?
 temp/Data/map02,a/d/ad93f02117839cccc3591a0c7056a2c79c44d19c
+^
+.src/main/java/MapReduce/SplittingWorkFlow.java,4/9/499c47fbd8a13e94be46c93da7b4bab2cae897f0
+Y
+)src/main/java/MapReduce/MainWorkFlow.java,1/6/16aaf06b9289285d30535b48a5310d5fc5a59ec6

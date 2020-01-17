@@ -5,8 +5,6 @@ import javax.tools.ToolProvider;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.IllegalFormatCodePointException;
@@ -21,8 +19,11 @@ public class FilesUtil {
 
     ProcessBuilder processBuilder = new ProcessBuilder();
     File file = new File(filename);
-    int size = (int) (file.length() / 1024) / numOfFiles + 1; //convert to kb then split the size evenly , //TODO covert from gb to kb
-    String splitCommand = "cd ./temp/Data/ &&" + " split -d -C " + size + "k" + " Data.txt" + " map";
+    int size =
+            (int) (file.length() / 1024) / numOfFiles
+                    + 1; // convert to kb then split the size evenly , //TODO covert from gb to kb
+    String splitCommand =
+            "cd ./temp/Data/ &&" + " split -d -C " + size + "k" + " Data.txt" + " map";
     processBuilder.command("sh", "-c", splitCommand);
 
     try {
@@ -44,7 +45,6 @@ public class FilesUtil {
     }
   }
 
-
   public static void copy(String from, String to) throws IOException {
     File src = new File(from);
     File root = new File("./temp");
@@ -52,7 +52,6 @@ public class FilesUtil {
     dst.getParentFile().mkdirs();
 
     Files.copy(src.toPath(), dst.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
   }
 
   public static Boolean checkIfExist(String path) {

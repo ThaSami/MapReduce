@@ -6,9 +6,10 @@ import lombok.Synchronized;
 import utility.Constants;
 import utility.FilesUtil;
 
-import java.io.File;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -17,12 +18,20 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class ContainersDataHandler {
+  private static ContainersDataHandler containersDataHandler = null;
   @Setter
   @Getter
-  public static int numOfContainers = 20;
-  public static int runningContainers = 0;
-  public static int finishedMappers = 0;
-  private static ContainersDataHandler containersDataHandler = null;
+  private int numOfContainers = 20;
+  @Setter
+  @Getter
+  private int numOfMappers = 0;
+  @Setter
+  @Getter
+  private int numOfReducer = 0;
+  @Setter
+  @Getter
+  private int runningContainers = 0;
+  private int finishedMappers = 0;
   private List<String> mappersAddresses;
   private ArrayList<String> reducersAddresses;
 
@@ -38,8 +47,8 @@ public class ContainersDataHandler {
   }
 
   @Synchronized
-  public static void incrementRunningContainers() {
-    runningContainers++;
+  public void incrementRunningContainers() {
+    this.runningContainers++;
   }
 
   @Synchronized
@@ -74,28 +83,45 @@ public class ContainersDataHandler {
     }
   }
 
-  public void sendFileToReducers() {
+  public boolean checkIfMappersFinished() {
+    return this.finishedMappers == numOfMappers;
+  }
+
+  public void sendFileToMappers() {
     List<String> files = FilesUtil.getFilesInDirectory("./temp/Data");
     int i = 0;
     for (String file : files) {
-      if (file.startsWith("Data.txt"))
-        continue;
+      if (file.startsWith("Data.txt")) continue;
       FilesUtil.fileUploader(mappersAddresses.get(i++), file);
     }
   }
 
   public void waitForContainersToRun(int timeOutInSeconds) throws TimeoutException {
     long startTime = Calendar.getInstance().getTimeInMillis();
-
+    int fromMilliToSeconds = 1000;
     while (runningContainers != numOfContainers) {
-      if (Calendar.getInstance().getTimeInMillis() - startTime > timeOutInSeconds) {
+      long currentTime = Calendar.getInstance().getTimeInMillis();
+      if (currentTime - startTime > (timeOutInSeconds * fromMilliToSeconds)) {
         throw new TimeoutException("Container Running TimeOut");
       }
     }
   }
 
   @Synchronized
-  public static void incrementFinishedMappers() {
-    finishedMappers++;
+  public void incrementFinishedMappers() {
+    this.finishedMappers++;
+  }
+
+  public void startReducing() {
+    for (String reducerAddress : reducersAddresses) {
+      try (Socket socket = new Socket(reducerAddress, Constants.MAIN_SERVER_PORT);
+           OutputStream outputStream = socket.getOutputStream();
+           DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
+        dataOutputStream.writeUTF("start");
+        dataOutputStream.flush();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
   }
 }

@@ -32,55 +32,56 @@ public class MapperNode {
 
       try (Socket sk = new Socket(reducersAddresses.get(i), Constants.TREE_MAP_RECEIVER_PORT);
            ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream())) {
-        objectOutput.writeObject(shuffleResult.get(i));
+          objectOutput.writeObject(shuffleResult.get(i));
       } catch (UnknownHostException e) {
-        e.printStackTrace();
+          e.printStackTrace();
       } catch (IOException e) {
-        e.printStackTrace();
+          e.printStackTrace();
       }
     }
+      System.out.println("sent Shuffle Result To reducers");
   }
 
   static void ReportToMainServer(String host, String query) {
-    try (Socket socket = new Socket(host, Constants.MAIN_SERVER_PORT);
-         OutputStream outputStream = socket.getOutputStream();
-         DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
-      System.out.println("Sending : " + query + " to main server");
-      dataOutputStream.writeUTF(query);
-      dataOutputStream.flush();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+      try (Socket socket = new Socket(host, Constants.MAIN_SERVER_PORT);
+           OutputStream outputStream = socket.getOutputStream();
+           DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
+          System.out.println("Sending : " + query + " to main server");
+          dataOutputStream.writeUTF(query);
+          dataOutputStream.flush();
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
   }
 
   static void ReceiveFile() {
-    try (ServerSocket serverSocket = new ServerSocket(Constants.MAPPERS_FILE_RECEIVER_PORT);
-         Socket socket = serverSocket.accept();
-         InputStream in = socket.getInputStream();
-         OutputStream out = new FileOutputStream("myData")) {
+      try (ServerSocket serverSocket = new ServerSocket(Constants.MAPPERS_FILE_RECEIVER_PORT);
+           Socket socket = serverSocket.accept();
+           InputStream in = socket.getInputStream();
+           OutputStream out = new FileOutputStream("myData")) {
 
-      byte[] bytes = new byte[8192];
+          byte[] bytes = new byte[8192];
 
-      int count;
-      while ((count = in.read(bytes)) > 0) {
-        out.write(bytes, 0, count);
+          int count;
+          while ((count = in.read(bytes)) > 0) {
+              out.write(bytes, 0, count);
+          }
+      } catch (Exception e) {
+          e.printStackTrace();
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   static void ReceiveReducersAdresses() {
     System.out.println("Receivng Reducers Addresses");
-    try (ServerSocket myServerSocket =
-                 new ServerSocket(Constants.MAPPERS_REDUCER_ADDRESS_RECEIVER_PORT);
-         Socket skt = myServerSocket.accept();
-         ObjectInputStream objectInput = new ObjectInputStream(skt.getInputStream())) {
-        Object object = objectInput.readObject();
-        reducersAddresses = (ArrayList<String>) object;
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
+      try (ServerSocket myServerSocket =
+                   new ServerSocket(Constants.MAPPERS_REDUCER_ADDRESS_RECEIVER_PORT);
+           Socket skt = myServerSocket.accept();
+           ObjectInputStream objectInput = new ObjectInputStream(skt.getInputStream())) {
+          Object object = objectInput.readObject();
+          reducersAddresses = (ArrayList<String>) object;
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
       System.out.println("Reducers addresses recieved");
   }
 
@@ -88,8 +89,7 @@ public class MapperNode {
         Map<?, ?> result = null;
         try {
             File root = new File("./");
-            URLClassLoader classLoader =
-                    URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
+            URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
             Class<?> cls = Class.forName("MapperUtil", false, classLoader);
             Method method = cls.getDeclaredMethod("mapping", String.class);
             result = (Map<?, ?>) method.invoke(cls, "./myData");
@@ -97,7 +97,6 @@ public class MapperNode {
             e.printStackTrace();
         }
         return result;
-
     }
 
     public static void main(String[] args) {
@@ -108,20 +107,16 @@ public class MapperNode {
                 })
                 .start();
 
+        new Thread(MapperNode::ReceiveReducersAdresses).start();
+
         new Thread(
-            MapperNode::ReceiveReducersAdresses)
-            .start();
-
-    new Thread(
-            () -> {
-                ReceiveFile();
-                Map<?, ?> mappingResult = startMapping();
-                shuffler(mappingResult);
-                sendShuffleResultToReducer();
-                ReportToMainServer(args[0], "Finished");
-
-            })
-            .start();
-
+                () -> {
+                    ReceiveFile();
+                    Map<?, ?> mappingResult = startMapping();
+                    shuffler(mappingResult);
+                    sendShuffleResultToReducer();
+                    ReportToMainServer(args[0], "Finished");
+                })
+                .start();
   }
 }
