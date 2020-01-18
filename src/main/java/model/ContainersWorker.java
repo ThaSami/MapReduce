@@ -23,17 +23,38 @@ public class ContainersWorker {
             containersDataHandler.addMapperAddress(socket.getInetAddress().toString().substring(1));
             containersDataHandler.incrementRunningContainers();
             containersDataHandler.incrementRunningMappers();
-            Main.appendText("Registered mapper " + containersDataHandler.getCurrentMappersRunning() + " / " + containersDataHandler.getNumOfMappers() + " " + socket.getInetAddress() + '\n');
+            Main.appendText(
+                    "Registered mapper "
+                            + containersDataHandler.getCurrentMappersRunning()
+                            + " / "
+                            + containersDataHandler.getNumOfMappers()
+                            + " "
+                            + socket.getInetAddress()
+                            + '\n');
             break;
           case "RegisterReducer":
-            containersDataHandler.addReducerAddress(socket.getInetAddress().toString().substring(1));
+            containersDataHandler.addReducerAddress(
+                    socket.getInetAddress().toString().substring(1));
             containersDataHandler.incrementRunningContainers();
             containersDataHandler.incrementRunningReducers();
-            Main.appendText("Registered reducer " + containersDataHandler.getCurrentReducersRunning() + " / " + containersDataHandler.getNumOfReducer() + " " + socket.getInetAddress() + '\n');
+            Main.appendText(
+                    "Registered reducer "
+                            + containersDataHandler.getCurrentReducersRunning()
+                            + " / "
+                            + containersDataHandler.getNumOfReducer()
+                            + " "
+                            + socket.getInetAddress()
+                            + '\n');
             break;
           case "Finished":
             containersDataHandler.incrementFinishedMappers();
-            outPuts.appendText("Mapper Finished" + containersDataHandler.getFinishedMappers() + " / " + containersDataHandler.getNumOfMappers() + socket.getInetAddress() + '\n');
+            outPuts.appendText(
+                    "Mapper Finished"
+                            + containersDataHandler.getFinishedMappers()
+                            + " / "
+                            + containersDataHandler.getNumOfMappers()
+                            + socket.getInetAddress()
+                            + '\n');
             break;
         }
       }

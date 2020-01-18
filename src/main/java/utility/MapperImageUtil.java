@@ -47,6 +47,7 @@ public class MapperImageUtil {
       ex.printStackTrace();
     }
   }
+
   public static void prepareDockerCompose(int numOfMappers, int numOfReducers) {
 
     try {
@@ -85,7 +86,7 @@ public class MapperImageUtil {
                       "     deploy:",
                       "        replicas: " + numOfReducers);
 
-        Path file = Paths.get("docker-compose.yml");
+      Path file = Paths.get("docker-compose.yml");
       Files.write(file, lines, StandardCharsets.UTF_8);
     } catch (IOException ex) {
       ex.printStackTrace();

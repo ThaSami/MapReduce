@@ -17,23 +17,29 @@ public class FilesUtil {
 
   public static void splitter(String filename, int numOfFiles) {
 
-    ProcessBuilder processBuilder = new ProcessBuilder();
-    File file = new File(filename);
-    int size =
-            (int) (file.length() / 1024) / numOfFiles
-                    + 1; // convert to kb then split the size evenly , //TODO covert from gb to kb
+      ProcessBuilder processBuilder = new ProcessBuilder();
+      File file = new File(filename);
+      int size =
+              (int) (file.length() / 1024) / numOfFiles
+                      + 1; // convert to kb then split the size evenly , //TODO covert from gb to kb
       String splitCommand =
-              "cd ./temp/Data/ &&" + " split -d -C " + size + "k" + " Data.txt" + " map " + " && rm Data.txt";
-    processBuilder.command("sh", "-c", splitCommand);
+              "cd ./temp/Data/ &&"
+                      + " split -d -C "
+                      + size
+                      + "k"
+                      + " Data.txt"
+                      + " map "
+                      + " && rm Data.txt";
+      processBuilder.command("sh", "-c", splitCommand);
 
-    try {
+      try {
 
-      Process process = processBuilder.start();
+          Process process = processBuilder.start();
 
-      BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+          BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-      String line;
-      while ((line = reader.readLine()) != null) {
+          String line;
+          while ((line = reader.readLine()) != null) {
         System.out.println(line);
       }
 
@@ -91,8 +97,8 @@ public class FilesUtil {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
     }
-  }
 
     public static void CompileJavaCode(File sourceFile) throws IllegalFormatCodePointException {
         sourceFile.getParentFile().mkdirs();

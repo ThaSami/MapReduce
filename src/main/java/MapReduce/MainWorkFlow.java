@@ -9,8 +9,6 @@ import utility.ReducerImageUtil;
 
 import java.io.IOException;
 
-import static model.Main.outPuts;
-
 @AllArgsConstructor
 public class MainWorkFlow implements WorkFlow {
   int numOfMappers;
@@ -19,7 +17,6 @@ public class MainWorkFlow implements WorkFlow {
   private String mappingMethod;
   private String reducingMethod;
   private String customImport;
-
 
   public void start() {
 
@@ -61,7 +58,6 @@ public class MainWorkFlow implements WorkFlow {
 
     // Todo run compose
 
-
     try {
       Main.appendText("Waiting For Containers to Run\n");
       handler.waitForContainersToRun(120);
@@ -86,17 +82,13 @@ public class MainWorkFlow implements WorkFlow {
 
     Main.appendText("Mappers Finished\n");
 
-
     Main.appendText("Starting Reduce phase\n");
     handler.startReducing();
-
 
     Main.appendText("Collector Initialized\n");
     Collector.startCollecting(numOfReducers);
 
     Collector.printCollectedDataToFile();
     Main.appendText("Data Print\n");
-
-
   }
 }

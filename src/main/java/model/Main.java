@@ -34,31 +34,32 @@ public class Main extends Application {
     private TextField textFilePath = new TextField();
     private Button btExecute = new Button("Execute");
 
-  public static void main(final String... args) {
+    public static void main(final String... args) {
 
-    new Thread(
-            () -> {
-              try (ServerSocket server = new ServerSocket(MAIN_SERVER_PORT)) {
+        new Thread(
+                () -> {
+                    try (ServerSocket server = new ServerSocket(MAIN_SERVER_PORT)) {
 
-                  outPuts.appendText("Server started at " + new Date() + '\n');
-                  while (true) {
-                      Socket client = server.accept();
-                      ContainersWorker thread = new ContainersWorker(client);
-                      thread.handle();
-                  }
-              } catch (IOException ex) {
-                  ex.printStackTrace();
-              }
-            })
-            .start();
+                        outPuts.appendText("Server started at " + new Date() + '\n');
+                        while (true) {
+                            Socket client = server.accept();
+                            ContainersWorker thread = new ContainersWorker(client);
+                            thread.handle();
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                })
+                .start();
 
-      launch(args);
-  }
+        launch(args);
+    }
 
     public static void appendText(String text) {
-        Platform.runLater(() -> {
-            outPuts.appendText(text);
-        });
+        Platform.runLater(
+                () -> {
+                    outPuts.appendText(text);
+                });
     }
 
     @Override
@@ -89,12 +90,12 @@ public class Main extends Application {
         textFilePath.setPrefColumnCount(10);
         mapperFunction.setPrefColumnCount(2);
         reducerFunction.setPrefColumnCount(3);
-    customImport.setPrefColumnCount(3);
+        customImport.setPrefColumnCount(3);
 
-    Scene scene = new Scene(pane, 800, 800);
-    primaryStage.setTitle("Map Reduce");
-    primaryStage.setScene(scene);
-    primaryStage.show();
+        Scene scene = new Scene(pane, 800, 800);
+        primaryStage.setTitle("Map Reduce");
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
         btExecute.setOnAction(
                 e -> {
@@ -116,13 +117,15 @@ public class Main extends Application {
                                         mappingMethod,
                                         reduceMethod,
                                         customImports);
-                        new Thread(() -> {
-                            mainWorkFlow.start();
-                        }).start();
+                        new Thread(
+                                () -> {
+                                    mainWorkFlow.start();
+                                })
+                                .start();
 
                     } catch (Exception ex) {
-                    System.err.println(ex);
-                }
-            });
+                        System.err.println(ex);
+                    }
+                });
   }
 }

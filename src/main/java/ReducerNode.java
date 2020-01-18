@@ -21,27 +21,28 @@ public class ReducerNode {
                 System.out.println("Waiting for client");
                 Socket client = server.accept();
                 System.out.println("Connected to mapper " + client.getInetAddress());
-                Thread t = new Thread(
-                        () -> {
-                            System.out.println("Started thread ");
-                            try (ObjectInputStream objectInput =
-                                         new ObjectInputStream(client.getInputStream())) {
-                                Object object = objectInput.readObject();
-                                Map<Object, Object> data = (TreeMap<Object, Object>) object;
-                                for (Object k : data.keySet()) {
-                                    if (reducerData.containsKey(k)) {
-                                        reducerData.get(k).add(data.get(k));
-                                    } else {
-                                        ArrayList<Object> arr = new ArrayList<>();
-                                        arr.add(data.get(k));
-                                        reducerData.put(k, arr);
+                Thread t =
+                        new Thread(
+                                () -> {
+                                    System.out.println("Started thread ");
+                                    try (ObjectInputStream objectInput =
+                                                 new ObjectInputStream(client.getInputStream())) {
+                                        Object object = objectInput.readObject();
+                                        Map<Object, Object> data = (TreeMap<Object, Object>) object;
+                                        for (Object k : data.keySet()) {
+                                            if (reducerData.containsKey(k)) {
+                                                reducerData.get(k).add(data.get(k));
+                                            } else {
+                                                ArrayList<Object> arr = new ArrayList<>();
+                                                arr.add(data.get(k));
+                                                reducerData.put(k, arr);
+                                            }
+                                        }
+                                        System.out.println("Thread Finished");
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
-                                }
-                                System.out.println("Thread Finished");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
+                                });
                 t.start();
                 t.join();
             }
@@ -77,7 +78,7 @@ public class ReducerNode {
             }
             in.close();
         } catch (Exception e) {
-            //normal
+            // normal
         }
         System.out.println("Start flag received");
     }
@@ -95,7 +96,9 @@ public class ReducerNode {
         System.out.println("Reduce Result Sent to Collector");
     }
 
-    static Map<?, ?> startReducing() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, MalformedURLException {
+    static Map<?, ?> startReducing()
+            throws InvocationTargetException, IllegalAccessException, NoSuchMethodException,
+            ClassNotFoundException, MalformedURLException {
         System.out.println("Starting Reducing function");
         File root = new File("./");
         URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});

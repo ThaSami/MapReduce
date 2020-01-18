@@ -39,7 +39,7 @@ public class ContainersDataHandler {
   private int finishedMappers = 0;
 
   private List<String> mappersAddresses;
-  private ArrayList<String> reducersAddresses; //since List is not Serializable
+  private ArrayList<String> reducersAddresses; // since List is not Serializable
 
   private ContainersDataHandler() {
     this.mappersAddresses = new ArrayList<>();
@@ -77,7 +77,6 @@ public class ContainersDataHandler {
     this.currentReducersRunning++;
   }
 
-
   @Synchronized
   public void addReducerAddress(String address) {
     reducersAddresses.add(address);
@@ -85,22 +84,22 @@ public class ContainersDataHandler {
 
   public void sendReducerAddresses() throws InterruptedException {
     for (String address : reducersAddresses) {
-      Thread t = new Thread(
-              () -> {
-                try (Socket sk =
-                             new Socket(address, Constants.MAPPERS_REDUCERADDRESS_RECEIVER_PORT)) {
-                  ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream());
-                  objectOutput.writeObject(this.reducersAddresses);
-                } catch (UnknownHostException e) {
-                  e.printStackTrace();
-                } catch (IOException e) {
-                  e.printStackTrace();
-                }
+      Thread t =
+              new Thread(
+                      () -> {
+                        try (Socket sk =
+                                     new Socket(address, Constants.MAPPERS_REDUCERADDRESS_RECEIVER_PORT)) {
+                          ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream());
+                          objectOutput.writeObject(this.reducersAddresses);
+                        } catch (UnknownHostException e) {
+                          e.printStackTrace();
+                        } catch (IOException e) {
+                          e.printStackTrace();
+                        }
               });
       t.start();
       t.join();
     }
-
   }
 
   public boolean checkIfMappersFinished() {
@@ -115,7 +114,6 @@ public class ContainersDataHandler {
       System.out.println(mappersAddresses.get(i));
       i++;
     }
-
   }
 
   public void waitForContainersToRun(int timeOutInSeconds) throws TimeoutException {
