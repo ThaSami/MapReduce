@@ -1,6 +1,5 @@
 package MapReduce;
 
-import lombok.Synchronized;
 import utility.Constants;
 
 import java.io.BufferedWriter;
@@ -26,19 +25,20 @@ public class Collector {
             while (dataReceivedFromReducers != numberOfReducers) {
                 Socket skt = server.accept();
                 dataReceivedFromReducers++;
-                Thread t = new Thread(
-                        () -> {
-                            try (ObjectInputStream objectInput =
-                                         new ObjectInputStream(skt.getInputStream())) {
-                                Object object = objectInput.readObject();
-                                Map<Object, Object> data = (NavigableMap<Object, Object>) object;
-                                for (Object k : data.keySet()) {
-                                    finalResult.put(k, data.get(k));
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
+                Thread t =
+                        new Thread(
+                                () -> {
+                                    try (ObjectInputStream objectInput =
+                                                 new ObjectInputStream(skt.getInputStream())) {
+                                        Object object = objectInput.readObject();
+                                        Map<Object, Object> data = (NavigableMap<Object, Object>) object;
+                                        for (Object k : data.keySet()) {
+                                            finalResult.put(k, data.get(k));
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                });
                 t.start();
                 t.join();
             }

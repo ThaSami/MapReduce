@@ -77,7 +77,7 @@ public class MapperNode {
     }
 
     static void ReceiveReducersAdresses() {
-        System.out.println("Receivng Reducers Addresses");
+        System.out.println("Waiting for Reducers Addresses");
         try (ServerSocket myServerSocket =
                      new ServerSocket(Constants.MAPPERS_REDUCERADDRESS_RECEIVER_PORT);
              Socket skt = myServerSocket.accept();
@@ -110,9 +110,7 @@ public class MapperNode {
     public static void main(String[] args) {
 
         new Thread(
-                () -> {
-                    ReceiveReducersAdresses();
-                })
+                MapperNode::ReceiveReducersAdresses)
                 .start();
 
         new Thread(

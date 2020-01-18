@@ -84,7 +84,9 @@ public class MapperImageUtil {
                       "        - java",
                       "        - ReducerNode",
                       "     deploy:",
-                      "        replicas: " + numOfReducers);
+                      "        replicas: " + numOfReducers,
+                      "     depends_on:",
+                      "        - mappers");
 
       Path file = Paths.get("docker-compose.yml");
       Files.write(file, lines, StandardCharsets.UTF_8);

@@ -83,7 +83,8 @@ public class ContainersDataHandler {
   }
 
   public void sendReducerAddresses() throws InterruptedException {
-    for (String address : reducersAddresses) {
+    Thread.sleep(3000);
+    for (String address : this.mappersAddresses) {
       Thread t =
               new Thread(
                       () -> {
@@ -91,20 +92,15 @@ public class ContainersDataHandler {
                                      new Socket(address, Constants.MAPPERS_REDUCERADDRESS_RECEIVER_PORT)) {
                           ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream());
                           objectOutput.writeObject(this.reducersAddresses);
-                        } catch (UnknownHostException e) {
-                          e.printStackTrace();
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                           e.printStackTrace();
                         }
-              });
+                      });
       t.start();
       t.join();
     }
   }
 
-  public boolean checkIfMappersFinished() {
-    return this.finishedMappers == this.numOfMappers;
-  }
 
   public void sendFileToMappers(String rootDirectory) {
     List<String> files = FilesUtil.getFilesInDirectory(rootDirectory);
@@ -130,6 +126,7 @@ public class ContainersDataHandler {
 
   public void waitForMappersToFinish() {
     while (this.getNumOfMappers() != this.getFinishedMappers()) {
+      System.out.println(this.getNumOfMappers() + " " + this.getFinishedMappers());
     }
   }
 
