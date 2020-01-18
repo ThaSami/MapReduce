@@ -31,9 +31,15 @@ public class ContainersDataHandler {
   @Setter
   @Getter
   private int runningContainers = 0;
+  @Getter
+  private int currentMappersRunning = 0;
+  @Getter
+  private int currentReducersRunning = 0;
+  @Getter
   private int finishedMappers = 0;
+
   private List<String> mappersAddresses;
-  private ArrayList<String> reducersAddresses;
+  private ArrayList<String> reducersAddresses; //since List is not Serializable
 
   private ContainersDataHandler() {
     this.mappersAddresses = new ArrayList<>();
@@ -57,20 +63,32 @@ public class ContainersDataHandler {
   }
 
   @Synchronized
+  public void incrementFinishedMappers() {
+    this.finishedMappers++;
+  }
+
+  @Synchronized
+  public void incrementRunningMappers() {
+    this.currentMappersRunning++;
+  }
+
+  @Synchronized
+  public void incrementRunningReducers() {
+    this.currentReducersRunning++;
+  }
+
+
+  @Synchronized
   public void addReducerAddress(String address) {
     reducersAddresses.add(address);
   }
 
-  public String getReducersAddresses(int id) {
-    return reducersAddresses.get(id);
-  }
-
-  public void sendReducerAddresses() {
+  public void sendReducerAddresses() throws InterruptedException {
     for (String address : reducersAddresses) {
-      new Thread(
+      Thread t = new Thread(
               () -> {
                 try (Socket sk =
-                             new Socket(address, Constants.MAPPERS_REDUCER_ADDRESS_RECEIVER_PORT)) {
+                             new Socket(address, Constants.MAPPERS_REDUCERADDRESS_RECEIVER_PORT)) {
                   ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream());
                   objectOutput.writeObject(this.reducersAddresses);
                 } catch (UnknownHostException e) {
@@ -78,43 +96,48 @@ public class ContainersDataHandler {
                 } catch (IOException e) {
                   e.printStackTrace();
                 }
-              })
-              .start();
+              });
+      t.start();
+      t.join();
     }
+
   }
 
   public boolean checkIfMappersFinished() {
-    return this.finishedMappers == numOfMappers;
+    return this.finishedMappers == this.numOfMappers;
   }
 
-  public void sendFileToMappers() {
-    List<String> files = FilesUtil.getFilesInDirectory("./temp/Data");
+  public void sendFileToMappers(String rootDirectory) {
+    List<String> files = FilesUtil.getFilesInDirectory(rootDirectory);
     int i = 0;
     for (String file : files) {
-      if (file.startsWith("Data.txt")) continue;
-      FilesUtil.fileUploader(mappersAddresses.get(i++), file);
+      FilesUtil.fileUploader(mappersAddresses.get(i), rootDirectory, file);
+      System.out.println(mappersAddresses.get(i));
+      i++;
     }
+
   }
 
   public void waitForContainersToRun(int timeOutInSeconds) throws TimeoutException {
     long startTime = Calendar.getInstance().getTimeInMillis();
     int fromMilliToSeconds = 1000;
+    long currentTime;
     while (runningContainers != numOfContainers) {
-      long currentTime = Calendar.getInstance().getTimeInMillis();
+      currentTime = Calendar.getInstance().getTimeInMillis();
       if (currentTime - startTime > (timeOutInSeconds * fromMilliToSeconds)) {
         throw new TimeoutException("Container Running TimeOut");
       }
     }
   }
 
-  @Synchronized
-  public void incrementFinishedMappers() {
-    this.finishedMappers++;
+  public void waitForMappersToFinish() {
+    while (this.getNumOfMappers() != this.getFinishedMappers()) {
+    }
   }
 
   public void startReducing() {
     for (String reducerAddress : reducersAddresses) {
-      try (Socket socket = new Socket(reducerAddress, Constants.MAIN_SERVER_PORT);
+      try (Socket socket = new Socket(reducerAddress, Constants.REDUCER_START_RECEIVER_PORT);
            OutputStream outputStream = socket.getOutputStream();
            DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
         dataOutputStream.writeUTF("start");

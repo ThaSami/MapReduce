@@ -47,35 +47,45 @@ public class MapperImageUtil {
       ex.printStackTrace();
     }
   }
-
   public static void prepareDockerCompose(int numOfMappers, int numOfReducers) {
-    String mapperReplicas = "       replicas: " + numOfMappers;
-    String reducerReplicas = "       replicas: " + numOfReducers;
+
     try {
       List<String> lines =
               Arrays.asList(
                       "version: '3.7'",
                       "services:",
                       "  mappers:",
+                      "     build:",
+                      "        context: .",
+                      "        dockerfile: mapperDockerFile",
                       "     image: mapper",
                       "     expose:",
-                      "        - '7777'",
+                      "        - '" + Constants.MAPPERS_FILE_RECEIVER_PORT + "'",
+                      "        - '" + Constants.MAPPERS_REDUCERADDRESS_RECEIVER_PORT + "'",
+                      "        - '" + Constants.TREE_MAP_RECEIVER_PORT + "'",
+                      "        - '" + Constants.MAIN_SERVER_PORT + "'",
                       "     entrypoint:",
                       "        - java",
                       "        - MapperNode",
                       "     deploy:",
-                      mapperReplicas,
+                      "        replicas: " + numOfMappers,
                       "  reducers:",
+                      "     build:",
+                      "        context: .",
+                      "        dockerfile: reducerDockerFile",
                       "     image: reducer",
                       "     expose:",
-                      "        - '7777'",
+                      "        - '" + Constants.MAPPERS_FILE_RECEIVER_PORT + "'",
+                      "        - '" + Constants.TREE_MAP_RECEIVER_PORT + "'",
+                      "        - '" + Constants.COLLECTOR_PORT + "'",
+                      "        - '" + Constants.REDUCER_START_RECEIVER_PORT + "'",
                       "     entrypoint:",
                       "        - java",
                       "        - ReducerNode",
                       "     deploy:",
-                      reducerReplicas);
+                      "        replicas: " + numOfReducers);
 
-      Path file = Paths.get("docker-dompose.yml");
+        Path file = Paths.get("docker-compose.yml");
       Files.write(file, lines, StandardCharsets.UTF_8);
     } catch (IOException ex) {
       ex.printStackTrace();

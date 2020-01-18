@@ -1,6 +1,7 @@
 import utility.Constants;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.*;
 import java.util.*;
@@ -9,43 +10,49 @@ import java.util.concurrent.ConcurrentSkipListMap;
 public class ReducerNode {
 
     static NavigableMap<Object, List<Object>> reducerData = new ConcurrentSkipListMap<>();
-    static boolean startReducing = false;
 
-    static void ReceiveTreeMap() {
-        new Thread(
-                () -> {
-                    try (ServerSocket server = new ServerSocket(Constants.TREE_MAP_RECEIVER_PORT)) {
-                        while (!startReducing) {
-                            Socket client = server.accept();
-                            new Thread(
-                                    () -> {
-                                        try (ObjectInputStream objectInput =
-                                                     new ObjectInputStream(client.getInputStream())) {
-                                            Object object = objectInput.readObject();
-                                            Map<Object, Object> data = (TreeMap<Object, Object>) object;
-                                            for (Object k : data.keySet()) {
-                                                if (reducerData.containsKey(k)) {
-                                                    reducerData.get(k).add(data.get(k));
-                                                } else {
-                                                    ArrayList<Object> arr = new ArrayList<>();
-                                                    arr.add(data.get(k));
-                                                    reducerData.put(k, arr);
-                                                }
-                                            }
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    })
-                                    .start();
-                        }
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                })
-                .start();
+    static volatile boolean startReducing = false;
+
+    static void receiveTreeMap() {
+        System.out.println("Receiving Data From Mappers");
+
+        try (ServerSocket server = new ServerSocket(Constants.TREE_MAP_RECEIVER_PORT)) {
+            while (!startReducing) {
+                System.out.println("Waiting for client");
+                Socket client = server.accept();
+                System.out.println("Connected to mapper " + client.getInetAddress());
+                Thread t = new Thread(
+                        () -> {
+                            System.out.println("Started thread ");
+                            try (ObjectInputStream objectInput =
+                                         new ObjectInputStream(client.getInputStream())) {
+                                Object object = objectInput.readObject();
+                                Map<Object, Object> data = (TreeMap<Object, Object>) object;
+                                for (Object k : data.keySet()) {
+                                    if (reducerData.containsKey(k)) {
+                                        reducerData.get(k).add(data.get(k));
+                                    } else {
+                                        ArrayList<Object> arr = new ArrayList<>();
+                                        arr.add(data.get(k));
+                                        reducerData.put(k, arr);
+                                    }
+                                }
+                                System.out.println("Thread Finished");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                t.start();
+                t.join();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Data from Mappers Received");
     }
 
-    static void RegisterContainer(String host) {
+    static void registerContainer(String host) {
 
         try (Socket socket = new Socket(host, Constants.MAIN_SERVER_PORT);
              OutputStream outputStream = socket.getOutputStream();
@@ -56,21 +63,23 @@ public class ReducerNode {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Registerd Container");
     }
 
     static void receiveStartFlag() {
+        System.out.println("Waiting for Start");
         try (ServerSocket server = new ServerSocket(Constants.REDUCER_START_RECEIVER_PORT)) {
             Socket sk = server.accept();
             DataInputStream in = new DataInputStream(sk.getInputStream());
             String query;
             while ((query = in.readUTF()) != null) {
                 if (query.startsWith("start")) startReducing = true;
-                System.out.println("Start flag received");
             }
             in.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            //normal
         }
+        System.out.println("Start flag received");
     }
 
     static void sendResultToCollector(String address, Map<?, ?> result) {
@@ -83,25 +92,33 @@ public class ReducerNode {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("sent Shuffle Result To reducers");
+        System.out.println("Reduce Result Sent to Collector");
+    }
+
+    static Map<?, ?> startReducing() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, MalformedURLException {
+        System.out.println("Starting Reducing function");
+        File root = new File("./");
+        URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
+        Class<?> cls = Class.forName("ReducerUtil", false, classLoader);
+        Method method = cls.getDeclaredMethod("reduce", Map.class);
+        Map<?, ?> result = (Map<?, ?>) method.invoke(cls, reducerData);
+        System.out.println("Reducers Finished");
+        return result;
     }
 
     public static void main(String[] args) {
+
         new Thread(
                 () -> {
-                    RegisterContainer(args[0]);
+                    registerContainer("192.168.8.102");
                     receiveStartFlag();
                 })
                 .start();
+        receiveTreeMap();
 
-        ReceiveTreeMap();
         try {
-            File root = new File("./");
-            URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
-            Class<?> cls = Class.forName("ReducerUtil", false, classLoader);
-            Method method = cls.getDeclaredMethod("reducer", Map.class);
-            Map<?, ?> result = (Map<?, ?>) method.invoke(cls, reducerData);
-            sendResultToCollector(args[0], result);
+            Map<?, ?> mappingResult = startReducing();
+            sendResultToCollector("192.168.8.102", mappingResult);
         } catch (Exception e) {
             e.printStackTrace();
         }

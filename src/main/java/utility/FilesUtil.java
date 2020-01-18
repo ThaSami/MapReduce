@@ -22,8 +22,8 @@ public class FilesUtil {
     int size =
             (int) (file.length() / 1024) / numOfFiles
                     + 1; // convert to kb then split the size evenly , //TODO covert from gb to kb
-    String splitCommand =
-            "cd ./temp/Data/ &&" + " split -d -C " + size + "k" + " Data.txt" + " map";
+      String splitCommand =
+              "cd ./temp/Data/ &&" + " split -d -C " + size + "k" + " Data.txt" + " map " + " && rm Data.txt";
     processBuilder.command("sh", "-c", splitCommand);
 
     try {
@@ -76,30 +76,30 @@ public class FilesUtil {
     return results;
   }
 
-  public static void fileUploader(String host, String path) {
+    public static void fileUploader(String address, String rootDirectory, String fileName) {
 
-    File f = new File(path);
+        File f = new File(rootDirectory + fileName);
 
-    try (Socket socket = new Socket(host, Constants.MAPPERS_FILE_RECEIVER_PORT);
-         InputStream in = new FileInputStream(f);
-         OutputStream out = socket.getOutputStream()) {
-      long length = f.length();
-      byte[] bytes = new byte[8192];
-      int count;
-      while ((count = in.read(bytes)) > 0) {
-        out.write(bytes, 0, count);
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+        try (Socket socket = new Socket(address, Constants.MAPPERS_FILE_RECEIVER_PORT);
+             InputStream in = new FileInputStream(f);
+             OutputStream out = socket.getOutputStream()) {
+            long length = f.length();
+            byte[] bytes = new byte[8192];
+            int count;
+            while ((count = in.read(bytes)) > 0) {
+                out.write(bytes, 0, count);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
     }
   }
 
-  public static void CompileJavaCode(File sourceFile) {
-    sourceFile.getParentFile().mkdirs();
-    JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-    int resultCode = compiler.run(null, null, null, sourceFile.getPath());
-    if (resultCode != 0) {
-      throw new IllegalFormatCodePointException(1);
+    public static void CompileJavaCode(File sourceFile) throws IllegalFormatCodePointException {
+        sourceFile.getParentFile().mkdirs();
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        int resultCode = compiler.run(null, null, null, sourceFile.getPath());
+        if (resultCode != 0) {
+            throw new IllegalFormatCodePointException(1);
+        }
     }
-  }
 }

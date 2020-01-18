@@ -1,14 +1,18 @@
-//Insert your Imports other than 
-//import java.io.*;
 
-import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
-import java.io.*;
-public class ReducerUtil { public static Map<?,?> reduce(Map<?,List<?>> map){
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.Map;
+import java.util.List;import java.io.*;
+public class ReducerUtil { 
 
+public static Map<?,?> reduce(Map<Object, List<Object>> map){
+        Map<Object, Object> secondMap = new TreeMap<>();
 
-return null;
-
+        map.forEach((k, v) -> {
+            int sum = v.stream().mapToInt(entry ->  (int)entry).sum();
+            secondMap.put(k, sum);
+        });
+        return secondMap;
 
 } }

@@ -2,13 +2,14 @@ package MapReduce;
 
 import lombok.AllArgsConstructor;
 import model.ContainersDataHandler;
+import model.Main;
 import utility.FilesUtil;
 import utility.MapperImageUtil;
 import utility.ReducerImageUtil;
 
 import java.io.IOException;
 
-import static model.Test.outPuts;
+import static model.Main.outPuts;
 
 @AllArgsConstructor
 public class MainWorkFlow implements WorkFlow {
@@ -19,16 +20,11 @@ public class MainWorkFlow implements WorkFlow {
   private String reducingMethod;
   private String customImport;
 
-  public static boolean checkOS(String name) {
-    String osName = System.getProperty("os.name").toLowerCase();
-
-    return osName.startsWith(name.toLowerCase());
-  }
 
   public void start() {
 
     if (FilesUtil.checkIfNotExist(txtFilePath)) {
-      outPuts.appendText("TEXT FILE NOT FOUND, make sure it is readable");
+      Main.appendText("TEXT FILE NOT FOUND, make sure it is readable");
       System.exit(1);
     }
 
@@ -46,43 +42,61 @@ public class MainWorkFlow implements WorkFlow {
 
     FilesUtil.splitter("./temp/Data/Data.txt", numOfMappers);
 
-    outPuts.appendText("Splitted Files\n");
+    Main.appendText("Splitted Files\n");
 
     MapperImageUtil.prepareMapperCode(mappingMethod, customImport);
-    outPuts.appendText("Mapper Code Prepared Successfully\n");
+    Main.appendText("Mapper Code Prepared Successfully\n");
 
     ReducerImageUtil.prepareReducerCode(reducingMethod, customImport);
-    outPuts.appendText("Reducer Code Prepared Successfully\n");
+    Main.appendText("Reducer Code Prepared Successfully\n");
 
     MapperImageUtil.prepareMapperDockerFile();
-    outPuts.appendText("Mapper DockerFile Created Successfully\n");
+    Main.appendText("Mapper DockerFile Created Successfully\n");
 
     ReducerImageUtil.prepareReducerDockerFile();
-    outPuts.appendText("Reducer DockerFile created Successfully\n");
+    Main.appendText("Reducer DockerFile created Successfully\n");
 
     MapperImageUtil.prepareDockerCompose(numOfMappers, numOfReducers);
-    outPuts.appendText("docker-compose created Successfully\n");
+    Main.appendText("docker-compose created Successfully\n");
 
     // Todo run compose
-    /*
-       try {
-         handler.waitForContainersToRun(30);
-       } catch (Exception e) {
-         e.printStackTrace();
-         outPuts.appendText("time out");
-         System.exit(1);
-       }
 
-    */
-    // send Reducer Addressses
-    handler.sendReducerAddresses();
 
+    try {
+      Main.appendText("Waiting For Containers to Run\n");
+      handler.waitForContainersToRun(120);
+    } catch (Exception e) {
+      e.printStackTrace();
+      Main.appendText("time out");
+    }
+
+    Main.appendText("Sending Reducers Addresses To Mappers\n");
+    try {
+      handler.sendReducerAddresses();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     // send files
-    handler.sendFileToMappers();
+    Main.appendText("Sending Files To Mappers\n");
+    handler.sendFileToMappers("./temp/Data/");
 
     // wait for mappers to finish working
-    if (handler.checkIfMappersFinished()) {
-      handler.startReducing();
-    }
+    Main.appendText("Waiting for mappers to finish working\n");
+    handler.waitForMappersToFinish();
+
+    Main.appendText("Mappers Finished\n");
+
+
+    Main.appendText("Starting Reduce phase\n");
+    handler.startReducing();
+
+
+    Main.appendText("Collector Initialized\n");
+    Collector.startCollecting(numOfReducers);
+
+    Collector.printCollectedDataToFile();
+    Main.appendText("Data Print\n");
+
+
   }
 }

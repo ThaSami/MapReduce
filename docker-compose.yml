@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  mappers:
+    build:
+      context: .
+      dockerfile: mapperDockerFile
+    image: mapper
+    expose:
+      - '6666'
+      - '49999'
+      - '8787'
+      - '7777'
+    entrypoint:
+      - java
+      - MapperNode
+    deploy:
+      replicas: 2
+  reducers:
+    build:
+      context: .
+      dockerfile: reducerDockerFile
+    image: reducer
+    expose:
+      - '6666'
+      - '8787'
+      - '9999'
+      - '8789'
+    entrypoint:
+      - java
+      - ReducerNode
+    deploy:
+      replicas: 2

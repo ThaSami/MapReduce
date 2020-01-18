@@ -3,6 +3,8 @@ package model;
 import java.io.DataInputStream;
 import java.net.Socket;
 
+import static model.Main.outPuts;
+
 public class ContainersWorker {
   private Socket socket;
   private ContainersDataHandler containersDataHandler;
@@ -18,21 +20,21 @@ public class ContainersWorker {
       while ((query = in.readUTF()) != null) {
         switch (query) {
           case "RegisterMapper":
-            containersDataHandler.addMapperAddress(socket.getInetAddress().toString());
-            Test.outPuts.appendText("Regsitered mapper " + socket.getInetAddress() + '\n');
+            containersDataHandler.addMapperAddress(socket.getInetAddress().toString().substring(1));
             containersDataHandler.incrementRunningContainers();
+            containersDataHandler.incrementRunningMappers();
+            Main.appendText("Registered mapper " + containersDataHandler.getCurrentMappersRunning() + " / " + containersDataHandler.getNumOfMappers() + " " + socket.getInetAddress() + '\n');
             break;
           case "RegisterReducer":
-            containersDataHandler.addReducerAddress(socket.getInetAddress().toString());
-            Test.outPuts.appendText("Regsitered reducer " + socket.getInetAddress() + '\n');
+            containersDataHandler.addReducerAddress(socket.getInetAddress().toString().substring(1));
             containersDataHandler.incrementRunningContainers();
+            containersDataHandler.incrementRunningReducers();
+            Main.appendText("Registered reducer " + containersDataHandler.getCurrentReducersRunning() + " / " + containersDataHandler.getNumOfReducer() + " " + socket.getInetAddress() + '\n');
             break;
           case "Finished":
-            Test.outPuts.appendText("Mapper Finished" + socket.getInetAddress() + '\n');
             containersDataHandler.incrementFinishedMappers();
+            outPuts.appendText("Mapper Finished" + containersDataHandler.getFinishedMappers() + " / " + containersDataHandler.getNumOfMappers() + socket.getInetAddress() + '\n');
             break;
-
-          default:
         }
       }
     } catch (Exception e) {
