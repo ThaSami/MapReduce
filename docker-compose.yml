@@ -12,9 +12,9 @@ services:
         - '7777'
      entrypoint:
         - java
-        - MapperNode
+        - com.atypon.nodes.mappernode.MapperNode
      deploy:
-        replicas: 3
+       replicas: 1
   reducers:
      build:
         context: .
@@ -27,8 +27,8 @@ services:
         - '8789'
      entrypoint:
         - java
-        - ReducerNode
+        - com.atypon.nodes.reducernode.ReducerNode
      deploy:
-        replicas: 1
+       replicas: 5
      depends_on:
         - mappers

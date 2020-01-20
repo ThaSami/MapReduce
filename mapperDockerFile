@@ -1,4 +1,4 @@
 FROM openjdk:8
-COPY ./target/classes/MapperNode.class /tmp
-COPY ./temp/mapper/MapperUtil.class /tmp
-WORKDIR /tmp
+COPY ./target/classes/com/atypon/nodes/ /tmp
+WORKDIR /tmp/nodes/mappernode
+ENTRYPOINT ["java","MapperNode"]

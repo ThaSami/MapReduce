@@ -1,0 +1,16 @@
+<workflow>
+    <phase>
+        <executor>com.atypon.mapreduce.Phases.splitphase.SplitExecutor</executor>
+        <rollback>com.atypon.mapreduce.Phases.DummyRollback</rollback>
+    </phase>
+
+    <phase>
+        <executor>com.atypon.mapreduce.Phases.preparedockerphase.DockerPrepareExecutor</executor>
+        <rollback>com.atypon.mapreduce.Phases.DummyRollback</rollback>
+    </phase>
+
+    <phase>
+        <executor>com.atypon.mapreduce.Phases.runandcollect.RunMapReduceExecutor</executor>
+        <rollback>com.atypon.mapreduce.Phases.DummyRollback</rollback>
+    </phase>
+</workflow>
