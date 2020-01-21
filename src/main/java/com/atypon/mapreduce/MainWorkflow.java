@@ -18,7 +18,7 @@ public class MainWorkflow {
   private String reducingMethod;
   private String customImport;
 
-  public void start() {
+  public void start() throws InterruptedException {
 
     if (FilesUtil.checkIfNotExist(txtFilePath)) {
       Main.appendText("TEXT FILE NOT FOUND, make sure it is readable");

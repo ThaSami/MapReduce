@@ -39,7 +39,7 @@ public class Collector {
                                     try (ObjectInputStream objectInput =
                                                  new ObjectInputStream(skt.getInputStream())) {
                                         Object object = objectInput.readObject();
-                                        Map<Object, Object> data = (NavigableMap<Object, Object>) object;
+                                        Map<Object, Object> data = (Map<Object, Object>) object;
                                         for (Map.Entry<?, ?> entry : data.entrySet()) {
                                             finalResult.put(entry.getKey(), entry.getValue());
                                         }
@@ -50,7 +50,9 @@ public class Collector {
                                 });
                 t.start();
             }
-        } catch (IOException ex) {
+            System.out.println("Data collected");
+
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }

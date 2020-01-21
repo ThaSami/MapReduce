@@ -82,7 +82,7 @@ public class MapperImageUtil {
                       "        - '" + Constants.REDUCER_RECEIVER_PORT + "'",
                       "     entrypoint:",
                       "        - java",
-                      "        - com.atypon.nodes.reducernode.ReducerNode",
+                      "        - com.atypon.nodes.ReducerNode",
                       "     deploy:",
                       "        replicas: " + numOfReducers,
                       "     depends_on:",

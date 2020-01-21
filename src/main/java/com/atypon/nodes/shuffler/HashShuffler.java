@@ -1,19 +1,19 @@
-package com.atypon.nodes.mappernode;
+package com.atypon.nodes.shuffler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HashShuffler<T, E> implements Shuffler<T, E> {
+public class HashShuffler implements Shuffler {
 
-    private List<Map<T, E>> shuffleResult;
-    private Map<T, E> mapToShuffle;
+    private List<Map<Object, Object>> shuffleResult;
+    private Map<Object, Object> mapToShuffle;
     int numbOfNodes;
 
-    public HashShuffler(Map<T, E> mapToShuffle, int numbOfNodes) {
+    public HashShuffler(Map<?, ?> mapToShuffle, int numbOfNodes) {
         this.numbOfNodes = numbOfNodes;
-        this.mapToShuffle = mapToShuffle;
+        this.mapToShuffle = (Map<Object, Object>) mapToShuffle;
         shuffleResult = new ArrayList<>(numbOfNodes);
 
         for (int i = 0; i < numbOfNodes; i++) {
@@ -23,10 +23,10 @@ public class HashShuffler<T, E> implements Shuffler<T, E> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Map<T, E>> shuffle(Map<T, E> map) {
+    public List<Map<Object, Object>> shuffle() {
         System.out.println("Started Shuffling");
 
-        for (T k : mapToShuffle.keySet()) {
+        for (Object k : mapToShuffle.keySet()) {
             shuffleResult.get(Math.abs(k.hashCode()) % numbOfNodes).put(k, mapToShuffle.get(k));
         }
         System.out.println("Shuffling Finished");

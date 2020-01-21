@@ -45,6 +45,26 @@ public class ContainersHandler {
         }
     }
 
+    public void sendMappersAddressesToReducers() throws InterruptedException {
+        Thread.sleep(3000);
+        for (String address : containersDataTracker.getReducersAddresses()) {
+            Thread t =
+                    new Thread(
+                            () -> {
+                                try (Socket sk =
+                                             new Socket(address, Constants.REDUCERS_MAPPERSADDRESSES_RECEIVER_PORT)) {
+                                    ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream());
+                                    objectOutput.writeObject(containersDataTracker.getMappersAddresses());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+            t.start();
+            t.join();
+        }
+    }
+
+
     public void sendNumOfMappersToReducers() {
         for (String reducerAddress : containersDataTracker.getReducersAddresses()) {
             try (Socket socket = new Socket(reducerAddress, Constants.REDUCER_RECEIVER_PORT);
@@ -57,7 +77,8 @@ public class ContainersHandler {
         }
     }
 
-    public void sendFilesToMappers(String rootDirectory) {
+    public void sendFilesToMappers(String rootDirectory) throws InterruptedException {
+        Thread.sleep(3000);
         List<String> filesAbsPath = FilesUtil.getFilesAbsPathInDirectory(rootDirectory);
         int i = 0;
         for (String fileAbsPath : filesAbsPath) {
@@ -81,4 +102,6 @@ public class ContainersHandler {
             }
         }
     }
+
+
 }

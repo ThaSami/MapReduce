@@ -22,17 +22,16 @@ public class RunMapReduceExecutor implements Executor {
             throw new PhaseExecutionFailed("TimeOut");
         }
 
-        Main.appendText("Sending Number of mappers To reducers\n");
+        Main.appendText("Sending Reducers Addresses To Mappers\n");
         try {
-            handler.sendNumOfMappersToReducers();
+            handler.sendReducerAddressesToMappers();
         } catch (Exception e) {
             e.printStackTrace();
             //throw new PhaseExecutionFailed("Failed to send Reducer Addresses");
         }
-
-        Main.appendText("Sending Reducers Addresses To Mappers\n");
+        Main.appendText("Sending Mappers Addresses To Reducers\n");
         try {
-            handler.sendReducerAddressesToMappers();
+            handler.sendMappersAddressesToReducers();
         } catch (Exception e) {
             e.printStackTrace();
             //throw new PhaseExecutionFailed("Failed to send Reducer Addresses");
@@ -51,18 +50,14 @@ public class RunMapReduceExecutor implements Executor {
 
         Main.appendText("Mappers Finished\n");
 
-        new Thread(() -> {
-            Main.appendText("started Collector\n");
-            Collector.startCollecting(context.getParam("numOfReducers"));
-        }).start();
 
-
-        Main.appendText("sending start flag to Reducers\n");
-        handler.sendStartFlagToReducers();
+        Main.appendText("started Collector\n");
+        Collector.startCollecting(context.getParam("numOfReducers"));
 
         Collector.getAllDataCollectedLatch().await();
+        Main.appendText("Saving Data to output.txt\n");
         Collector.printCollectedDataToFile();
-        Main.appendText("Data Print\n");
+        Main.appendText("Data saved\n");
         return context;
     }
 }

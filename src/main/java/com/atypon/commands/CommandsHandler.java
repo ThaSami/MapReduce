@@ -1,29 +1,29 @@
 package com.atypon.commands;
 
-import com.atypon.workflow.phase.Executor;
-import com.atypon.workflow.phase.Rollback;
-
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.net.Socket;
 
 public class CommandsHandler {
 
-    public static void execute(String command, Socket socket) {
+  private CommandsHandler() {
+  }
 
-        try {
-            Class<?> klass = Class.forName(command);
-            Constructor<?> constructor = klass.getDeclaredConstructor(String.class);
-            Command cmd;
-            if (socket != null) {
-                cmd = (Command) constructor.newInstance(socket);
-            } else {
-                cmd = (Command) constructor.newInstance();
-            }
+  public static void execute(String command, Socket socket) {
 
-            cmd.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    try {
+      Class<?> klass = Class.forName("com.atypon.commands." + command);
+      Constructor<?> constructor;
+      Command cmd = null;
+
+      if ((constructor = klass.getDeclaredConstructor(Socket.class)) != null) {
+        cmd = (Command) constructor.newInstance(socket);
+      } else {
+        constructor = klass.getDeclaredConstructor();
+        cmd = (Command) constructor.newInstance();
+      }
+      cmd.execute();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+  }
 }

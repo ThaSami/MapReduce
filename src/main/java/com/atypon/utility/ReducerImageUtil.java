@@ -39,7 +39,7 @@ public class ReducerImageUtil {
       List<String> lines =
               Arrays.asList(
                       "FROM openjdk:8",
-                      "COPY ./target/classes/com.atypon.nodes.reducernode.ReducerNode.class /tmp",
+                      "COPY ./target/classes/com.atypon.nodes.ReducerNode.class /tmp",
                       "COPY ./temp/reducer/ReducerUtil.class /tmp",
                       "WORKDIR /tmp");
       Path file = Paths.get("reducerDockerFile");

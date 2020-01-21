@@ -33,7 +33,7 @@ public class ContainersDataTracker {
     private AtomicInteger finishedMappers;
 
     @Getter
-    private List<String> mappersAddresses;
+    private ArrayList<String> mappersAddresses;
     @Getter
     private ArrayList<String> reducersAddresses;
 
@@ -43,7 +43,7 @@ public class ContainersDataTracker {
     private CountDownLatch waitForContainersLatch;
 
     private ContainersDataTracker() {
-        mappersAddresses = new CopyOnWriteArrayList<>();
+        mappersAddresses = new ArrayList<>();
         reducersAddresses = new ArrayList<>();
         numOfContainers = new AtomicInteger();
         numOfMappers = new AtomicInteger();
@@ -76,9 +76,16 @@ public class ContainersDataTracker {
         waitForContainersLatch.countDown();
     }
 
+    @Synchronized
     public void addMapperAddress(String address) {
         mappersAddresses.add(address);
     }
+
+    @Synchronized
+    public void addReducerAddress(String address) {
+        reducersAddresses.add(address);
+    }
+
 
     public void incrementFinishedMappers() {
         this.finishedMappers.getAndIncrement();
@@ -94,8 +101,4 @@ public class ContainersDataTracker {
         this.currentReducersRunning.getAndIncrement();
     }
 
-    @Synchronized
-    public void addReducerAddress(String address) {
-        reducersAddresses.add(address);
-    }
 }

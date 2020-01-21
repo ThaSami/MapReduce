@@ -1,5 +1,6 @@
 package com.atypon.docker;
 
+import com.atypon.commands.CommandsHandler;
 import com.atypon.gui.Main;
 
 import java.io.DataInputStream;
@@ -21,45 +22,7 @@ public class ContainersWorker {
         try (DataInputStream in = new DataInputStream(socket.getInputStream())) {
             String query;
             while ((query = in.readUTF()) != null) {
-                switch (query) {
-                    case "RegisterMapper":
-                        containersDataTracker.addMapperAddress(socket.getInetAddress().toString().substring(1));
-                        containersDataTracker.incrementRunningContainers();
-                        containersDataTracker.incrementRunningMappers();
-                        Main.appendText(
-                                "Registered mapper "
-                                        + containersDataTracker.getCurrentMappersRunning()
-                                        + " / "
-                                        + containersDataTracker.getNumOfMappers()
-                                        + " "
-                                        + socket.getInetAddress()
-                                        + '\n');
-                        break;
-                    case "RegisterReducer":
-                        containersDataTracker.addReducerAddress(
-                                socket.getInetAddress().toString().substring(1));
-                        containersDataTracker.incrementRunningContainers();
-                        containersDataTracker.incrementRunningReducers();
-                        Main.appendText(
-                                "Registered reducer "
-                                        + containersDataTracker.getCurrentReducersRunning()
-                                        + " / "
-                                        + containersDataTracker.getNumOfReducer()
-                                        + " "
-                                        + socket.getInetAddress()
-                                        + '\n');
-                        break;
-                    case "Finished":
-                        containersDataTracker.incrementFinishedMappers();
-                        outPuts.appendText(
-                                "Mapper Finished"
-                                        + containersDataTracker.getFinishedMappers()
-                                        + " / "
-                                        + containersDataTracker.getNumOfMappers()
-                                        + socket.getInetAddress()
-                                        + '\n');
-                        break;
-                }
+                CommandsHandler.execute(query, socket);
             }
         } catch (Exception e) {
             System.out.printf(
