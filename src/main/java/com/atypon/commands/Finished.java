@@ -8,23 +8,23 @@ import static com.atypon.gui.Main.outPuts;
 
 public class Finished implements Command {
 
-    private ContainersDataTracker containersDataTracker;
-    Socket socket;
+  Socket socket;
+  private ContainersDataTracker containersDataTracker;
 
-    public Finished(Socket socket) {
-        this.socket = socket;
-        this.containersDataTracker = ContainersDataTracker.getInstance();
-    }
+  public Finished(Socket socket) {
+    this.socket = socket;
+    this.containersDataTracker = ContainersDataTracker.getInstance();
+  }
 
-    @Override
-    public void execute() {
-        containersDataTracker.incrementFinishedMappers();
-        outPuts.appendText(
-                "Mapper Finished"
-                        + containersDataTracker.getFinishedMappers()
-                        + " / "
-                        + containersDataTracker.getNumOfMappers()
-                        + socket.getInetAddress()
-                        + '\n');
-    }
+  @Override
+  public void execute() {
+    containersDataTracker.incrementFinishedMappers();
+    outPuts.appendText(
+            "Mapper Finished"
+                    + containersDataTracker.getFinishedMappers()
+                    + " / "
+                    + containersDataTracker.getNumOfMappers()
+                    + socket.getInetAddress()
+                    + '\n');
+  }
 }

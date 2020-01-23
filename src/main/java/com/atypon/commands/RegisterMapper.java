@@ -7,26 +7,26 @@ import java.net.Socket;
 
 public class RegisterMapper implements Command {
 
-    private ContainersDataTracker containersDataTracker;
-    Socket socket;
+  Socket socket;
+  private ContainersDataTracker containersDataTracker;
 
-    public RegisterMapper(Socket socket) {
-        this.socket = socket;
-        this.containersDataTracker = ContainersDataTracker.getInstance();
-    }
+  public RegisterMapper(Socket socket) {
+    this.socket = socket;
+    this.containersDataTracker = ContainersDataTracker.getInstance();
+  }
 
-    @Override
-    public void execute() {
-        containersDataTracker.addMapperAddress(socket.getInetAddress().toString().substring(1));
-        containersDataTracker.incrementRunningContainers();
-        containersDataTracker.incrementRunningMappers();
-        Main.appendText(
-                "Registered mapper "
-                        + containersDataTracker.getCurrentMappersRunning()
-                        + " / "
-                        + containersDataTracker.getNumOfMappers()
-                        + " "
-                        + socket.getInetAddress()
-                        + '\n');
-    }
+  @Override
+  public void execute() {
+    containersDataTracker.addMapperAddress(socket.getInetAddress().toString().substring(1));
+    containersDataTracker.incrementRunningContainers();
+    containersDataTracker.incrementRunningMappers();
+    Main.appendText(
+            "Registered mapper "
+                    + containersDataTracker.getCurrentMappersRunning()
+                    + " / "
+                    + containersDataTracker.getNumOfMappers()
+                    + " "
+                    + socket.getInetAddress()
+                    + '\n');
+  }
 }

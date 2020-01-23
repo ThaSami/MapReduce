@@ -18,29 +18,29 @@ public class FilesUtil {
 
   public static void splitter(String filename, int numOfFiles) {
 
-      ProcessBuilder processBuilder = new ProcessBuilder();
-      File file = new File(filename);
-      int size =
-              (int) (file.length() / 1024) / numOfFiles
-                      + 1; // convert to kb then split the size evenly , //TODO covert from gb to kb
-      String splitCommand =
-              "cd ./temp/Data/ &&"
-                      + " split -d -C "
-                      + size
-                      + "k"
-                      + " Data.txt"
-                      + " map "
-                      + " && rm Data.txt";
-      processBuilder.command("sh", "-c", splitCommand);
+    ProcessBuilder processBuilder = new ProcessBuilder();
+    File file = new File(filename);
+    int size =
+            (int) (file.length() / 1024) / numOfFiles
+                    + 1; // convert to kb then split the size evenly , //TODO covert from gb to kb
+    String splitCommand =
+            "cd ./temp/Data/ &&"
+                    + " split -d -C "
+                    + size
+                    + "k"
+                    + " Data.txt"
+                    + " map "
+                    + " && rm Data.txt";
+    processBuilder.command("sh", "-c", splitCommand);
 
-      try {
+    try {
 
-          Process process = processBuilder.start();
+      Process process = processBuilder.start();
 
-          BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+      BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-          String line;
-          while ((line = reader.readLine()) != null) {
+      String line;
+      while ((line = reader.readLine()) != null) {
         System.out.println(line);
       }
 
@@ -71,57 +71,54 @@ public class FilesUtil {
     return !file.exists();
   }
 
-    public static List<String> getFilesAbsPathInDirectory(String directoryPath) {
-        List<String> results = new ArrayList<>();
+  public static List<String> getFilesAbsPathInDirectory(String directoryPath) {
+    List<String> results = new ArrayList<>();
 
-        File[] files = new File(directoryPath).listFiles();
-        for (File file : files) {
-            if (file.isFile()) {
-                results.add(file.getAbsolutePath());
-            }
-        }
-        return results;
+    File[] files = new File(directoryPath).listFiles();
+    for (File file : files) {
+      if (file.isFile()) {
+        results.add(file.getAbsolutePath());
+      }
+    }
+    return results;
+  }
+
+  public static void fileUploader(String address, String fileAbsPath) {
+
+    File f = new File(fileAbsPath);
+
+    try (Socket socket = new Socket(address, Constants.MAPPERS_FILE_RECEIVER_PORT);
+         InputStream in = new FileInputStream(f);
+         OutputStream out = socket.getOutputStream()) {
+
+      byte[] bytes = new byte[8192];
+      int count;
+      while ((count = in.read(bytes)) > 0) {
+        out.write(bytes, 0, count);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static String readFileAsString(String filePath) {
+    String content = "";
+
+    try {
+      content = new String(Files.readAllBytes(Paths.get(filePath)));
+    } catch (IOException e) {
+      e.printStackTrace();
     }
 
-    public static void fileUploader(String address, String fileAbsPath) {
+    return content;
+  }
 
-        File f = new File(fileAbsPath);
-
-        try (Socket socket = new Socket(address, Constants.MAPPERS_FILE_RECEIVER_PORT);
-             InputStream in = new FileInputStream(f);
-             OutputStream out = socket.getOutputStream()) {
-
-            byte[] bytes = new byte[8192];
-            int count;
-            while ((count = in.read(bytes)) > 0) {
-                out.write(bytes, 0, count);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+  public static void CompileJavaCode(File sourceFile) throws IllegalFormatCodePointException {
+    sourceFile.getParentFile().mkdirs();
+    JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+    int resultCode = compiler.run(null, null, null, sourceFile.getPath());
+    if (resultCode != 0) {
+      throw new IllegalFormatCodePointException(1);
     }
-
-    public static String readFileAsString(String filePath) {
-        String content = "";
-
-        try {
-            content = new String(Files.readAllBytes(Paths.get(filePath)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return content;
-    }
-
-    public static void CompileJavaCode(File sourceFile) throws IllegalFormatCodePointException {
-        sourceFile.getParentFile().mkdirs();
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        int resultCode = compiler.run(null, null, null, sourceFile.getPath());
-        if (resultCode != 0) {
-            throw new IllegalFormatCodePointException(1);
-        }
-    }
-
-
-
+  }
 }

@@ -33,17 +33,22 @@ public class MapperImageUtil {
     }
   }
 
-  public static void prepareMapperDockerFile() {
+  public static void prepareReducerCode(String reducerMethod, String customImports) {
+    String source =
+            customImports
+                    + "import java.io.*;\n"
+                    + "public class ReducerUtil { "
+                    + reducerMethod
+                    + " }";
     try {
-      List<String> lines =
-              Arrays.asList(
-                      "FROM openjdk:8",
-                      "COPY ./target/classes/com/atypon/nodes /",
-                      "COPY ./temp/mapper/MapperUtil.class /tmp",
-                      "WORKDIR /tmp");
-      Path file = Paths.get("mapperDockerFile");
-      Files.write(file, lines, StandardCharsets.UTF_8);
-    } catch (IOException ex) {
+      File root = new File("./temp");
+      File sourceFile = new File(root, "reducer/ReducerUtil.java");
+      sourceFile.getParentFile().mkdirs();
+      Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8));
+
+      FilesUtil.CompileJavaCode(sourceFile);
+
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
   }
@@ -62,8 +67,8 @@ public class MapperImageUtil {
                       "     image: mapper",
                       "     expose:",
                       "        - '" + Constants.MAPPERS_FILE_RECEIVER_PORT + "'",
-                      "        - '" + Constants.MAPPERS_REDUCERADDRESS_RECEIVER_PORT + "'",
-                      "        - '" + Constants.TREE_MAP_RECEIVER_PORT + "'",
+                      "        - '" + Constants.MAINSERVER_TO_MAPPERS_PORT + "'",
+                      "        - '" + Constants.MAPPERS_TO_REDUCERS_PORT + "'",
                       "        - '" + Constants.MAIN_SERVER_PORT + "'",
                       "     entrypoint:",
                       "        - java",
@@ -77,9 +82,8 @@ public class MapperImageUtil {
                       "     image: reducer",
                       "     expose:",
                       "        - '" + Constants.MAPPERS_FILE_RECEIVER_PORT + "'",
-                      "        - '" + Constants.TREE_MAP_RECEIVER_PORT + "'",
+                      "        - '" + Constants.MAPPERS_TO_REDUCERS_PORT + "'",
                       "        - '" + Constants.COLLECTOR_PORT + "'",
-                      "        - '" + Constants.REDUCER_RECEIVER_PORT + "'",
                       "     entrypoint:",
                       "        - java",
                       "        - com.atypon.nodes.ReducerNode",

@@ -10,7 +10,6 @@ public class Context {
         this.params = params;
     }
 
-
     @SuppressWarnings("unchecked")
     public <T> T getParam(String paramName) {
         return (T) params.get(paramName);

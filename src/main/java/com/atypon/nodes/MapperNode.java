@@ -4,8 +4,8 @@ import com.atypon.nodes.receivers.ArrayListReceiver;
 import com.atypon.nodes.receivers.FileReceiver;
 import com.atypon.nodes.receivers.Receiver;
 import com.atypon.nodes.senders.DataSender;
-import com.atypon.nodes.shuffler.HashShuffler;
-import com.atypon.nodes.shuffler.Shuffler;
+import com.atypon.nodes.shufflers.HashShuffler;
+import com.atypon.nodes.shufflers.Shuffler;
 import com.atypon.utility.Constants;
 
 import java.io.File;
@@ -23,7 +23,6 @@ public class MapperNode {
 
     static List<String> reducersAddresses;
     static List<Map<Object, Object>> shuffleResult;
-
 
     static Map<?, ?> startMapping(String path) {
         Map<?, ?> result = null;
@@ -44,7 +43,7 @@ public class MapperNode {
         int numberOfReducers = reducersAddresses.size();
         for (int i = startFrom; i < numberOfReducers; i++) {
 
-            try (Socket sk = new Socket(reducersAddresses.get(i), Constants.TREE_MAP_RECEIVER_PORT);
+            try (Socket sk = new Socket(reducersAddresses.get(i), Constants.MAPPERS_TO_REDUCERS_PORT);
                  ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream())) {
                 objectOutput.writeObject(shuffleResult.get(i));
             } catch (Exception e) {
@@ -63,7 +62,7 @@ public class MapperNode {
                             Receiver reducerArrayListReceiver = new ArrayListReceiver();
                             System.out.println("waiting for reducers addresses: ");
                             reducersAddresses =
-                                    reducerArrayListReceiver.start(Constants.MAPPERS_REDUCERADDRESS_RECEIVER_PORT);
+                                    reducerArrayListReceiver.start(Constants.MAINSERVER_TO_MAPPERS_PORT);
                             System.out.println("Reducers addresses received");
                             System.out.println("Receving txt file from Main server");
                             Receiver data = new FileReceiver("myData");

@@ -1,7 +1,7 @@
 package com.atypon.workflow.phase;
 
 public interface Phase {
-    Executor getExecutor();
+  Executor getExecutor();
 
-    Rollback getRollback();
+  Rollback getRollback();
 }

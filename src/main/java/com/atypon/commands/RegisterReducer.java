@@ -7,27 +7,26 @@ import java.net.Socket;
 
 public class RegisterReducer implements Command {
 
-    private ContainersDataTracker containersDataTracker;
-    Socket socket;
+  Socket socket;
+  private ContainersDataTracker containersDataTracker;
 
-    public RegisterReducer(Socket socket) {
-        this.socket = socket;
-        this.containersDataTracker = ContainersDataTracker.getInstance();
-    }
+  public RegisterReducer(Socket socket) {
+    this.socket = socket;
+    this.containersDataTracker = ContainersDataTracker.getInstance();
+  }
 
-    @Override
-    public void execute() {
-        containersDataTracker.addReducerAddress(
-                socket.getInetAddress().toString().substring(1));
-        containersDataTracker.incrementRunningContainers();
-        containersDataTracker.incrementRunningReducers();
-        Main.appendText(
-                "Registered reducer "
-                        + containersDataTracker.getCurrentReducersRunning()
-                        + " / "
-                        + containersDataTracker.getNumOfReducer()
-                        + " "
-                        + socket.getInetAddress()
-                        + '\n');
-    }
+  @Override
+  public void execute() {
+    containersDataTracker.addReducerAddress(socket.getInetAddress().toString().substring(1));
+    containersDataTracker.incrementRunningContainers();
+    containersDataTracker.incrementRunningReducers();
+    Main.appendText(
+            "Registered reducer "
+                    + containersDataTracker.getCurrentReducersRunning()
+                    + " / "
+                    + containersDataTracker.getNumOfReducer()
+                    + " "
+                    + socket.getInetAddress()
+                    + '\n');
+  }
 }

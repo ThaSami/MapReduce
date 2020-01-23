@@ -1,6 +1,5 @@
 package com.atypon.mapreduce;
 
-import com.atypon.docker.ContainersHandler;
 import com.atypon.utility.Constants;
 import lombok.Getter;
 
@@ -11,7 +10,6 @@ import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
-import java.util.NavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
