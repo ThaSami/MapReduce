@@ -1,0 +1,7 @@
+
+Fsquid:S1148J"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8œåÛ±û-
+Fsquid:S1148/"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8Áä›«ü-
+csquid:UselessImportCheck"3Remove this unused import 'java.util.NavigableMap'.(õ Ì§ûÿÿÿÿ8ªú’«ü-
+Fsquid:S1148E"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8œåÛ±û-
+psquid:UselessImportCheck"@Remove this unused import 'com.atypon.docker.ContainersHandler'.(ˆí€äýÿÿÿÿ8†ÆÜýû-
+Asquid:S11488"#Use a logger to log this exception.(Ç’Çê8œåÛ±û-

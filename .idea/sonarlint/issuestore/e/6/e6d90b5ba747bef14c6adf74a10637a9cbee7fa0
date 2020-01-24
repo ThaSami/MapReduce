@@ -1,0 +1,7 @@
+
+Bsquid:S1148Ó"#Use a logger to log this exception.(Ç’Çê8€á­óû-
+osquid:CommentedOutCodeLineË"<This block of commented-out lines of code should be removed.(ÀßÀÎúÿÿÿÿ8¥’Ñòû-
+:squid:S1148k"#Use a logger to log this exception.(Ç’Çê
+Isquid:S1444 "-Make this "public static outPuts" field final(›¯ðÿÿÿÿÿ
+Csquid:S1602u",Remove useless curly braces around statement(÷¼¼Ä
+†"squid:ClassVariableVisibilityCheck "SMake outPuts a static final constant or non-public and provide accessors if needed.(›¯ðÿÿÿÿÿ

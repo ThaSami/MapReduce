@@ -1,34 +1,30 @@
 version: '3.7'
 services:
   mappers:
-     build:
-        context: .
-        dockerfile: mapperDockerFile
-     image: mapper
-     expose:
-        - '6666'
-        - '9090'
-        - '8787'
-        - '7777'
-     entrypoint:
-        - java
-        - com.atypon.nodes.mappernode.MapperNode
-     deploy:
-        replicas: 1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: map_reduce
+    expose:
+      - '7777'
+      - '8787'
+      - '9090'
+      - '6666'
+
+    entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode
+    deploy:
+      replicas: 4
   reducers:
-     build:
-        context: .
-        dockerfile: reducerDockerFile
-     image: reducer
-     expose:
-        - '6666'
-        - '8787'
-        - '9999'
-        - '8789'
-     entrypoint:
-        - java
-        - com.atypon.nodes.ReducerNode
-     deploy:
-        replicas: 1
-     depends_on:
-        - mappers
+    image: map_reduce
+    expose:
+      - '7777'
+      - '9091'
+      - '8787'
+      - '9999'
+
+    entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode
+    deploy:
+      replicas: 4
+    depends_on:
+      - mappers
+

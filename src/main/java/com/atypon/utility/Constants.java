@@ -8,7 +8,7 @@ public class Constants {
   public static final int MAINSERVER_TO_REDUCERS_PORT = 9091;
   public static final int MAPPERS_FILE_RECEIVER_PORT = 6666;
   public static final int COLLECTOR_PORT = 9999;
-  public static final String HOST_IP_ADDRESS = "192.168.8.102";
+  public static final String HOST_IP_ADDRESS = "192.168.8.101";
 
   private Constants() {
   }

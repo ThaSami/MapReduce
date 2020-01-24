@@ -1,0 +1,7 @@
+
+csquid:S21181"@Make the "java.util.Map" class "Serializable" or don't write it.(”‚‘úÿÿÿÿ8À¨—ûû-
+Fsquid:S1148%"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8½¥Û±û-
+Fsquid:S1148W"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8½¥Û±û-
+dsquid:S2142V"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8Ğ€¹«ü-
+Dsquid:S1452"&Remove usage of generic wildcard type.(³”üé8½¥Û±û-
+Dsquid:S1452"&Remove usage of generic wildcard type.(³”üé8½¥Û±û-

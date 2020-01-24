@@ -16,16 +16,16 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.atypon.utility.Constants.MAIN_SERVER_PORT;
+import static com.atypon.utility.Constants.*;
 
 public class Main extends Application {
 
@@ -175,6 +175,27 @@ public class Main extends Application {
                 params.put("customImports", customImports);
                 params.put("ContainersTimeOut", 120);
 
+                VelocityContext velocityContext = new VelocityContext();
+
+                List<Integer> mappersPorts = new ArrayList<>();
+                mappersPorts.add(MAIN_SERVER_PORT);
+                mappersPorts.add(MAPPERS_TO_REDUCERS_PORT);
+                mappersPorts.add(MAINSERVER_TO_MAPPERS_PORT);
+                mappersPorts.add(MAPPERS_FILE_RECEIVER_PORT);
+
+                List<Integer> reducersPorts = new ArrayList<>();
+                reducersPorts.add(MAIN_SERVER_PORT);
+                reducersPorts.add(MAINSERVER_TO_REDUCERS_PORT);
+                reducersPorts.add(MAPPERS_TO_REDUCERS_PORT);
+                reducersPorts.add(COLLECTOR_PORT);
+
+                velocityContext.put("mappersPorts", mappersPorts);
+                velocityContext.put("numOfMappers", mappersNumber);
+                velocityContext.put("reducersPorts", reducersPorts);
+                velocityContext.put("numOfReducers", reducersNumber);
+
+                params.put("compose-data", velocityContext);
+
                 ContainersDataTracker tracker = ContainersDataTracker.getInstance();
                 tracker.setNumOfMappers(new AtomicInteger(mappersNumber));
                 tracker.setNumOfReducer(new AtomicInteger(reducersNumber));
@@ -193,21 +214,6 @@ public class Main extends Application {
                         })
                         .start();
 
-            /*
-                                    MainWorkFlow mainWorkFlow =
-                                            new MainWorkFlow(
-                                                    mappersNumber,
-                                                    reducersNumber,
-                                                    txtFilePath,
-                                                    mappingMethod,
-                                                    reduceMethod,
-                                                    customImports);
-                                    new Thread(
-                                            () -> {
-                                                mainWorkFlow.start();
-                                            })
-                                            .start();
-            */
               } catch (Exception ex) {
                 ex.printStackTrace();
               }
