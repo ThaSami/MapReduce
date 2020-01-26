@@ -1,0 +1,54 @@
+version: '3.7'
+services:
+  ipcollector:
+    image: map_reduce
+    ports:
+      - target: ${IPCport}
+        published: ${IPCport}
+    entrypoint: java -cp ../../../ com/atypon/nodes/SwarmIPCollector ${hostAddress}
+    deploy:
+      placement:
+           constraints: [node.role == manager]
+      replicas: 1
+
+  mappers:
+    image: map_reduce
+    ports:
+  #foreach( $port in $mappersPorts )
+    - target: $port
+        published: $port
+  #end
+
+        protocol: tcp
+        mode: host
+
+    entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode ${ipcAddress}
+    deploy:
+      placement:
+        constraints: [node.role == worker]
+      replicas: ${numOfMappers}
+    depends_on:
+      - ipcollector
+
+  reducers:
+    image: map_reduce
+    ports:
+  #foreach( $port in $reducersPorts )
+    - target: $port
+        published: $port
+  #end
+
+        protocol: tcp
+        mode: host
+    entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode ${ipcAddress}
+    deploy:
+      placement:
+           constraints: [node.role == worker]
+      replicas: ${numOfReducers}
+    depends_on:
+      - ipcollector
+
+networks:
+  mynet1:
+    driver: overlay
+    attachable: true
