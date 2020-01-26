@@ -28,16 +28,16 @@ public class ReducerNode {
 
   static void sendResultToCollector(String address, Map<?, ?> result, int collectPort)
           throws InterruptedException {
-    System.out.println("Sending final Result To collector");
-    try (Socket sk = new Socket(address, collectPort);
-         ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream())) {
-      objectOutput.writeObject(result);
-    } catch (Exception e) {
-      System.out.println("sending failed trying again");
-      Thread.sleep(1000);
-      sendResultToCollector(address, result, collectPort);
-    }
-    System.out.println("Reduce Result Sent to Collector");
+      System.out.println("Sending final Result To collector");
+      try (Socket sk = new Socket(address, collectPort);
+           ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream())) {
+          objectOutput.writeObject(result);
+      } catch (Exception e) {
+          System.out.println("sending failed trying again");
+          Thread.sleep(1000);
+          sendResultToCollector(address, result, collectPort);
+      }
+      System.out.println("Reduce Result Sent to Collector");
   }
 
   static Map<?, ?> startReducing()
@@ -45,9 +45,9 @@ public class ReducerNode {
           InvocationTargetException, IllegalAccessException {
 
     System.out.println("Starting Reducing function");
-    File root = new File("./");
-    URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
-    Class<?> cls = Class.forName("ReducerUtil", false, classLoader);
+      File root = new File("./");
+      URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
+      Class<?> cls = Class.forName("ReducerUtil", false, classLoader);
     Method method = cls.getDeclaredMethod("reduce", Map.class);
     Map<?, ?> result = (Map<?, ?>) method.invoke(cls, reducerData);
     System.out.println("Reducers Finished");
@@ -56,26 +56,26 @@ public class ReducerNode {
 
   static void combiner(List<Map<Object, Object>> listOfMaps) {
 
-    listOfMaps.forEach(
-            entry ->
-                    entry.forEach(
-                            (k, v) -> {
-                              if (!reducerData.containsKey(k)) {
-                                reducerData.put(k, new ArrayList<>());
-                              }
-                              reducerData.get(k).add(v);
-                            }));
+      listOfMaps.forEach(
+              entry ->
+                      entry.forEach(
+                              (k, v) -> {
+                                  if (!reducerData.containsKey(k)) {
+                                      reducerData.put(k, new ArrayList<>());
+                                  }
+                                  reducerData.get(k).add(v);
+                              }));
   }
 
   public static void main(String[] args) {
 
-    new Thread(
-            () -> {
-              System.out.println("Registering to server");
-              DataSender.sendString(
-                      Constants.HOST_IP_ADDRESS, Constants.MAIN_SERVER_PORT, "RegisterReducer");
-            })
-            .start();
+      new Thread(
+              () -> {
+                  System.out.println("Registering to server");
+                  DataSender.sendString(
+                          args[0], Constants.SWARM_IP_COLLECTOR_PORT, "RegisterReducer");
+              })
+              .start();
 
     System.out.println("Receiving mappers addresses");
     Receiver mapperAddressesReceiver = new ArrayListReceiver();

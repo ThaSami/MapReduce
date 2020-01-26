@@ -5,12 +5,17 @@
     </phase>
 
     <phase>
-        <executor>com.atypon.mapreduce.Phases.preparedockerphase.DockerPrepareExecutor</executor>
+        <executor>com.atypon.mapreduce.Phases.swarm.buildswarmcompose.SwarmComposeInitExecutor</executor>
         <rollback>com.atypon.mapreduce.Phases.DummyRollback</rollback>
     </phase>
 
     <phase>
-        <executor>com.atypon.mapreduce.Phases.runandcollect.RunMapReduceExecutor</executor>
+        <executor>com.atypon.mapreduce.Phases.local.composerun.ComposeRunnerExecutor</executor>
+        <rollback>com.atypon.mapreduce.Phases.DummyRollback</rollback>
+    </phase>
+
+    <phase>
+        <executor>com.atypon.mapreduce.Phases.local.runandcollect.RunMapReduceExecutor</executor>
         <rollback>com.atypon.mapreduce.Phases.DummyRollback</rollback>
     </phase>
 </workflow>

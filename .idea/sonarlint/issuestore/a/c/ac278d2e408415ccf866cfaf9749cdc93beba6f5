@@ -1,4 +1,3 @@
 
-csquid:UselessImportCheck	"8Remove this unused import 'com.atypon.gui.Main.outPuts'.(ÜªÞÙ8ì‰•‰ü-
-Xsquid:S2209"5Change this instance-reference to a static reference.(¬â½Äÿÿÿÿÿ8òü´ùû-
-[squid:UselessImportCheck"0Remove this unused import 'com.atypon.gui.Main'.(íùÓÑ8ì‰•‰ü-
+Wsquid:S1068
+"9Remove this unused "containersDataTracker" private field.(µÓÇõ8´ð‹¢ý-

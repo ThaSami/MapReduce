@@ -64,7 +64,7 @@ public class MapperNode {
                             reducersAddresses =
                                     reducerArrayListReceiver.start(Constants.MAINSERVER_TO_MAPPERS_PORT);
                             System.out.println("Reducers addresses received");
-                            System.out.println("Receving txt file from Main server");
+                            System.out.println("Receiving txt file from Main server");
                             Receiver data = new FileReceiver("myData");
                             System.out.println("File Received");
                             System.out.println("Starting mapping Function");
@@ -91,7 +91,7 @@ public class MapperNode {
                         });
         t.start();
 
-        DataSender.sendString(HOST_IP_ADDRESS, Constants.MAIN_SERVER_PORT, "RegisterMapper");
+        DataSender.sendString(args[0], Constants.SWARM_IP_COLLECTOR_PORT, "RegisterMapper");
         t.join();
     }
 }

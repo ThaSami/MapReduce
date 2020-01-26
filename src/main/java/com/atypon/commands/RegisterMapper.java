@@ -20,13 +20,13 @@ public class RegisterMapper implements Command {
     containersDataTracker.addMapperAddress(socket.getInetAddress().toString().substring(1));
     containersDataTracker.incrementRunningContainers();
     containersDataTracker.incrementRunningMappers();
-    Main.appendText(
-            "Registered mapper "
-                    + containersDataTracker.getCurrentMappersRunning()
-                    + " / "
-                    + containersDataTracker.getNumOfMappers()
-                    + " "
-                    + socket.getInetAddress()
-                    + '\n');
+      Main.appendText(
+              "Registered mapper "
+                      + containersDataTracker.getCurrentMappersRunning()
+                      + " / "
+                      + containersDataTracker.getNumOfMappers()
+                      + " "
+                      + socket.getInetAddress()
+                      + '\n');
   }
 }

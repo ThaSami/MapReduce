@@ -16,8 +16,8 @@ public class PhaseExecutionFailed extends Exception {
     super(cause);
   }
 
-  public PhaseExecutionFailed(
-          String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
+    public PhaseExecutionFailed(
+            String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

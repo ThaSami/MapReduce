@@ -1,6 +1,3 @@
 
-qsquid:UselessImportCheck"ARemove this unused import 'jdk.internal.org.xml.sax.InputSource'.(ÊÑ­¢ÿÿÿÿÿ8Ã£›öû-
-Ksquid:S2755)"-Disable XML external entity (XXE) processing.(ğ¨ºî8š†ÔÓû-
-isquid:UselessImportCheck">Remove this unused import 'java.nio.charset.StandardCharsets'.(ï˜ŞÛ8°“†öû-
-Fsquid:S1148B"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ÃÅ€Ôû-
-\squid:UselessImportCheck"1Remove this unused import 'java.io.StringReader'.(¡Ö£8Ñ±•öû-
+Ksquid:S2755%"-Disable XML external entity (XXE) processing.(ğ¨ºî8¯³‡¢ı-
+Fsquid:S1148?"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8¯³‡¢ı-

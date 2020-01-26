@@ -14,7 +14,7 @@ public class DummyRollback implements Rollback {
     return instance;
   }
 
-  @Override
-  public void rollback(Context context) {
-  }
+    @Override
+    public void rollback(Context context) {
+    }
 }

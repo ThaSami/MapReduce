@@ -14,7 +14,6 @@ public class ContainersWorker {
     this.containersDataTracker = ContainersDataTracker.getInstance();
   }
 
-  // command pattern
   public void handle() {
     try (DataInputStream in = new DataInputStream(socket.getInputStream())) {
       String query;

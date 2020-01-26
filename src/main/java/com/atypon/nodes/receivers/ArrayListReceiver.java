@@ -15,14 +15,14 @@ public class ArrayListReceiver implements Receiver {
   @Override
   @SuppressWarnings("unchecked")
   public ArrayList<Object> start(int port) {
-    try (ServerSocket myServerSocket = new ServerSocket(port);
-         Socket skt = myServerSocket.accept();
-         ObjectInputStream objectInput = new ObjectInputStream(skt.getInputStream())) {
-      Object object = objectInput.readObject();
-      dataReceived = (ArrayList<Object>) object;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+      try (ServerSocket myServerSocket = new ServerSocket(port);
+           Socket skt = myServerSocket.accept();
+           ObjectInputStream objectInput = new ObjectInputStream(skt.getInputStream())) {
+          Object object = objectInput.readObject();
+          dataReceived = (ArrayList<Object>) object;
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
     return dataReceived;
   }
 }

@@ -1,30 +1,62 @@
 version: '3.7'
 services:
-  mappers:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  ipcollector:
     image: map_reduce
-    expose:
-      - '7777'
-      - '8787'
-      - '9090'
-      - '6666'
-
-    entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode
+    ports:
+      - target: 7676
+        published: 7676
+    entrypoint: java -cp ../../../ com/atypon/nodes/SwarmIPCollector 192.168.8.103
     deploy:
-      replicas: 4
+      placement:
+        constraints: [node.role == manager]
+      replicas: 1
+
+  mappers:
+    image: map_reduce
+    ports:
+      - target: 7777
+        published: 7777
+      - target: 8787
+        published: 8787
+      - target: 9090
+        published: 9090
+      - target: 6666
+        published: 6666
+
+        protocol: tcp
+        mode: host
+
+    entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode 192.168.99.107
+    deploy:
+      placement:
+        constraints: [node.role == worker]
+      replicas: 2
+    depends_on:
+      - ipcollector
+
   reducers:
     image: map_reduce
-    expose:
-      - '7777'
-      - '9091'
-      - '8787'
-      - '9999'
+    ports:
+      - target: 7777
+        published: 7777
+      - target: 9091
+        published: 9091
+      - target: 8787
+        published: 8787
+      - target: 9999
+        published: 9999
 
-    entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode
+        protocol: tcp
+        mode: host
+    entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode 192.168.99.107
     deploy:
-      replicas: 4
+      placement:
+        constraints: [node.role == worker]
+      replicas: 2
     depends_on:
-      - mappers
+      - ipcollector
 
+networks:
+  mynet1:
+    driver: overlay
+    attachable: true

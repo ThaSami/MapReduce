@@ -1,6 +1,0 @@
-
-_squid:UselessImportCheck"4Remove this unused import 'java.util.regex.Matcher'.(ëÅ›ã8õ±çˆü-
-dsquid:UselessImportCheck"4Remove this unused import 'java.util.regex.Pattern'.(Ã•…Äúÿÿÿÿ8õ±çˆü-
-Xsquid:S1118":Add a private constructor to hide the implicit public one.(®„«ù8õ±çˆü-
-Isquid:S1452	"&Remove usage of generic wildcard type.(÷Ì¨„üÿÿÿÿ8õ±çˆü-
-Isquid:S1452	"&Remove usage of generic wildcard type.(÷Ì¨„üÿÿÿÿ8õ±çˆü-

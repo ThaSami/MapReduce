@@ -19,12 +19,12 @@ public class Finished implements Command {
   @Override
   public void execute() {
     containersDataTracker.incrementFinishedMappers();
-    outPuts.appendText(
-            "Mapper Finished"
-                    + containersDataTracker.getFinishedMappers()
-                    + " / "
-                    + containersDataTracker.getNumOfMappers()
-                    + socket.getInetAddress()
-                    + '\n');
+      outPuts.appendText(
+              "Mapper Finished"
+                      + containersDataTracker.getFinishedMappers()
+                      + " / "
+                      + containersDataTracker.getNumOfMappers()
+                      + socket.getInetAddress()
+                      + '\n');
   }
 }

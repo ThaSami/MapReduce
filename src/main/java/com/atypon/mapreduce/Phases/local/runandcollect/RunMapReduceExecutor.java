@@ -1,4 +1,4 @@
-package com.atypon.mapreduce.Phases.runandcollect;
+package com.atypon.mapreduce.Phases.local.runandcollect;
 
 import com.atypon.docker.ContainersDataTracker;
 import com.atypon.docker.ContainersHandler;
