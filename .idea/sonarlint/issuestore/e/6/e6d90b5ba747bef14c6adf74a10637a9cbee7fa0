@@ -1,9 +1,9 @@
 
-Jsquid:S1602d",Remove useless curly braces around statement(÷¼¼Ä8ö‚’¾ı-
 †"squid:ClassVariableVisibilityCheck"SMake outPuts a static final constant or non-public and provide accessors if needed.(›¯ğÿÿÿÿÿ
-Bsquid:S1148É"#Use a logger to log this exception.(Ç’Çê8ö‚’¾ı-
+Jsquid:S1602d",Remove useless curly braces around statement(÷¼¼Ä8ö‚’¾ı-
 Isquid:S1444"-Make this "public static outPuts" field final(›¯ğÿÿÿÿÿ
-Wsquid:UselessImportCheck",Remove this unused import 'java.net.Socket'.(­‡àú8ñÇ¬Áı-
-`squid:UselessImportCheck"0Remove this unused import 'java.io.IOException'.(ªº»Úıÿÿÿÿ8ñÇ¬Áı-
+Bsquid:S1148É"#Use a logger to log this exception.(Ç’Çê8ö‚’¾ı-
 bsquid:UselessImportCheck"2Remove this unused import 'java.net.ServerSocket'.(ĞúÙÿÿÿÿÿ8ñÇ¬Áı-
+`squid:UselessImportCheck"0Remove this unused import 'java.io.IOException'.(ªº»Úıÿÿÿÿ8ñÇ¬Áı-
 jsquid:UselessImportCheck"?Remove this unused import 'com.atypon.docker.ContainersWorker'.(¹‘¿¯8ñÇ¬Áı-
+Wsquid:UselessImportCheck",Remove this unused import 'java.net.Socket'.(­‡àú8ñÇ¬Áı-

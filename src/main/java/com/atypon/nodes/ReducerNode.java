@@ -73,7 +73,7 @@ public class ReducerNode {
               () -> {
                   System.out.println("Registering to server");
                   DataSender.sendString(
-                          args[0], Constants.SWARM_IP_COLLECTOR_PORT, "RegisterReducer");
+                          args[0], Constants.MAIN_SERVER_PORT, "RegisterReducer");
               })
               .start();
 

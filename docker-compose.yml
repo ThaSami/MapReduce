@@ -5,32 +5,37 @@ services:
     ports:
       - target: 7676
         published: 7676
+        protocol: tcp
+        mode: host
     entrypoint: java -cp ../../../ com/atypon/nodes/SwarmIPCollector 192.168.8.103
     deploy:
       placement:
         constraints: [node.role == manager]
-      replicas: 1
+      mode: global
 
   mappers:
     image: map_reduce
     ports:
       - target: 7777
         published: 7777
+        mode: host
       - target: 8787
         published: 8787
+        mode: host
       - target: 9090
         published: 9090
+        mode: host
       - target: 6666
         published: 6666
-
-        protocol: tcp
         mode: host
+
 
     entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode 192.168.99.107
     deploy:
       placement:
-        constraints: [node.role == worker]
-      replicas: 2
+        constraints: [node.labels.name == mapper]
+      mode: global
+      endpoint_mode: dnsrr
     depends_on:
       - ipcollector
 
@@ -39,20 +44,24 @@ services:
     ports:
       - target: 7777
         published: 7777
+        mode: host
       - target: 9091
         published: 9091
+        mode: host
       - target: 8787
         published: 8787
+        mode: host
       - target: 9999
         published: 9999
-
-        protocol: tcp
         mode: host
+
+
     entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode 192.168.99.107
     deploy:
       placement:
-        constraints: [node.role == worker]
-      replicas: 2
+        constraints: [node.labels.name == reducer]
+      mode: global
+      endpoint_mode: dnsrr
     depends_on:
       - ipcollector
 

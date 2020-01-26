@@ -1,6 +1,5 @@
 package com.atypon.nodes;
 
-import com.atypon.commands.CommandsHandler;
 import com.atypon.nodes.senders.DataSender;
 import com.atypon.utility.Constants;
 
@@ -9,11 +8,11 @@ import java.net.Socket;
 
 public class IPCollectorWorker {
     private Socket socket;
-    private String address;
+    private String hostAddress;
 
-    public IPCollectorWorker(Socket socket, String address) {
+    public IPCollectorWorker(Socket socket, String hostAddress) {
         this.socket = socket;
-        this.address = address;
+        this.hostAddress = hostAddress;
     }
 
     public void handle() {
@@ -21,9 +20,9 @@ public class IPCollectorWorker {
             String query;
             while ((query = in.readUTF()) != null) {
                 if (query.startsWith("RegisterMapper")) {
-                    DataSender.sendString(address, Constants.MAIN_SERVER_PORT, "SwarmRegisterMapper," + socket.getInetAddress());
+                    DataSender.sendString(hostAddress, Constants.MAIN_SERVER_PORT, "SwarmRegisterMapper," + socket.getInetAddress());
                 } else {
-                    DataSender.sendString(address, Constants.MAIN_SERVER_PORT, "SwarmRegisterReducer," + socket.getInetAddress());
+                    DataSender.sendString(hostAddress, Constants.MAIN_SERVER_PORT, "SwarmRegisterReducer," + socket.getInetAddress());
                 }
             }
         } catch (Exception e) {

@@ -5,11 +5,13 @@ services:
     ports:
       - target: ${IPCport}
         published: ${IPCport}
+        protocol: tcp
+        mode: host
     entrypoint: java -cp ../../../ com/atypon/nodes/SwarmIPCollector ${hostAddress}
     deploy:
       placement:
            constraints: [node.role == manager]
-      replicas: 1
+      mode: global
 
   mappers:
     image: map_reduce
@@ -17,16 +19,16 @@ services:
   #foreach( $port in $mappersPorts )
     - target: $port
         published: $port
+        mode: host
   #end
 
-        protocol: tcp
-        mode: host
 
     entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode ${ipcAddress}
     deploy:
       placement:
-        constraints: [node.role == worker]
-      replicas: ${numOfMappers}
+        constraints: [node.labels.name == mapper]
+      mode: global
+      endpoint_mode: dnsrr
     depends_on:
       - ipcollector
 
@@ -36,15 +38,16 @@ services:
   #foreach( $port in $reducersPorts )
     - target: $port
         published: $port
+        mode: host
   #end
 
-        protocol: tcp
-        mode: host
+
     entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode ${ipcAddress}
     deploy:
       placement:
-           constraints: [node.role == worker]
-      replicas: ${numOfReducers}
+           constraints: [node.labels.name == reducer]
+      mode: global
+      endpoint_mode: dnsrr
     depends_on:
       - ipcollector
 

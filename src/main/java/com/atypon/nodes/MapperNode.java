@@ -91,7 +91,7 @@ public class MapperNode {
                         });
         t.start();
 
-        DataSender.sendString(args[0], Constants.SWARM_IP_COLLECTOR_PORT, "RegisterMapper");
+        DataSender.sendString(args[0], Integer.parseInt(args[1]), "RegisterMapper");
         t.join();
     }
 }

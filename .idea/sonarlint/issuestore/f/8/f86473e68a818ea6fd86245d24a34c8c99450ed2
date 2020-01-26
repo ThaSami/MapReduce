@@ -1,8 +1,8 @@
 
-Psquid:S1135"2Complete the task associated to this TODO comment.(¦íÛÞ8œåÛ±û-
-Fsquid:S1148m"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8 »‡ñû-
-dsquid:S21421"FEither re-interrupt this method or rethrow the "InterruptedException".(òž¶È8œåÛ±û-
-Fsquid:S1148c"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8œåÛ±û-
-rsquid:S00100s"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(—»»Þúÿÿÿÿ8œåÛ±û-
-Fsquid:S11482"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8œåÛ±û-
-±%squid:RedundantThrowsDeclarationChecks"tRemove the declaration of thrown exception 'java.util.IllegalFormatCodePointException' which is a runtime exception.(—»»Þúÿÿÿÿ8œåÛ±û-
+dsquid:S21422"FEither re-interrupt this method or rethrow the "InterruptedException".(òž¶È8œåÛ±û-
+±%squid:RedundantThrowsDeclarationCheckt"tRemove the declaration of thrown exception 'java.util.IllegalFormatCodePointException' which is a runtime exception.(—»»Þúÿÿÿÿ8œåÛ±û-
+Fsquid:S1148n"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8 »‡ñû-
+Psquid:S1135"2Complete the task associated to this TODO comment.(¦íÛÞ8œåÛ±û-
+Fsquid:S1148d"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8œåÛ±û-
+Fsquid:S11483"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8œåÛ±û-
+rsquid:S00100t"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(—»»Þúÿÿÿÿ8œåÛ±û-
