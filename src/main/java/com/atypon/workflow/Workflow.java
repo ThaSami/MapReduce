@@ -7,5 +7,5 @@ public interface Workflow {
 
   void start(Context context);
 
-    void shutdown();
+  void shutdown();
 }

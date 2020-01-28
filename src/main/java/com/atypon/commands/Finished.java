@@ -1,10 +1,9 @@
 package com.atypon.commands;
 
 import com.atypon.docker.ContainersDataTracker;
+import com.atypon.gui.Main;
 
 import java.net.Socket;
-
-import static com.atypon.gui.Main.outPuts;
 
 public class Finished implements Command {
 
@@ -19,12 +18,12 @@ public class Finished implements Command {
   @Override
   public void execute() {
     containersDataTracker.incrementFinishedMappers();
-      outPuts.appendText(
-              "Mapper Finished"
-                      + containersDataTracker.getFinishedMappers()
-                      + " / "
-                      + containersDataTracker.getNumOfMappers()
-                      + socket.getInetAddress()
-                      + '\n');
+    Main.appendText(
+            "Mapper Finished"
+                    + containersDataTracker.getFinishedMappers()
+                    + " / "
+                    + containersDataTracker.getNumOfMappers()
+                    + socket.getInetAddress()
+                    + '\n');
   }
 }

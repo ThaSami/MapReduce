@@ -1,4 +1,4 @@
-package com.atypon.mapreduce.Phases.splitphase;
+package com.atypon.mapreduce.Phases.sharedphases.splitphase;
 
 import com.atypon.gui.Main;
 import com.atypon.mapreduce.Phases.PhaseExecutionFailed;

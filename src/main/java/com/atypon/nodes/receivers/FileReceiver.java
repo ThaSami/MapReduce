@@ -21,14 +21,14 @@ public class FileReceiver implements Receiver {
          InputStream in = socket.getInputStream();
          OutputStream out = new FileOutputStream(fileName)) {
 
-        byte[] bytes = new byte[8192];
+      byte[] bytes = new byte[8192];
 
-        int count;
-        while ((count = in.read(bytes)) > 0) {
-            out.write(bytes, 0, count);
-        }
+      int count;
+      while ((count = in.read(bytes)) > 0) {
+        out.write(bytes, 0, count);
+      }
     } catch (Exception e) {
-        e.printStackTrace();
+      e.printStackTrace();
     }
     return "./" + fileName;
   }

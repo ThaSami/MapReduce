@@ -1,13 +1,13 @@
 version: '3.7'
 services:
-  ipcollector:
+  forwarder:
     image: map_reduce
     ports:
-      - target: ${IPCport}
-        published: ${IPCport}
+      - target: ${ForwarderPort}
+        published: ${ForwarderPort}
         protocol: tcp
         mode: host
-    entrypoint: java -cp ../../../ com/atypon/nodes/SwarmIPCollector ${hostAddress}
+    entrypoint: java -cp ../../../ com/atypon/nodes/SwarmForwarderNode ${hostAddress}
     deploy:
       placement:
            constraints: [node.role == manager]
@@ -23,14 +23,14 @@ services:
   #end
 
 
-    entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode ${ipcAddress}
+    entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode ${ForwarderAddress} ${ForwarderPort}
     deploy:
       placement:
         constraints: [node.labels.name == mapper]
       mode: global
       endpoint_mode: dnsrr
     depends_on:
-      - ipcollector
+      - forwarder
 
   reducers:
     image: map_reduce
@@ -42,14 +42,14 @@ services:
   #end
 
 
-    entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode ${ipcAddress}
+    entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode ${ForwarderAddress} ${ForwarderPort}
     deploy:
       placement:
            constraints: [node.labels.name == reducer]
       mode: global
       endpoint_mode: dnsrr
     depends_on:
-      - ipcollector
+      - forwarder
 
 networks:
   mynet1:

@@ -38,19 +38,19 @@ public class MultiHashMapsReceiver implements Receiver {
         Thread t =
                 new Thread(
                         () -> {
-                            try (ObjectInputStream objectInput =
-                                         new ObjectInputStream(client.getInputStream())) {
-                                Object object = objectInput.readObject();
-                                Map<Object, Object> data = (Map<Object, Object>) object;
-                                lock.lock();
+                          try (ObjectInputStream objectInput =
+                                       new ObjectInputStream(client.getInputStream())) {
+                            Object object = objectInput.readObject();
+                            Map<Object, Object> data = (Map<Object, Object>) object;
+                            lock.lock();
 
-                                dataReceived.get(mapsReceived.get()).putAll(data);
+                            dataReceived.get(mapsReceived.get()).putAll(data);
 
-                                mapsReceived.getAndIncrement();
-                                lock.unlock();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            mapsReceived.getAndIncrement();
+                            lock.unlock();
+                          } catch (Exception e) {
+                            e.printStackTrace();
+                          }
                         });
         t.start();
         t.join();

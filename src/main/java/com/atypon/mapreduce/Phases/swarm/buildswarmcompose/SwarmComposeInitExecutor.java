@@ -19,35 +19,35 @@ import java.nio.file.Paths;
 import java.util.Collections;
 
 public class SwarmComposeInitExecutor implements Executor {
-    @Override
-    public Context execute(Context context) throws PhaseExecutionFailed {
-        try {
-            MapperImageUtil.prepareMapperCode(
-                    context.getParam("mappingMethod"), context.getParam("customImports"));
-            Main.appendText("Mapper Code Prepared Successfully\n");
+  @Override
+  public Context execute(Context context) throws PhaseExecutionFailed {
+    try {
+      MapperImageUtil.prepareMapperCode(
+              context.getParam("mappingMethod"), context.getParam("customImports"));
+      Main.appendText("Mapper Code Prepared Successfully\n");
 
-            MapperImageUtil.prepareReducerCode(
-                    context.getParam("reducingMethod"), context.getParam("customImports"));
-            Main.appendText("Reducer Code Prepared Successfully\n");
+      MapperImageUtil.prepareReducerCode(
+              context.getParam("reducingMethod"), context.getParam("customImports"));
+      Main.appendText("Reducer Code Prepared Successfully\n");
 
-            VelocityEngine velocityEngine = new VelocityEngine();
-            velocityEngine.init();
-            Template t = velocityEngine.getTemplate("src/main/resources/compose/docker-compose2.vm");
-            StringWriter writer = new StringWriter();
-            VelocityContext vcontext = context.getParam("compose-data");
-            vcontext.put("IPCport", Constants.SWARM_IP_COLLECTOR_PORT);
-            vcontext.put("ipcAddress", SwarmUtils.getManagerIP());
-            vcontext.put("hostAddress", Constants.HOST_IP_ADDRESS);
+      VelocityEngine velocityEngine = new VelocityEngine();
+      velocityEngine.init();
+      Template t = velocityEngine.getTemplate("src/main/resources/compose/docker-compose2.vm");
+      StringWriter writer = new StringWriter();
+      VelocityContext vcontext = context.getParam("compose-data");
+      vcontext.put("ForwarderPort", Constants.SWARM_FORWARDER_PORT);
+      vcontext.put("ForwarderAddress", SwarmUtils.getManagerIP());
+      vcontext.put("hostAddress", Constants.MAIN_SERVER_IP);
 
-            t.merge(vcontext, writer);
+      t.merge(vcontext, writer);
 
-            Path file = Paths.get("docker-compose.yml");
-            Files.write(file, Collections.singleton(writer.toString()), StandardCharsets.UTF_8);
+      Path file = Paths.get("docker-compose.yml");
+      Files.write(file, Collections.singleton(writer.toString()), StandardCharsets.UTF_8);
 
-            Main.appendText("docker-compose for swarm created Successfully\n");
-        } catch (Exception e) {
-            new PhaseExecutionFailed("Couldn't Write Compose Data");
-        }
-        return context;
+      Main.appendText("docker-compose for swarm created Successfully\n");
+    } catch (Exception e) {
+      new PhaseExecutionFailed("Couldn't Write Compose Data");
     }
+    return context;
+  }
 }

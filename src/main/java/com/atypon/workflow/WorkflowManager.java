@@ -9,7 +9,7 @@ import java.util.List;
 public class WorkflowManager {
   @Getter
   private List<Workflow> workflows;
-    private WorkflowParser parser;
+  private WorkflowParser parser;
 
   public WorkflowManager(String rootPath) {
     parser = new XmlWorkflowParser();

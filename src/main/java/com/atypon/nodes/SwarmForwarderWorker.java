@@ -6,11 +6,11 @@ import com.atypon.utility.Constants;
 import java.io.DataInputStream;
 import java.net.Socket;
 
-public class IPCollectorWorker {
+public class SwarmForwarderWorker {
     private Socket socket;
     private String hostAddress;
 
-    public IPCollectorWorker(Socket socket, String hostAddress) {
+    public SwarmForwarderWorker(Socket socket, String hostAddress) {
         this.socket = socket;
         this.hostAddress = hostAddress;
     }
@@ -20,9 +20,15 @@ public class IPCollectorWorker {
             String query;
             while ((query = in.readUTF()) != null) {
                 if (query.startsWith("RegisterMapper")) {
-                    DataSender.sendString(hostAddress, Constants.MAIN_SERVER_PORT, "SwarmRegisterMapper," + socket.getInetAddress());
+                    DataSender.sendString(
+                            hostAddress,
+                            Constants.MAIN_SERVER_PORT,
+                            "SwarmRegisterMapper," + socket.getInetAddress());
                 } else {
-                    DataSender.sendString(hostAddress, Constants.MAIN_SERVER_PORT, "SwarmRegisterReducer," + socket.getInetAddress());
+                    DataSender.sendString(
+                            hostAddress,
+                            Constants.MAIN_SERVER_PORT,
+                            "SwarmRegisterReducer," + socket.getInetAddress());
                 }
             }
         } catch (Exception e) {
@@ -30,7 +36,5 @@ public class IPCollectorWorker {
                     "connection terminated Successfuly with Client %s:%d%n",
                     socket.getInetAddress(), socket.getPort());
         }
-
-
     }
 }

@@ -4,18 +4,18 @@ import java.util.Map;
 
 public class Context {
 
-    private Map<String, Object> params;
+  private Map<String, Object> params;
 
-    public Context(Map<String, Object> params) {
-        this.params = params;
-    }
+  public Context(Map<String, Object> params) {
+    this.params = params;
+  }
 
-    @SuppressWarnings("unchecked")
-    public <T> T getParam(String paramName) {
-        return (T) params.get(paramName);
-    }
+  @SuppressWarnings("unchecked")
+  public <T> T getParam(String paramName) {
+    return (T) params.get(paramName);
+  }
 
-    public void put(String paramName, Object paramValue) {
-        params.put(paramName, paramValue);
-    }
+  public void put(String paramName, Object paramValue) {
+    params.put(paramName, paramValue);
+  }
 }

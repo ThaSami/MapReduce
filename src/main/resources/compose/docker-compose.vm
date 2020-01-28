@@ -1,16 +1,13 @@
 version: '3.7'
 services:
   mappers:
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: map_reduce
     expose:
   #foreach( $port in $mappersPorts )
     - '$port'
   #end
 
-    entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode
+    entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode ${hostAddress} ${hostPort}
     deploy:
       replicas: ${numOfMappers}
 
@@ -21,7 +18,7 @@ services:
     - '$port'
   #end
 
-    entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode
+    entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode ${hostAddress} ${hostPort}
     deploy:
       replicas: ${numOfReducers}
     depends_on:

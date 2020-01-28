@@ -1,16 +1,21 @@
 <workflow>
     <phase>
-        <executor>com.atypon.mapreduce.Phases.splitphase.SplitExecutor</executor>
+        <executor>com.atypon.mapreduce.Phases.sharedphases.splitphase.SplitExecutor</executor>
         <rollback>com.atypon.mapreduce.Phases.DummyRollback</rollback>
     </phase>
 
     <phase>
-        <executor>com.atypon.mapreduce.Phases.swarm.buildswarmcompose.SwarmComposeInitExecutor</executor>
+        <executor>com.atypon.mapreduce.Phases.sharedphases.preparedocker.DockerPrepareExecutor</executor>
         <rollback>com.atypon.mapreduce.Phases.DummyRollback</rollback>
     </phase>
 
     <phase>
-        <executor>com.atypon.mapreduce.Phases.local.composerun.ComposeRunnerExecutor</executor>
+        <executor>com.atypon.mapreduce.Phases.sharedphases.imagebuilder.DockerImageBuilderExecutor</executor>
+        <rollback>com.atypon.mapreduce.Phases.DummyRollback</rollback>
+    </phase>
+
+    <phase>
+        <executor>com.atypon.mapreduce.Phases.local.composerun.DockerComposeExecutor</executor>
         <rollback>com.atypon.mapreduce.Phases.DummyRollback</rollback>
     </phase>
 

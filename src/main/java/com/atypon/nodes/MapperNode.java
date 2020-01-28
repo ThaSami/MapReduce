@@ -17,7 +17,7 @@ import java.net.URLClassLoader;
 import java.util.List;
 import java.util.Map;
 
-import static com.atypon.utility.Constants.HOST_IP_ADDRESS;
+import static com.atypon.utility.Constants.MAIN_SERVER_IP;
 
 public class MapperNode {
 
@@ -86,8 +86,8 @@ public class MapperNode {
                                 e.printStackTrace();
                             }
 
-                            DataSender.sendString(HOST_IP_ADDRESS, Constants.MAIN_SERVER_PORT, "Finished");
-                            System.out.println("sending finished");
+                            DataSender.sendString(MAIN_SERVER_IP, Constants.MAIN_SERVER_PORT, "Finished");
+                            System.out.println("Finished");
                         });
         t.start();
 
