@@ -1,9 +1,3 @@
 
-Fsquid:S11483"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8Ù¨œÎş-
-Fsquid:S1148n"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8 »‡ñû-
-dsquid:S21422"FEither re-interrupt this method or rethrow the "InterruptedException".(ò¶È8Ù¨œÎş-
-vsquid:UselessImportCheck"FRemove this unused import 'java.util.IllegalFormatCodePointException'.(¹®öÉüÿÿÿÿ8Œ‰Îş-
-esquid:UselessImportCheck"5Remove this unused import 'javax.tools.ToolProvider'.(´£²—şÿÿÿÿ8Œ‰Îş-
-Psquid:S1135"2Complete the task associated to this TODO comment.(¦íÛŞ8Ù¨œÎş-
-`squid:UselessImportCheck"5Remove this unused import 'javax.tools.JavaCompiler'.(ÚÍõÖ8Œ‰Îş-
-Fsquid:S1148d"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8œåÛ±û-
+usquid:S27375"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û8ş¢Îäş-
+Fsquid:S1148?"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8 »‡ñû-

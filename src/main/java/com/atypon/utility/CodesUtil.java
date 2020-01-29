@@ -44,13 +44,13 @@ public class CodesUtil {
         File sourceFile = new File(root, "reducer/ReducerUtil.java");
         sourceFile.getParentFile().mkdirs();
         Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8));
-
+       // sourceFile.getParentFile().mkdirs();
         compileJavaCode(sourceFile);
 
     }
 
     public static void compileJavaCode(File sourceFile) throws IllegalFormatCodePointException {
-        sourceFile.getParentFile().mkdirs();
+
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         int resultCode = compiler.run(null, null, null, sourceFile.getPath());
         if (resultCode != 0) {

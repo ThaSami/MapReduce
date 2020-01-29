@@ -18,7 +18,7 @@ public class DockerClustersExecutor implements Executor {
       processBuilder.command(
               "sh",
               "-c",
-              "./src/main/resources/Scripts/clustersinit.sh "
+              "./src/main/resources/Scripts/ClustersInit.sh "
                       + context.getParam("numOfMappers")
                       + " "
                       + context.getParam("numOfReducers"));

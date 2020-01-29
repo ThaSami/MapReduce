@@ -38,10 +38,11 @@ public class MapperNode {
         return result;
     }
 
-    static void sendShuffleResultToReducers(List<Map<Object, Object>> shuffleResult, int startSendingFrom)
+    static void sendShuffleResultToReducers(List<Map<Object, Object>> shuffleResult)
             throws InterruptedException {
         int numberOfReducers = reducersAddresses.size();
-        for (int i = startSendingFrom; i < numberOfReducers; i++) {
+        int i = 0;
+        for (i = 0; i < numberOfReducers; i++) {
 
             try (Socket sk = new Socket(reducersAddresses.get(i), Constants.MAPPERS_TO_REDUCERS_PORT);
                  ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream())) {
@@ -49,7 +50,7 @@ public class MapperNode {
             } catch (Exception e) {
                 System.out.println("Sending failed trying again in 3 seconds");
                 Thread.sleep(3000);
-                sendShuffleResultToReducers(shuffleResult, i); // recover sending from where the fail happened.
+                i--; //recover
             }
         }
     }
@@ -82,7 +83,7 @@ public class MapperNode {
                             System.out.println("shuffling finished");
 
                             try {
-                                sendShuffleResultToReducers(shuffleResult, 0);
+                                sendShuffleResultToReducers(shuffleResult);
                                 System.out.println("data sent to reducers");
 
                             } catch (InterruptedException e) {

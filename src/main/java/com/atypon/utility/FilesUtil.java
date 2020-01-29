@@ -36,20 +36,20 @@ public class FilesUtil {
     return results;
   }
 
-    public static void fileUploader(String address, String fileAbsPath) throws IOException {
+    public static void fileUploader(String address, String fileAbsPath, int port) throws IOException {
 
         File f = new File(fileAbsPath);
 
-        try (Socket socket = new Socket(address, Constants.MAPPERS_FILE_RECEIVER_PORT);
+        try (Socket socket = new Socket(address, port);
              InputStream in = new FileInputStream(f);
              OutputStream out = socket.getOutputStream()) {
 
             byte[] bytes = new byte[8192];
             int count;
             while ((count = in.read(bytes)) > 0) {
-        out.write(bytes, 0, count);
-      }
-    } catch (Exception e) {
+                out.write(bytes, 0, count);
+            }
+        } catch (Exception e) {
             throw e;
     }
   }

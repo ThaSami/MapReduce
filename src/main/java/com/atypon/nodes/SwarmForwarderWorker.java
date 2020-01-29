@@ -31,7 +31,7 @@ public class SwarmForwarderWorker {
                             "SwarmRegisterReducer," + socket.getInetAddress());
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e) { //normal
             System.out.printf(
                     "connection terminated Successfuly with Client %s:%d%n",
                     socket.getInetAddress(), socket.getPort());
