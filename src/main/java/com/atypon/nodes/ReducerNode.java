@@ -32,18 +32,19 @@ public class ReducerNode {
     return (Map<?, ?>) method.invoke(cls, reducerData);
   }
 
-  static void combiner(List<Map<Object, Object>> listOfMaps) {
+    // combines list of maps into one map with list of values map<key,list<values>
+    static void combiner(List<Map<Object, Object>> listOfMaps) {
 
-    listOfMaps.forEach(
-            entry ->
-                    entry.forEach(
-                            (k, v) -> {
-                              if (!reducerData.containsKey(k)) {
-                                reducerData.put(k, new ArrayList<>());
-                              }
-                              reducerData.get(k).add(v);
-                            }));
-  }
+        listOfMaps.forEach(
+                entry ->
+                        entry.forEach(
+                                (k, v) -> {
+                                    if (!reducerData.containsKey(k)) {
+                                        reducerData.put(k, new ArrayList<>());
+                                    }
+                                    reducerData.get(k).add(v);
+                                }));
+    }
 
   public static void main(String[] args) throws Exception {
 

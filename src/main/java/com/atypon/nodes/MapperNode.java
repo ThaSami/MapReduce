@@ -38,10 +38,10 @@ public class MapperNode {
         return result;
     }
 
-    static void sendShuffleResultToReducers(List<Map<Object, Object>> shuffleResult, int startFrom)
+    static void sendShuffleResultToReducers(List<Map<Object, Object>> shuffleResult, int startSendingFrom)
             throws InterruptedException {
         int numberOfReducers = reducersAddresses.size();
-        for (int i = startFrom; i < numberOfReducers; i++) {
+        for (int i = startSendingFrom; i < numberOfReducers; i++) {
 
             try (Socket sk = new Socket(reducersAddresses.get(i), Constants.MAPPERS_TO_REDUCERS_PORT);
                  ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream())) {
@@ -49,7 +49,7 @@ public class MapperNode {
             } catch (Exception e) {
                 System.out.println("Sending failed trying again in 3 seconds");
                 Thread.sleep(3000);
-                sendShuffleResultToReducers(shuffleResult, i);
+                sendShuffleResultToReducers(shuffleResult, i); // recover sending from where the fail happened.
             }
         }
     }
@@ -61,12 +61,15 @@ public class MapperNode {
                         () -> {
                             Receiver reducerArrayListReceiver = new ArrayListReceiver();
                             System.out.println("waiting for reducers addresses: ");
+
                             reducersAddresses =
                                     reducerArrayListReceiver.start(Constants.MAINSERVER_TO_MAPPERS_PORT);
                             System.out.println("Reducers addresses received");
+
                             System.out.println("Receiving txt file from Main server");
                             Receiver data = new FileReceiver("myData");
                             System.out.println("File Received");
+
                             System.out.println("Starting mapping Function");
                             Map<?, ?> mappingResult =
                                     startMapping(data.start(Constants.MAPPERS_FILE_RECEIVER_PORT));
@@ -77,8 +80,8 @@ public class MapperNode {
 
                             shuffleResult = hashShuffler.shuffle();
                             System.out.println("shuffling finished");
-                            try {
 
+                            try {
                                 sendShuffleResultToReducers(shuffleResult, 0);
                                 System.out.println("data sent to reducers");
 

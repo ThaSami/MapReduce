@@ -10,7 +10,7 @@ services:
 
     entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode 192.168.8.100 7777
     deploy:
-      replicas: 2
+      replicas: 5
 
   reducers:
     image: map_reduce
@@ -21,7 +21,7 @@ services:
 
     entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode 192.168.8.100 7777
     deploy:
-      replicas: 2
+      replicas: 3
     depends_on:
       - mappers
 

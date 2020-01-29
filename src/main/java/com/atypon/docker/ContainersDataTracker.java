@@ -9,6 +9,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ContainersDataTracker {
+
   private static ContainersDataTracker containersDataTracker = null;
 
   @Setter
@@ -60,39 +61,40 @@ public class ContainersDataTracker {
     return containersDataTracker;
   }
 
-  public void setFinishedMappersLatch(int numOfMappers) {
-    finishedMappersLatch = new CountDownLatch(numOfMappers);
-  }
-
-  public void setWaitForContainersLatch(int numOfContainers) {
-    waitForContainersLatch = new CountDownLatch(numOfContainers);
-  }
-
-  public void incrementRunningContainers() {
-    this.runningContainers.getAndIncrement();
-    waitForContainersLatch.countDown();
-  }
-
   @Synchronized
   public void addMapperAddress(String address) {
     mappersAddresses.add(address);
   }
 
-  @Synchronized
-  public void addReducerAddress(String address) {
-    reducersAddresses.add(address);
-  }
+    @Synchronized
+    public void addReducerAddress(String address) {
+        reducersAddresses.add(address);
+    }
 
-  public void incrementFinishedMappers() {
-    this.finishedMappers.getAndIncrement();
-    finishedMappersLatch.countDown();
-  }
+    public void incrementFinishedMappers() {
+        this.finishedMappers.getAndIncrement();
+        finishedMappersLatch.countDown();
+    }
 
-  public void incrementRunningMappers() {
-    this.currentMappersRunning.getAndIncrement();
-  }
+    public void setFinishedMappersLatch(int numOfMappers) {
+        finishedMappersLatch = new CountDownLatch(numOfMappers);
+    }
 
-  public void incrementRunningReducers() {
-    this.currentReducersRunning.getAndIncrement();
-  }
+    public void setWaitForContainersLatch(int numOfContainers) {
+        waitForContainersLatch = new CountDownLatch(numOfContainers);
+    }
+
+    public void incrementRunningContainers() {
+        this.runningContainers.getAndIncrement();
+        waitForContainersLatch.countDown();
+    }
+
+
+    public void incrementRunningMappers() {
+        this.currentMappersRunning.getAndIncrement();
+    }
+
+    public void incrementRunningReducers() {
+        this.currentReducersRunning.getAndIncrement();
+    }
 }

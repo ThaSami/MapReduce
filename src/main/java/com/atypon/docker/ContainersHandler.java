@@ -3,11 +3,13 @@ package com.atypon.docker;
 import com.atypon.utility.Constants;
 import com.atypon.utility.FilesUtil;
 
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
 public class ContainersHandler {
+
   private static ContainersHandler containersDataHandler = null;
   private ContainersDataTracker containersDataTracker;
 
@@ -23,43 +25,32 @@ public class ContainersHandler {
     return containersDataHandler;
   }
 
-  public void sendReducerAddressesToMappers() throws InterruptedException {
+  // TODO: replace with executioner
+  public void sendReducerAddressesToMappers() throws InterruptedException, IOException {
     Thread.sleep(3000);
     for (String address : containersDataTracker.getMappersAddresses()) {
-      Thread t =
-              new Thread(
-                      () -> {
-                        try (Socket sk = new Socket(address, Constants.MAINSERVER_TO_MAPPERS_PORT)) {
-                          ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream());
-                          objectOutput.writeObject(containersDataTracker.getReducersAddresses());
-                        } catch (Exception e) {
-                          e.printStackTrace();
-                        }
-                      });
-      t.start();
-      t.join();
+      try (Socket sk = new Socket(address, Constants.MAINSERVER_TO_MAPPERS_PORT)) {
+        ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream());
+        objectOutput.writeObject(containersDataTracker.getReducersAddresses());
+      } catch (Exception e) {
+        throw e;
+      }
     }
   }
 
-  public void sendMappersAddressesToReducers() throws InterruptedException {
+  public void sendMappersAddressesToReducers() throws InterruptedException, IOException {
     Thread.sleep(3000);
     for (String address : containersDataTracker.getReducersAddresses()) {
-      Thread t =
-              new Thread(
-                      () -> {
-                        try (Socket sk = new Socket(address, Constants.MAINSERVER_TO_REDUCERS_PORT)) {
-                          ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream());
-                          objectOutput.writeObject(containersDataTracker.getMappersAddresses());
-                        } catch (Exception e) {
-                          e.printStackTrace();
-                        }
-                      });
-      t.start();
-      t.join();
+      try (Socket sk = new Socket(address, Constants.MAINSERVER_TO_REDUCERS_PORT)) {
+        ObjectOutputStream objectOutput = new ObjectOutputStream(sk.getOutputStream());
+        objectOutput.writeObject(containersDataTracker.getMappersAddresses());
+      } catch (Exception e) {
+        throw e;
+      }
     }
   }
 
-  public void sendFilesToMappers(String rootDirectory) throws InterruptedException {
+  public void sendFilesToMappers(String rootDirectory) throws IOException, InterruptedException {
     Thread.sleep(3000);
     List<String> filesAbsPath = FilesUtil.getFilesAbsPathInDirectory(rootDirectory);
     int i = 0;

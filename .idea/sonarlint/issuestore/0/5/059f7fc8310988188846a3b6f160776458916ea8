@@ -1,5 +1,4 @@
 
-?squid:S1148 "#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
-?squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
-?squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
-[squid:S2147"DCombine this catch with the one at line 19, which has the same body.(ï­£Ä
+Fsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ô•Ìş-
+usquid:S2737"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û8Á–ÃÌş-
+jsquid:UselessImportCheck":Remove this unused import 'java.net.UnknownHostException'.(Ú·¬˜úÿÿÿÿ8ŸºÃÌş-

@@ -1,8 +1,9 @@
 
-dsquid:S21422"FEither re-interrupt this method or rethrow the "InterruptedException".(ò¶È8œåÛ±û-
-±%squid:RedundantThrowsDeclarationCheckt"tRemove the declaration of thrown exception 'java.util.IllegalFormatCodePointException' which is a runtime exception.(—»»Şúÿÿÿÿ8œåÛ±û-
+Fsquid:S11483"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8Ù¨œÎş-
 Fsquid:S1148n"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8 »‡ñû-
-Psquid:S1135"2Complete the task associated to this TODO comment.(¦íÛŞ8œåÛ±û-
+dsquid:S21422"FEither re-interrupt this method or rethrow the "InterruptedException".(ò¶È8Ù¨œÎş-
+vsquid:UselessImportCheck"FRemove this unused import 'java.util.IllegalFormatCodePointException'.(¹®öÉüÿÿÿÿ8Œ‰Îş-
+esquid:UselessImportCheck"5Remove this unused import 'javax.tools.ToolProvider'.(´£²—şÿÿÿÿ8Œ‰Îş-
+Psquid:S1135"2Complete the task associated to this TODO comment.(¦íÛŞ8Ù¨œÎş-
+`squid:UselessImportCheck"5Remove this unused import 'javax.tools.JavaCompiler'.(ÚÍõÖ8Œ‰Îş-
 Fsquid:S1148d"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8œåÛ±û-
-Fsquid:S11483"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8œåÛ±û-
-rsquid:S00100t"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(—»»Şúÿÿÿÿ8œåÛ±û-

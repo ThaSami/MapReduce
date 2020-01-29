@@ -14,10 +14,11 @@
         <rollback>com.atypon.mapreduceworkflow.phases.DummyRollback</rollback>
     </phase>
 
-    <phase>
-        <executor>com.atypon.mapreduceworkflow.phases.local.composerun.DockerComposeExecutor</executor>
-        <rollback>com.atypon.mapreduceworkflow.phases.DummyRollback</rollback>
-    </phase>
+    //init cluster
+    //init swarm
+    //send the image
+    //run compose
+    //delete the restart policy
 
     <phase>
         <executor>com.atypon.mapreduceworkflow.phases.local.runandcollect.RunMapReduceExecutor</executor>
