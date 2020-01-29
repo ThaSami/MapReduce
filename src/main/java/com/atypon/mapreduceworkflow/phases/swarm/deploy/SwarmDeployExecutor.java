@@ -1,6 +1,5 @@
-package com.atypon.mapreduceworkflow.phases.swarm.swarminit;
+package com.atypon.mapreduceworkflow.phases.swarm.deploy;
 
-import com.atypon.gui.Main;
 import com.atypon.mapreduceworkflow.phases.PhaseExecutionFailed;
 import com.atypon.workflow.Context;
 import com.atypon.workflow.phase.Executor;
@@ -8,18 +7,17 @@ import com.atypon.workflow.phase.Executor;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class SwarmInitExecutor implements Executor {
+public class SwarmDeployExecutor implements Executor {
     @Override
     public Context execute(Context context) throws PhaseExecutionFailed {
+
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
             processBuilder.command(
                     "sh",
                     "-c",
-                    "./src/main/resources/Scripts/SwarmInit.sh "
-                            + context.getParam("numOfMappers")
-                            + " "
-                            + context.getParam("numOfReducers"));
+                    "docker-machine scp docker-compose.yml manager:/home/docker/ &&" +
+                    " docker-machine ssh manager 'docker stack deploy --compose-file=docker-compose.yml mapreduce'");
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
@@ -29,17 +27,15 @@ public class SwarmInitExecutor implements Executor {
             }
 
             int exitCode = process.waitFor();
-            System.out.println("\nswarm initialization Exited with error code : " + exitCode);
+            System.out.println("\nDeploying to swarm Exited with error code : " + exitCode);
 
             if (exitCode != 0) {
-                throw new PhaseExecutionFailed("Running Docker-Compose Failed");
+                throw new PhaseExecutionFailed("Deploying to swarm Failed");
             }
         } catch (Exception e) {
-            throw new PhaseExecutionFailed("swarm initialization Failed");
+            throw new PhaseExecutionFailed("Deploying to swarm Failed");
         }
 
-        Main.appendText("Swarm Initialized on Clusters successfully\n");
-        Main.appendText("visit http://localhost:8080 for swarm monitoring\n");
         return context;
     }
 }

@@ -10,7 +10,7 @@ public class Constants {
   public static final int COLLECTOR_PORT = 9999;
   public static final int SWARM_FORWARDER_PORT = 7676;
 
-  public static final String MAIN_SERVER_IP = "192.168.8.100";
+  public static final String MAIN_SERVER_IP = "192.168.8.102";
 
   private Constants() {
   }

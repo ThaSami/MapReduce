@@ -1,4 +1,4 @@
-package com.atypon.mapreduceworkflow.phases.local.runandcollect;
+package com.atypon.mapreduceworkflow.phases.sharedphases.runandcollect;
 
 import com.atypon.docker.ContainersDataTracker;
 import com.atypon.docker.ContainersHandler;
@@ -8,9 +8,9 @@ import com.atypon.mapreduceworkflow.phases.PhaseExecutionFailed;
 import com.atypon.workflow.Context;
 import com.atypon.workflow.phase.Executor;
 
-public class RunMapReduceExecutor implements Executor {
+public class SendAndCollectExecutor implements Executor {
   @Override
-  public Context execute(Context context) throws PhaseExecutionFailed, InterruptedException {
+  public Context execute(Context context) throws PhaseExecutionFailed {
 
     ContainersDataTracker dataTracker = ContainersDataTracker.getInstance();
     ContainersHandler handler = ContainersHandler.getInstance();
@@ -35,12 +35,16 @@ public class RunMapReduceExecutor implements Executor {
         throw new PhaseExecutionFailed("Failed to send Reducer Addresses");
     }
 
+    try{
     Main.appendText("Sending Files To Mappers\n");
     handler.sendFilesToMappers("./temp/Data/");
+    }catch (Exception e){
+        throw new PhaseExecutionFailed("Failed to files to mappers");
+    }
 
     try {
-      Main.appendText("Waiting for mappers to finish working\n");
-        dataTracker.getFinishedMappersLatch().await();
+        Main.appendText("Waiting for mappers to finish working\n");
+        dataTracker.getFinishedMappersLatch().await(); // TimeOut of waiting can be injected in await() method.
         Main.appendText("Mappers Finished\n");
     } catch (Exception e) {
       throw new PhaseExecutionFailed("Failed to wait mappers to finish working");

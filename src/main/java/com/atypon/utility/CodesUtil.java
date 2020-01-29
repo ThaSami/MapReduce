@@ -44,7 +44,6 @@ public class CodesUtil {
         File sourceFile = new File(root, "reducer/ReducerUtil.java");
         sourceFile.getParentFile().mkdirs();
         Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8));
-       // sourceFile.getParentFile().mkdirs();
         compileJavaCode(sourceFile);
 
     }

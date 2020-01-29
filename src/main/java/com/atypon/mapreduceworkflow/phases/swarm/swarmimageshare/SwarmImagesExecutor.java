@@ -1,5 +1,6 @@
-package com.atypon.mapreduceworkflow.phases.swarm.dockerimageshare;
+package com.atypon.mapreduceworkflow.phases.swarm.swarmimageshare;
 
+import com.atypon.gui.Main;
 import com.atypon.mapreduceworkflow.phases.PhaseExecutionFailed;
 import com.atypon.workflow.Context;
 import com.atypon.workflow.phase.Executor;
@@ -19,6 +20,8 @@ public class SwarmImagesExecutor implements Executor {
                     "sh",
                     "-c",
                     "./src/main/resources/Scripts/SwarmImageSender.sh ");
+
+            Main.appendText("Sending map_reduce docker image to clusters\n");
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
@@ -30,13 +33,14 @@ public class SwarmImagesExecutor implements Executor {
             int exitCode = process.waitFor();
             System.out.println("\nimage sending Exited with error code : " + exitCode);
 
-            if (exitCode != 0) {
+            if(exitCode!=0){
                 throw new PhaseExecutionFailed("Docker Image Sending Failed");
             }
         } catch (Exception e) {
             throw new PhaseExecutionFailed("Docker Image Sending Failed");
         }
 
+        Main.appendText("Images sent to cluster successfully\n");
 
         return context;
     }

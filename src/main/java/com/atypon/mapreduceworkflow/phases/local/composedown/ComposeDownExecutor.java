@@ -1,25 +1,33 @@
-package com.atypon.mapreduceworkflow.phases.swarm.swarminit;
+package com.atypon.mapreduceworkflow.phases.local.composerun;
 
 import com.atypon.gui.Main;
 import com.atypon.mapreduceworkflow.phases.PhaseExecutionFailed;
 import com.atypon.workflow.Context;
 import com.atypon.workflow.phase.Executor;
+import org.apache.velocity.Template;
+import org.apache.velocity.app.VelocityEngine;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 
-public class SwarmInitExecutor implements Executor {
+public class ComposeDownExecutor implements Executor {
+
     @Override
     public Context execute(Context context) throws PhaseExecutionFailed {
+
         try {
+
+
+            Main.appendText("Shutting Down docker-compose\n");
             ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command(
-                    "sh",
-                    "-c",
-                    "./src/main/resources/Scripts/SwarmInit.sh "
-                            + context.getParam("numOfMappers")
-                            + " "
-                            + context.getParam("numOfReducers"));
+            processBuilder.command("sh", "-c", "docker-compose --compatibility down");
+
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
@@ -29,17 +37,16 @@ public class SwarmInitExecutor implements Executor {
             }
 
             int exitCode = process.waitFor();
-            System.out.println("\nswarm initialization Exited with error code : " + exitCode);
+            System.out.println("\nshutting compose Exited with error code : " + exitCode);
 
+            // process failed to execute
             if (exitCode != 0) {
-                throw new PhaseExecutionFailed("Running Docker-Compose Failed");
+                throw new PhaseExecutionFailed("shutting Docker-Compose Failed");
             }
         } catch (Exception e) {
-            throw new PhaseExecutionFailed("swarm initialization Failed");
+            throw new PhaseExecutionFailed("shutting Docker-Compose Failed");
         }
 
-        Main.appendText("Swarm Initialized on Clusters successfully\n");
-        Main.appendText("visit http://localhost:8080 for swarm monitoring\n");
         return context;
     }
 }

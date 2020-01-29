@@ -32,61 +32,11 @@ public class Main extends Application {
   private TextField numOfMappers = new TextField();
   private TextField numOfReducers = new TextField();
   private TextArea customImport =
-          new TextArea(
-                  "\n"
-                          + "import java.util.TreeMap;\n"
-                          + "import java.util.regex.Matcher;\n"
-                          + "import java.util.regex.Pattern;\n"
-                          + "import java.util.Map;\n"
-                          + "import java.util.List;");
+          new TextArea("//please list all your imports here.");
   private TextArea mapperFunction =
-          new TextArea(
-                  "\n"
-                          + "public static Map<?,?> mapping(String file){ \n"
-                          + "       Pattern pattern = Pattern.compile(\"[a-zA-Z]+\");\n"
-                          + "        TreeMap<String,Integer> wordCount = new TreeMap<String,Integer>();\n"
-                          + "\n"
-                          + "        try (\n"
-                          + "                BufferedReader src = new BufferedReader(new FileReader(file));\n"
-                          + "\n"
-                          + "        ){\n"
-                          + "\n"
-                          + "            Matcher matcher ;\n"
-                          + "            String str = src.readLine();\n"
-                          + "            while(str!=null){\n"
-                          + "                if(!str.equals(\"\")){\n"
-                          + "                    matcher = pattern.matcher(str);\n"
-                          + "                    while(matcher.find()){\n"
-                          + "                        String word = matcher.group();\n"
-                          + "                        if(!wordCount.containsKey(word))\n"
-                          + "                            wordCount.put(word,1);\n"
-                          + "                        else\n"
-                          + "                            wordCount.put(word,wordCount.get(word)+1);\n"
-                          + "                    }\n"
-                          + "                }\n"
-                          + "                str = src.readLine();\n"
-                          + "            }\n"
-                          + "        }\n"
-                          + "        catch(IOException e){\n"
-                          + "            e.printStackTrace();\n"
-                          + "        }\n"
-                          + "return wordCount;\n"
-                          + "}\n");
+      new TextArea("public static Map<?,?> mapping(String file){ \n\n\n\n  }\n");
   private TextArea reducerFunction =
-          new TextArea(
-                  "\n"
-                          + "\n"
-                          + "public static Map<?,?> reduce(Map<Object, List<Object>> map){\n"
-                          + "        Map<Object, Object> secondMap = new TreeMap<>();\n"
-                          + "\n"
-                          + "        map.forEach((k, v) -> {\n"
-                          + "            int sum = v.stream().mapToInt(entry ->  (int)entry).sum();\n"
-                          + "            secondMap.put(k, sum);\n"
-                          + "        });\n"
-                          + "        return secondMap;\n"
-                          + "\n"
-                          + "}\n"
-                          + "\n");
+          new TextArea("public static Map<?,?> reduce(Map<Object, List<Object>> map){\n \n \n }");
   private TextField textFilePath = new TextField();
   private TextField whereToExec = new TextField();
 

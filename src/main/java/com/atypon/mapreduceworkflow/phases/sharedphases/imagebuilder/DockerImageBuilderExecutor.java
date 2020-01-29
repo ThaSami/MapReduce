@@ -15,7 +15,7 @@ public class DockerImageBuilderExecutor implements Executor {
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("sh", "-c", "docker build . -t map_reduce");
-        Main.appendText("Building Docker Image , this may take time...");
+        Main.appendText("Building Docker Image , this may take time...\n");
         try {
 
             Process process = processBuilder.start();
@@ -33,7 +33,7 @@ public class DockerImageBuilderExecutor implements Executor {
         } catch (IOException | InterruptedException e) {
             throw new PhaseExecutionFailed("Couldn't build docker image");
         }
-        Main.appendText("Docker Image Built successfully");
+        Main.appendText("Docker Image Built successfully\n");
         return context;
     }
 }

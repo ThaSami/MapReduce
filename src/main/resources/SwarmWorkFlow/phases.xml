@@ -14,14 +14,33 @@
         <rollback>com.atypon.mapreduceworkflow.phases.DummyRollback</rollback>
     </phase>
 
-    //init cluster
-    //init swarm
-    //send the image
-    //run compose
-    //delete the restart policy
+    <phase>
+        <executor>com.atypon.mapreduceworkflow.phases.swarm.initclusters.DockerClustersExecutor</executor>
+        <rollback>com.atypon.mapreduceworkflow.phases.swarm.SwarmRollback</rollback>
+    </phase>
 
     <phase>
-        <executor>com.atypon.mapreduceworkflow.phases.local.runandcollect.RunMapReduceExecutor</executor>
-        <rollback>com.atypon.mapreduceworkflow.phases.DummyRollback</rollback>
+        <executor>com.atypon.mapreduceworkflow.phases.swarm.swarminit.SwarmInitExecutor</executor>
+        <rollback>com.atypon.mapreduceworkflow.phases.swarm.SwarmRollback</rollback>
+    </phase>
+
+    <phase>
+        <executor>com.atypon.mapreduceworkflow.phases.swarm.swarmimageshare.SwarmImagesExecutor</executor>
+        <rollback>com.atypon.mapreduceworkflow.phases.swarm.SwarmRollback</rollback>
+    </phase>
+
+    <phase>
+        <executor>com.atypon.mapreduceworkflow.phases.swarm.buildswarmcompose.SwarmComposeExecutor</executor>
+        <rollback>com.atypon.mapreduceworkflow.phases.swarm.SwarmRollback</rollback>
+    </phase>
+
+    <phase>
+        <executor>com.atypon.mapreduceworkflow.phases.swarm.deploy.SwarmDeployExecutor</executor>
+        <rollback>com.atypon.mapreduceworkflow.phases.swarm.SwarmRollback</rollback>
+    </phase>
+
+    <phase>
+        <executor>com.atypon.mapreduceworkflow.phases.sharedphases.runandcollect.SendAndCollectExecutor</executor>
+        <rollback>com.atypon.mapreduceworkflow.phases.swarm.SwarmRollback</rollback>
     </phase>
 </workflow>
