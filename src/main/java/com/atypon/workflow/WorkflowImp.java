@@ -37,6 +37,5 @@ public class WorkflowImp implements Workflow {
   }
 
   @Override
-  public void shutdown() {
-  }
+  public void shutdown() {}
 }

@@ -10,7 +10,7 @@ services:
     entrypoint: java -cp ../../../ com/atypon/nodes/SwarmForwarderNode 192.168.8.102
     deploy:
       placement:
-           constraints: [node.role == manager]
+        constraints: [node.role == manager]
       mode: global
 
   mappers:
@@ -28,7 +28,7 @@ services:
       - target: 6666
         published: 6666
         mode: host
-  
+
 
     entrypoint: java -cp ../../../ com/atypon/nodes/MapperNode 192.168.99.130 7676
     deploy:
@@ -51,12 +51,12 @@ services:
       - target: 8787
         published: 8787
         mode: host
-  
+
 
     entrypoint: java -cp ../../../ com/atypon/nodes/ReducerNode 192.168.99.130 7676
     deploy:
       placement:
-           constraints: [node.labels.name == reducer]
+        constraints: [node.labels.name == reducer]
       mode: global
       endpoint_mode: dnsrr
     depends_on:

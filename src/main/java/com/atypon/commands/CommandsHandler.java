@@ -5,8 +5,7 @@ import java.net.Socket;
 
 public class CommandsHandler {
 
-  private CommandsHandler() {
-  }
+  private CommandsHandler() {}
 
   public static void execute(String command, Socket socket) {
     Constructor<?> constructor;

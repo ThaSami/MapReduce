@@ -1,6 +1,5 @@
 package com.atypon.utility;
 
-
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
@@ -11,21 +10,19 @@ import java.util.List;
 
 public class FilesUtil {
 
-    private FilesUtil() {
-    }
+  private FilesUtil() {}
 
+  public static void copyToDir(File srcPath, File dstWithName) throws IOException {
+    Files.copy(srcPath.toPath(), dstWithName.toPath(), StandardCopyOption.REPLACE_EXISTING);
+  }
 
-    public static void copyToDir(File srcPath, File dstWithName) throws IOException {
-        Files.copy(srcPath.toPath(), dstWithName.toPath(), StandardCopyOption.REPLACE_EXISTING);
-    }
+  public static Boolean checkIfNotExist(String path) {
+    File file = new File(path);
+    return !file.exists();
+  }
 
-    public static Boolean checkIfNotExist(String path) {
-        File file = new File(path);
-        return !file.exists();
-    }
-
-    public static List<String> getFilesAbsPathInDirectory(String directoryPath) {
-        List<String> results = new ArrayList<>();
+  public static List<String> getFilesAbsPathInDirectory(String directoryPath) {
+    List<String> results = new ArrayList<>();
 
     File[] files = new File(directoryPath).listFiles();
     for (File file : files) {
@@ -36,21 +33,21 @@ public class FilesUtil {
     return results;
   }
 
-    public static void fileUploader(String address, String fileAbsPath, int port) throws IOException {
+  public static void fileUploader(String address, String fileAbsPath, int port) throws IOException {
 
-        File f = new File(fileAbsPath);
+    File f = new File(fileAbsPath);
 
-        try (Socket socket = new Socket(address, port);
-             InputStream in = new FileInputStream(f);
-             OutputStream out = socket.getOutputStream()) {
+    try (Socket socket = new Socket(address, port);
+        InputStream in = new FileInputStream(f);
+        OutputStream out = socket.getOutputStream()) {
 
-            byte[] bytes = new byte[8192];
-            int count;
-            while ((count = in.read(bytes)) > 0) {
-                out.write(bytes, 0, count);
-            }
-        } catch (Exception e) {
-            throw e;
+      byte[] bytes = new byte[8192];
+      int count;
+      while ((count = in.read(bytes)) > 0) {
+        out.write(bytes, 0, count);
+      }
+    } catch (Exception e) {
+      throw e;
     }
   }
 
@@ -65,6 +62,4 @@ public class FilesUtil {
 
     return content;
   }
-
-
 }

@@ -16,8 +16,10 @@ public class SendAndCollectExecutor implements Executor {
     ContainersHandler handler = ContainersHandler.getInstance();
 
     try {
-        Main.appendText("Waiting For Containers to Run\n");
-        dataTracker.getWaitForContainersLatch().await(); // TimeOut of waiting can be injected in await() method.
+      Main.appendText("Waiting For Containers to Run\n");
+      dataTracker
+          .getWaitForContainersLatch()
+          .await(); // TimeOut of waiting can be injected in await() method.
     } catch (Exception e) {
       throw new PhaseExecutionFailed("TimeOut");
     }
@@ -26,41 +28,43 @@ public class SendAndCollectExecutor implements Executor {
     try {
       handler.sendReducerAddressesToMappers();
     } catch (Exception e) {
-        throw new PhaseExecutionFailed("Failed to send Reducer Addresses");
+      throw new PhaseExecutionFailed("Failed to send Reducer Addresses");
     }
     Main.appendText("Sending Mappers Addresses To Reducers\n");
     try {
       handler.sendMappersAddressesToReducers();
     } catch (Exception e) {
-        throw new PhaseExecutionFailed("Failed to send Reducer Addresses");
-    }
-
-    try{
-    Main.appendText("Sending Files To Mappers\n");
-    handler.sendFilesToMappers("./temp/Data/");
-    }catch (Exception e){
-        throw new PhaseExecutionFailed("Failed to files to mappers");
+      throw new PhaseExecutionFailed("Failed to send Reducer Addresses");
     }
 
     try {
-        Main.appendText("Waiting for mappers to finish working\n");
-        dataTracker.getFinishedMappersLatch().await(); // TimeOut of waiting can be injected in await() method.
-        Main.appendText("Mappers Finished\n");
+      Main.appendText("Sending Files To Mappers\n");
+      handler.sendFilesToMappers("./temp/Data/");
+    } catch (Exception e) {
+      throw new PhaseExecutionFailed("Failed to files to mappers");
+    }
+
+    try {
+      Main.appendText("Waiting for mappers to finish working\n");
+      dataTracker
+          .getFinishedMappersLatch()
+          .await(); // TimeOut of waiting can be injected in await() method.
+      Main.appendText("Mappers Finished\n");
     } catch (Exception e) {
       throw new PhaseExecutionFailed("Failed to wait mappers to finish working");
     }
 
-      try {
-          Main.appendText("started Collector\n");
-          Collector.startCollecting(context.getParam("numOfReducers"));
-          Collector.getAllDataCollectedLatch().await();
+    try {
+      Main.appendText("started Collector\n");
+      Collector.startCollecting(context.getParam("numOfReducers"));
+      Collector.getAllDataCollectedLatch().await();
 
-          Main.appendText("Saving Data to output.txt\n");
-          Collector.printCollectedDataToFile();
-          Main.appendText("Data saved\n");
-      } catch (Exception e) {
-          throw new PhaseExecutionFailed("data collection failed");
-      }
+      Main.appendText("Saving Data to output.txt\n");
+      Collector.printCollectedDataToFile();
+      Main.appendText("Data saved\n");
+    } catch (Exception e) {
+      throw new PhaseExecutionFailed("data collection failed");
+    }
     return context;
   }
 }

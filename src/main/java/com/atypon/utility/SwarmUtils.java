@@ -5,8 +5,7 @@ import java.io.InputStreamReader;
 
 public class SwarmUtils {
 
-  private SwarmUtils() {
-  }
+  private SwarmUtils() {}
 
   public static String getManagerIP() {
     ProcessBuilder processBuilder = new ProcessBuilder();

@@ -55,8 +55,11 @@ public class ContainersHandler {
     int i = 0;
     for (String fileAbsPath : filesAbsPath) {
       System.out.println("Sending : " + fileAbsPath);
-        FilesUtil.fileUploader(containersDataTracker.getMappersAddresses().get(i), fileAbsPath, Constants.MAPPERS_FILE_RECEIVER_PORT);
-        System.out.println(containersDataTracker.getMappersAddresses().get(i));
+      FilesUtil.fileUploader(
+          containersDataTracker.getMappersAddresses().get(i),
+          fileAbsPath,
+          Constants.MAPPERS_FILE_RECEIVER_PORT);
+      System.out.println(containersDataTracker.getMappersAddresses().get(i));
       i++;
     }
   }

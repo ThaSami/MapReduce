@@ -1,5 +1,3 @@
 
-©%squid:RedundantThrowsDeclarationCheck5"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(ÄÜ´áùÿÿÿÿ8‰âÑæş-
-usquid:S2737$"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û8¿á±æş-
-usquid:S27370"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û8¿á±æş-
-Usquid:S1135"2Complete the task associated to this TODO comment.(Ñíÿûøÿÿÿÿ8çÛ æş-
+usquid:S2737/"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û8¿á±æş-
+usquid:S2737#"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û8¿á±æş-

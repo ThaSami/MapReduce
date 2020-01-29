@@ -33,7 +33,6 @@ public class SplitExecutor implements Executor {
       throw new PhaseExecutionFailed("Couldn't Copy The File");
     }
 
-
     try {
       ProcessBuilder processBuilder = new ProcessBuilder();
       File file = new File("./temp/Data/Data.txt");
@@ -62,7 +61,7 @@ public class SplitExecutor implements Executor {
       int exitCode = process.waitFor();
       System.out.println("\nSplitter Exited with error code : " + exitCode);
 
-      //process failed to execute
+      // process failed to execute
       if (exitCode != 0) {
         throw new PhaseExecutionFailed("Couldn't split the file");
       }
@@ -71,7 +70,6 @@ public class SplitExecutor implements Executor {
     } catch (Exception e) {
       throw new PhaseExecutionFailed("Couldn't split the file");
     }
-
 
     return context;
   }

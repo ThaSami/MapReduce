@@ -12,34 +12,19 @@ public class ContainersDataTracker {
 
   private static ContainersDataTracker containersDataTracker = null;
 
-  @Setter
-  @Getter
-  private AtomicInteger numOfContainers;
-  @Setter
-  @Getter
-  private AtomicInteger numOfMappers;
-  @Setter
-  @Getter
-  private AtomicInteger numOfReducer;
-  @Setter
-  @Getter
-  private AtomicInteger runningContainers;
-  @Getter
-  private AtomicInteger currentMappersRunning;
-  @Getter
-  private AtomicInteger currentReducersRunning;
-  @Getter
-  private AtomicInteger finishedMappers;
+  @Setter @Getter private AtomicInteger numOfContainers;
+  @Setter @Getter private AtomicInteger numOfMappers;
+  @Setter @Getter private AtomicInteger numOfReducer;
+  @Setter @Getter private AtomicInteger runningContainers;
+  @Getter private AtomicInteger currentMappersRunning;
+  @Getter private AtomicInteger currentReducersRunning;
+  @Getter private AtomicInteger finishedMappers;
 
-  @Getter
-  private ArrayList<String> mappersAddresses;
-  @Getter
-  private ArrayList<String> reducersAddresses;
+  @Getter private ArrayList<String> mappersAddresses;
+  @Getter private ArrayList<String> reducersAddresses;
 
-  @Getter
-  private CountDownLatch finishedMappersLatch;
-  @Getter
-  private CountDownLatch waitForContainersLatch;
+  @Getter private CountDownLatch finishedMappersLatch;
+  @Getter private CountDownLatch waitForContainersLatch;
 
   private ContainersDataTracker() {
     mappersAddresses = new ArrayList<>();
@@ -66,35 +51,34 @@ public class ContainersDataTracker {
     mappersAddresses.add(address);
   }
 
-    @Synchronized
-    public void addReducerAddress(String address) {
-        reducersAddresses.add(address);
-    }
+  @Synchronized
+  public void addReducerAddress(String address) {
+    reducersAddresses.add(address);
+  }
 
-    public void incrementFinishedMappers() {
-        this.finishedMappers.getAndIncrement();
-        finishedMappersLatch.countDown();
-    }
+  public void incrementFinishedMappers() {
+    this.finishedMappers.getAndIncrement();
+    finishedMappersLatch.countDown();
+  }
 
-    public void setFinishedMappersLatch(int numOfMappers) {
-        finishedMappersLatch = new CountDownLatch(numOfMappers);
-    }
+  public void setFinishedMappersLatch(int numOfMappers) {
+    finishedMappersLatch = new CountDownLatch(numOfMappers);
+  }
 
-    public void setWaitForContainersLatch(int numOfContainers) {
-        waitForContainersLatch = new CountDownLatch(numOfContainers);
-    }
+  public void setWaitForContainersLatch(int numOfContainers) {
+    waitForContainersLatch = new CountDownLatch(numOfContainers);
+  }
 
-    public void incrementRunningContainers() {
-        this.runningContainers.getAndIncrement();
-        waitForContainersLatch.countDown();
-    }
+  public void incrementRunningContainers() {
+    this.runningContainers.getAndIncrement();
+    waitForContainersLatch.countDown();
+  }
 
+  public void incrementRunningMappers() {
+    this.currentMappersRunning.getAndIncrement();
+  }
 
-    public void incrementRunningMappers() {
-        this.currentMappersRunning.getAndIncrement();
-    }
-
-    public void incrementRunningReducers() {
-        this.currentReducersRunning.getAndIncrement();
-    }
+  public void incrementRunningReducers() {
+    this.currentReducersRunning.getAndIncrement();
+  }
 }

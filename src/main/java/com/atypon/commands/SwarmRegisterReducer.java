@@ -19,12 +19,12 @@ public class SwarmRegisterReducer implements Command {
     containersDataTracker.incrementRunningContainers();
     containersDataTracker.incrementRunningReducers();
     Main.appendText(
-            "Registered reducer "
-                    + containersDataTracker.getCurrentReducersRunning()
-                    + " / "
-                    + containersDataTracker.getNumOfReducer()
-                    + " "
-                    + this.ip
-                    + '\n');
+        "Registered reducer "
+            + containersDataTracker.getCurrentReducersRunning()
+            + " / "
+            + containersDataTracker.getNumOfReducer()
+            + " "
+            + this.ip
+            + '\n');
   }
 }

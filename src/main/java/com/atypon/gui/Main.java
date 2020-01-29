@@ -31,12 +31,11 @@ public class Main extends Application {
   private static TextArea outPuts = new TextArea();
   private TextField numOfMappers = new TextField();
   private TextField numOfReducers = new TextField();
-  private TextArea customImport =
-          new TextArea("//please list all your imports here.");
+  private TextArea customImport = new TextArea("//please list all your imports here.");
   private TextArea mapperFunction =
       new TextArea("public static Map<?,?> mapping(String file){ \n\n\n\n  }\n");
   private TextArea reducerFunction =
-          new TextArea("public static Map<?,?> reduce(Map<Object, List<Object>> map){\n \n \n }");
+      new TextArea("public static Map<?,?> reduce(Map<Object, List<Object>> map){\n \n \n }");
   private TextField textFilePath = new TextField();
   private TextField whereToExec = new TextField();
 
@@ -58,7 +57,7 @@ public class Main extends Application {
                 ex.printStackTrace();
               }
             })
-            .start();
+        .start();
 
     launch(args);
   }
@@ -106,74 +105,74 @@ public class Main extends Application {
     primaryStage.show();
 
     btExecute.setOnAction(
-            e -> {
-              try {
+        e -> {
+          try {
 
-                btExecute.setDisable(true);
-                int mappersNumber = Integer.parseInt(numOfMappers.getText());
-                int reducersNumber = Integer.parseInt(numOfReducers.getText());
-                String mappingMethod = mapperFunction.getText();
-                String reduceMethod = reducerFunction.getText();
-                String txtFilePath = textFilePath.getText();
-                String customImports = customImport.getText();
-                String _whereToExec = whereToExec.getText();
-                Map<String, Object> params = new HashMap<>();
-                params.put("numOfMappers", mappersNumber);
-                params.put("numOfReducers", reducersNumber);
-                params.put("mappingMethod", mappingMethod);
-                params.put("reducingMethod", reduceMethod);
-                params.put("txtFilePath", txtFilePath);
-                params.put("customImports", customImports);
-                params.put("ContainersTimeOut", 120);
+            btExecute.setDisable(true);
+            int mappersNumber = Integer.parseInt(numOfMappers.getText());
+            int reducersNumber = Integer.parseInt(numOfReducers.getText());
+            String mappingMethod = mapperFunction.getText();
+            String reduceMethod = reducerFunction.getText();
+            String txtFilePath = textFilePath.getText();
+            String customImports = customImport.getText();
+            String _whereToExec = whereToExec.getText();
+            Map<String, Object> params = new HashMap<>();
+            params.put("numOfMappers", mappersNumber);
+            params.put("numOfReducers", reducersNumber);
+            params.put("mappingMethod", mappingMethod);
+            params.put("reducingMethod", reduceMethod);
+            params.put("txtFilePath", txtFilePath);
+            params.put("customImports", customImports);
+            params.put("ContainersTimeOut", 120);
 
-                VelocityContext velocityContext = new VelocityContext();
+            VelocityContext velocityContext = new VelocityContext();
 
-                List<Integer> mappersPorts = new ArrayList<>();
-                mappersPorts.add(MAIN_SERVER_PORT);
-                mappersPorts.add(MAPPERS_TO_REDUCERS_PORT);
-                mappersPorts.add(MAINSERVER_TO_MAPPERS_PORT);
-                mappersPorts.add(MAPPERS_FILE_RECEIVER_PORT);
+            List<Integer> mappersPorts = new ArrayList<>();
+            mappersPorts.add(MAIN_SERVER_PORT);
+            mappersPorts.add(MAPPERS_TO_REDUCERS_PORT);
+            mappersPorts.add(MAINSERVER_TO_MAPPERS_PORT);
+            mappersPorts.add(MAPPERS_FILE_RECEIVER_PORT);
 
-                List<Integer> reducersPorts = new ArrayList<>();
-                reducersPorts.add(MAIN_SERVER_PORT);
-                reducersPorts.add(MAINSERVER_TO_REDUCERS_PORT);
-                reducersPorts.add(MAPPERS_TO_REDUCERS_PORT);
+            List<Integer> reducersPorts = new ArrayList<>();
+            reducersPorts.add(MAIN_SERVER_PORT);
+            reducersPorts.add(MAINSERVER_TO_REDUCERS_PORT);
+            reducersPorts.add(MAPPERS_TO_REDUCERS_PORT);
 
-                velocityContext.put("mappersPorts", mappersPorts);
-                velocityContext.put("numOfMappers", mappersNumber);
-                velocityContext.put("reducersPorts", reducersPorts);
-                velocityContext.put("numOfReducers", reducersNumber);
-                velocityContext.put("hostAddress", MAIN_SERVER_IP);
-                velocityContext.put("hostPort", MAIN_SERVER_PORT);
+            velocityContext.put("mappersPorts", mappersPorts);
+            velocityContext.put("numOfMappers", mappersNumber);
+            velocityContext.put("reducersPorts", reducersPorts);
+            velocityContext.put("numOfReducers", reducersNumber);
+            velocityContext.put("hostAddress", MAIN_SERVER_IP);
+            velocityContext.put("hostPort", MAIN_SERVER_PORT);
 
-                params.put("compose-data", velocityContext);
+            params.put("compose-data", velocityContext);
 
-                ContainersDataTracker tracker = ContainersDataTracker.getInstance();
-                tracker.setNumOfMappers(new AtomicInteger(mappersNumber));
-                tracker.setNumOfReducer(new AtomicInteger(reducersNumber));
-                tracker.setNumOfContainers(new AtomicInteger((mappersNumber + reducersNumber)));
-                tracker.setFinishedMappersLatch(mappersNumber);
-                tracker.setWaitForContainersLatch(mappersNumber + reducersNumber);
+            ContainersDataTracker tracker = ContainersDataTracker.getInstance();
+            tracker.setNumOfMappers(new AtomicInteger(mappersNumber));
+            tracker.setNumOfReducer(new AtomicInteger(reducersNumber));
+            tracker.setNumOfContainers(new AtomicInteger((mappersNumber + reducersNumber)));
+            tracker.setFinishedMappersLatch(mappersNumber);
+            tracker.setWaitForContainersLatch(mappersNumber + reducersNumber);
 
-                Context data = new Context(params);
-                WorkflowManager workflowManager;
+            Context data = new Context(params);
+            WorkflowManager workflowManager;
 
-                if (_whereToExec.contains("sw") || _whereToExec.contains("Sw")) {
-                  workflowManager = new WorkflowManager("./src/main/resources/SwarmWorkFlow");
-                } else {
-                  workflowManager = new WorkflowManager("./src/main/resources/LocalWorkFlow");
-                }
-                new Thread(
-                        () -> {
-                          for (Workflow workflow : workflowManager.getWorkflows()) {
-                            workflow.start(data);
-                          }
-                        })
-                        .start();
+            if (_whereToExec.contains("sw") || _whereToExec.contains("Sw")) {
+              workflowManager = new WorkflowManager("./src/main/resources/SwarmWorkFlow");
+            } else {
+              workflowManager = new WorkflowManager("./src/main/resources/LocalWorkFlow");
+            }
+            new Thread(
+                    () -> {
+                      for (Workflow workflow : workflowManager.getWorkflows()) {
+                        workflow.start(data);
+                      }
+                    })
+                .start();
 
-              } catch (Exception ex) {
-                ex.printStackTrace();
-              }
-            });
+          } catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        });
   }
 }

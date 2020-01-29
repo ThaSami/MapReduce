@@ -1,8 +1,7 @@
 package com.atypon.mapreduceworkflow.phases;
 
 public class PhaseExecutionFailed extends Exception {
-  public PhaseExecutionFailed() {
-  }
+  public PhaseExecutionFailed() {}
 
   public PhaseExecutionFailed(String message) {
     super(message);
@@ -17,7 +16,7 @@ public class PhaseExecutionFailed extends Exception {
   }
 
   public PhaseExecutionFailed(
-          String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
 }

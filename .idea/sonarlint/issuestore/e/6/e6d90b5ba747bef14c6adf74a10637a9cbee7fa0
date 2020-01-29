@@ -1,4 +1,4 @@
 
-Asquid:S1148l"#Use a logger to log this exception.(Ç’Çê8†ó•Ìþ-
-qsquid:S00117©"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÀÍœŠ8†ó•Ìþ-
-Bsquid:S1148á"#Use a logger to log this exception.(Ç’Çê8­à¿Êþ-
+psquid:S00117w"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÀÍœŠ8†ó•Ìþ-
+Bsquid:S1148¯"#Use a logger to log this exception.(Ç’Çê8­à¿Êþ-
+Asquid:S1148:"#Use a logger to log this exception.(Ç’Çê8†ó•Ìþ-

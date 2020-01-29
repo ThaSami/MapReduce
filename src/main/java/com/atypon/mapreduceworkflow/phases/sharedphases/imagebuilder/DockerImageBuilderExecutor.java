@@ -6,34 +6,33 @@ import com.atypon.workflow.Context;
 import com.atypon.workflow.phase.Executor;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class DockerImageBuilderExecutor implements Executor {
-    @Override
-    public Context execute(Context context) throws PhaseExecutionFailed {
+  @Override
+  public Context execute(Context context) throws PhaseExecutionFailed {
 
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("sh", "-c", "docker build . -t map_reduce");
-        Main.appendText("Building Docker Image , this may take time...\n");
-        try {
+    ProcessBuilder processBuilder = new ProcessBuilder();
+    processBuilder.command("sh", "-c", "docker build . -t map_reduce");
+    Main.appendText("Building Docker Image , this may take time...\n");
+    try {
 
-            Process process = processBuilder.start();
+      Process process = processBuilder.start();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+      BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
+      String line;
+      while ((line = reader.readLine()) != null) {
+        System.out.println(line);
+      }
 
-            int exitCode = process.waitFor();
-            System.out.println("\nImage Built Exited with error code : " + exitCode);
+      int exitCode = process.waitFor();
+      System.out.println("\nImage Built Exited with error code : " + exitCode);
 
-        } catch (IOException | InterruptedException e) {
-            throw new PhaseExecutionFailed("Couldn't build docker image");
-        }
-        Main.appendText("Docker Image Built successfully\n");
-        return context;
+    } catch (Exception e) {
+      throw new PhaseExecutionFailed("Couldn't build docker image");
     }
+    Main.appendText("Docker Image Built successfully\n");
+    return context;
+  }
 }

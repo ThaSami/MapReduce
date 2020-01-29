@@ -21,12 +21,12 @@ public class RegisterReducer implements Command {
     containersDataTracker.incrementRunningContainers();
     containersDataTracker.incrementRunningReducers();
     Main.appendText(
-            "Registered reducer "
-                    + containersDataTracker.getCurrentReducersRunning()
-                    + " / "
-                    + containersDataTracker.getNumOfReducer()
-                    + " "
-                    + socket.getInetAddress()
-                    + '\n');
+        "Registered reducer "
+            + containersDataTracker.getCurrentReducersRunning()
+            + " / "
+            + containersDataTracker.getNumOfReducer()
+            + " "
+            + socket.getInetAddress()
+            + '\n');
   }
 }

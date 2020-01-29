@@ -12,6 +12,5 @@ public class Constants {
 
   public static final String MAIN_SERVER_IP = "192.168.8.102";
 
-  private Constants() {
-  }
+  private Constants() {}
 }

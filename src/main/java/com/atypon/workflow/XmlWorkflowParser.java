@@ -43,13 +43,13 @@ public class XmlWorkflowParser implements WorkflowParser {
 
       String expression = "/workflow/phase";
       NodeList nodeList =
-              (NodeList) xPath.compile(expression).evaluate(doc, XPathConstants.NODESET);
+          (NodeList) xPath.compile(expression).evaluate(doc, XPathConstants.NODESET);
       for (int i = 0; i < nodeList.getLength(); i++) {
         Node nNode = nodeList.item(i);
         if (nNode.getNodeType() == Node.ELEMENT_NODE) {
           Element element = (Element) nNode;
           Class<?> klass =
-                  Class.forName(element.getElementsByTagName("executor").item(0).getTextContent());
+              Class.forName(element.getElementsByTagName("executor").item(0).getTextContent());
           Constructor<?> constructor = klass.getConstructor();
           Executor exec = (Executor) constructor.newInstance();
 

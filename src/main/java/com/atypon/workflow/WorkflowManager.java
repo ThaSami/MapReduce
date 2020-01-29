@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WorkflowManager {
-  @Getter
-  private List<Workflow> workflows;
+  @Getter private List<Workflow> workflows;
   private WorkflowParser parser;
 
   public WorkflowManager(String rootPath) {

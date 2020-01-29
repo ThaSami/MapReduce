@@ -26,25 +26,25 @@ public class ReducerNode {
       throws MalformedURLException, NoSuchMethodException, ClassNotFoundException,
           InvocationTargetException, IllegalAccessException {
     File root = new File("./");
-    URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
+    URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] {root.toURI().toURL()});
     Class<?> cls = Class.forName("ReducerUtil", false, classLoader);
     Method method = cls.getDeclaredMethod("reduce", Map.class);
     return (Map<?, ?>) method.invoke(cls, reducerData);
   }
 
-    // combines list of maps into one map with list of values map<key,list<values>
-    static void combiner(List<Map<Object, Object>> listOfMaps) {
+  // combines list of maps into one map with list of values map<key,list<values>
+  static void combiner(List<Map<Object, Object>> listOfMaps) {
 
-        listOfMaps.forEach(
-                entry ->
-                        entry.forEach(
-                                (k, v) -> {
-                                    if (!reducerData.containsKey(k)) {
-                                        reducerData.put(k, new ArrayList<>());
-                                    }
-                                    reducerData.get(k).add(v);
-                                }));
-    }
+    listOfMaps.forEach(
+        entry ->
+            entry.forEach(
+                (k, v) -> {
+                  if (!reducerData.containsKey(k)) {
+                    reducerData.put(k, new ArrayList<>());
+                  }
+                  reducerData.get(k).add(v);
+                }));
+  }
 
   public static void main(String[] args) throws Exception {
 
@@ -53,7 +53,7 @@ public class ReducerNode {
               System.out.println("Registering to server");
               DataSender.sendString(args[0], Integer.parseInt(args[1]), "RegisterReducer");
             })
-            .start();
+        .start();
 
     System.out.println("Receiving mappers addresses");
     Receiver mapperAddressesReceiver = new ArrayListReceiver();

@@ -16,12 +16,12 @@ public class DockerClustersExecutor implements Executor {
     try {
       ProcessBuilder processBuilder = new ProcessBuilder();
       processBuilder.command(
-              "sh",
-              "-c",
-              "./src/main/resources/Scripts/ClustersInit.sh "
-                      + context.getParam("numOfMappers")
-                      + " "
-                      + context.getParam("numOfReducers"));
+          "sh",
+          "-c",
+          "./src/main/resources/Scripts/ClustersInit.sh "
+              + context.getParam("numOfMappers")
+              + " "
+              + context.getParam("numOfReducers"));
       Process process = processBuilder.start();
       BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 

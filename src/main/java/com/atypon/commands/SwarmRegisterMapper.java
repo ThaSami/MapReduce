@@ -19,12 +19,12 @@ public class SwarmRegisterMapper implements Command {
     containersDataTracker.incrementRunningContainers();
     containersDataTracker.incrementRunningMappers();
     Main.appendText(
-            "Registered mapper "
-                    + containersDataTracker.getCurrentMappersRunning()
-                    + " / "
-                    + containersDataTracker.getNumOfMappers()
-                    + " "
-                    + this.ip
-                    + '\n');
+        "Registered mapper "
+            + containersDataTracker.getCurrentMappersRunning()
+            + " / "
+            + containersDataTracker.getNumOfMappers()
+            + " "
+            + this.ip
+            + '\n');
   }
 }

@@ -3,7 +3,6 @@ package com.atypon.mapreduceworkflow.phases.swarm.buildswarmcompose;
 import com.atypon.gui.Main;
 import com.atypon.mapreduceworkflow.phases.PhaseExecutionFailed;
 import com.atypon.utility.Constants;
-import com.atypon.utility.CodesUtil;
 import com.atypon.utility.SwarmUtils;
 import com.atypon.workflow.Context;
 import com.atypon.workflow.phase.Executor;
