@@ -88,7 +88,7 @@ public class Main extends Application {
     pane.add(btExecute, 1, 7);
     GridPane.setHalignment(btExecute, HPos.RIGHT);
 
-    pane.add(new Label("OutPuts"), 0, 8);
+    pane.add(new Label("Outputs"), 0, 8);
     pane.add(outPuts, 1, 8);
 
     pane.setAlignment(Pos.TOP_CENTER);
