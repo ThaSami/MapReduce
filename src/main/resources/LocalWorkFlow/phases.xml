@@ -23,4 +23,10 @@
         <executor>com.atypon.mapreduceworkflow.phases.sharedphases.runandcollect.SendAndCollectExecutor</executor>
         <rollback>com.atypon.mapreduceworkflow.phases.DummyRollback</rollback>
     </phase>
+
+    <phase>
+        <executor>com.atypon.mapreduceworkflow.phases.local.composerun.ComposeDownExecutor</executor>
+        <rollback>com.atypon.mapreduceworkflow.phases.DummyRollback</rollback>
+    </phase>
+
 </workflow>
