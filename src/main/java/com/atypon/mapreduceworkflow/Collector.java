@@ -24,7 +24,7 @@ public class Collector {
     allDataCollectedLatch =
         new CountDownLatch(
             numberOfReducers); // initialize the latch to let the method receive data from all
-                               // reducers to stop other threads from executing.
+    // reducers to stop other threads from executing.
     finalResult = new ConcurrentSkipListMap<>();
     try (ServerSocket server = new ServerSocket(Constants.COLLECTOR_PORT)) {
       AtomicInteger dataReceivedFromReducers =

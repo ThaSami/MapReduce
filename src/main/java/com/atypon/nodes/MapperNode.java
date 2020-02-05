@@ -9,6 +9,7 @@ import com.atypon.nodes.shufflers.Shuffler;
 import com.atypon.utility.Constants;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 import java.net.Socket;
@@ -55,7 +56,7 @@ public class MapperNode {
     }
   }
 
-  public static void main(String[] args) throws InterruptedException {
+  public static void main(String[] args) throws InterruptedException, IOException {
 
     Thread t =
         new Thread(
@@ -90,7 +91,11 @@ public class MapperNode {
                 e.printStackTrace();
               }
 
-              DataSender.sendString(MAIN_SERVER_IP, Constants.MAIN_SERVER_PORT, "Finished");
+              try {
+                DataSender.sendString(MAIN_SERVER_IP, Constants.MAIN_SERVER_PORT, "Finished");
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
               System.out.println("Finished");
             });
     t.start();

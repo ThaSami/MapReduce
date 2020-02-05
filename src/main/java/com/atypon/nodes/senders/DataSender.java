@@ -19,13 +19,13 @@ public class DataSender {
     }
   }
 
-  public static void sendString(String address, int port, String dataToSend) {
+  public static void sendString(String address, int port, String dataToSend) throws IOException {
     try (Socket socket = new Socket(address, port);
         OutputStream outputStream = socket.getOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
       dataOutputStream.writeUTF(String.valueOf(dataToSend));
     } catch (Exception e) {
-      e.printStackTrace();
+      throw e;
     }
   }
 }

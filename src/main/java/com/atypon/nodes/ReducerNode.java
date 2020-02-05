@@ -7,6 +7,7 @@ import com.atypon.nodes.senders.DataSender;
 import com.atypon.utility.Constants;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -51,7 +52,11 @@ public class ReducerNode {
     new Thread(
             () -> {
               System.out.println("Registering to server");
-              DataSender.sendString(args[0], Integer.parseInt(args[1]), "RegisterReducer");
+              try {
+                DataSender.sendString(args[0], Integer.parseInt(args[1]), "RegisterReducer");
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
             })
         .start();
 
