@@ -25,14 +25,21 @@ easy to add to phases from XML parser.
 
 ## presequites 
 
-1- Linux OS
-2- Docker
-3- Docker-machine
-4- Docker-compose
-5- VirtualBox
-6- Docker-Swarm
-7- Java 1.8
-8- JavaFx
+1- Linux OS.
+
+2- Docker.
+
+3- Docker-machine.
+
+4- Docker-compose.
+
+5- VirtualBox.
+
+6- Docker-Swarm.
+
+7- Java 1.8.
+
+8- JavaFx.
 
 ## How to use it ?
 1- Number of Mappers : take int value, defines how many mapper's nodes (swarm/containers) to run mapper's function.
