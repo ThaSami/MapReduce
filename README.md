@@ -43,14 +43,19 @@ easy to add to phases from XML parser.
 
 ## How to use it ?
 1- Number of Mappers : take int value, defines how many mapper's nodes (swarm/containers) to run mapper's function.
+
 2- Number of Reducers : take int value, defines how many reducers's nodes (swarm/containers) to run reducers's function.
+
 3- Text File Path: the text file you want to process.
+
 4- Where to execute: define where to run on Swarm cluster or Local 
    - Swarm -> this will create (Docker Machines) based on number of mappers and reducers using scripts in src/main/resources/Scripts
    - locally -> this will create containers based on number of mappers and reducers in src/main/resources/compose/docker-compose.vm   
 
 5- Custom Imports: custom imports for Mapper and Reducer Function.
+
 6- Mapper Function (must return a generic hashmap and takes file) defines the function to run on the mapper nodes.
+
 7- Reducer Function (must return a generic hashmap and takes hashmap) defines the function to run on the reducer nodes.
 
 
