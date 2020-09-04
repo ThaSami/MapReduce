@@ -59,5 +59,5 @@ easy to add to phases from XML parser.
 7- Reducer Function (must return a generic hashmap and takes hashmap) defines the function to run on the reducer nodes.
 
 
-     
-
+## Contribution
+just add your classes and define the workflow steps in src/main/resources/
