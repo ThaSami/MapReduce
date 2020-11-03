@@ -58,6 +58,9 @@ easy to add to phases from XML parser.
 
 7- Reducer Function (must return a generic hashmap and takes hashmap) defines the function to run on the reducer nodes.
 
+## Note
+Make sure to edit the Main server ip in /src/main/java/com/atypon/utility/Constants.java to match your host ip address.
+
 
 ## Contribution
 just add your classes and define the workflow steps in src/main/resources/
