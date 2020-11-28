@@ -11,7 +11,6 @@ a full documenation file is presented in the repo 'FinalProjectReport.pdf'
 more about mapreduce:
 https://www.thegeekdiary.com/understanding-the-hadoop-mapreduce-framework/
 
-source code is available on github contact me to grant you an access.
 
 # Project’s Features:
 
